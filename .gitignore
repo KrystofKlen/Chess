@@ -1,0 +1,11 @@
+.vscode
+*.o
+game
+*.out
+Mon*
+Tue*
+Wed*
+Thu*
+Fri*
+Sat*
+Sun*
