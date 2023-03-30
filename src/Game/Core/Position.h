@@ -6,7 +6,7 @@
 class Position{
 public:
     int mRowIndex, mColumnIndex;
-    std::shared_ptr<Figure> mFigure;
+    std::shared_ptr<Piece> mPiece;
     Position* ptrToPositionOnWhichIsPawnThatCanBeKickedUsingEnPassant = nullptr;
     bool mIsFree = true;
     bool operator == (const Position & rhs ){

@@ -9,21 +9,21 @@
 class Game{
 public:
     
-   std::vector<std::shared_ptr<Figure>> figuresPlayer1, figuresPlayer2;
-   std::list<std::shared_ptr<Figure>> figuresOUTplayer1, figuresOUTplayer2;
-   std::list<std::shared_ptr<Figure>> figuresINplayer1, figuresINplayer2;
+   std::vector<std::shared_ptr<Piece>> piecesPlayer1, piecesPlayer2;
+   std::list<std::shared_ptr<Piece>> piecesOUTplayer1, piecesOUTplayer2;
+   std::list<std::shared_ptr<Piece>> piecesINplayer1, piecesINplayer2;
 
-    void kickout(std::shared_ptr<Figure> figureToKickout);
+    void kickout(std::shared_ptr<Piece> pieceToKickout);
 
-    void kickout(Coordinates coordinatesOfFigureToKickOut, std::list<std::shared_ptr<Figure>> & dstToMoveKickedFigure);
+    void kickout(Coordinates coordinatesOfPieceToKickOut, std::list<std::shared_ptr<Piece>> & dstToMoveKickedPiece);
 
-    void checkEnPassant(Coordinates selectedPosition, Coordinates figureCoordinates);
+    void checkEnPassant(Coordinates selectedPosition, Coordinates pieceCoordinates);
 
-    bool detectCastlingAttempt( Coordinates selectedPosition , Coordinates figurePosition);
+    bool detectCastlingAttempt( Coordinates selectedPosition , Coordinates piecePosition);
 
-    bool checkIfFigureWasKickedOut(Coordinates coordinates);
+    bool checkIfPieceWasKickedOut(Coordinates coordinates);
 
-    bool castle(Board & b, Coordinates selectedPosition, Coordinates figureCoordinates);
+    bool castle(Board & b, Coordinates selectedPosition, Coordinates pieceCoordinates);
 
     bool checkIfPawnReachedEnd(int playingSide);
 
@@ -33,7 +33,7 @@ public:
 
     void findKingsIndex();
 
-    bool moveIsValid(Coordinates coordinatesOfFigureToMove, Coordinates selectedPosition);
+    bool moveIsValid(Coordinates coordinatesOfPieceToMove, Coordinates selectedPosition);
 
 private:
     

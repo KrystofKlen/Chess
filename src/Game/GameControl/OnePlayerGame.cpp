@@ -13,17 +13,17 @@ OnePlayerGame::OnePlayerGame(int difficulty){
 
 void OnePlayerGame::startGameLoop(){
     
-    Board::setFiguresOnBoard(g.figuresINplayer1, g.figuresINplayer2);
+    Board::setPiecesOnBoard(g.piecesINplayer1, g.piecesINplayer2);
     
     bool gameRunning = true;
 
     while(gameRunning){
 
-        b.refreshFigureCoordinates();
+        b.refreshPieceCoordinates();
 
         //refresh UI
         api.showBoard();
-        api.updateFigures(g);
+        api.updatePieces(g);
 
         //check game state
         checkDetected = kingIsInCheck(g,b,1);
@@ -34,7 +34,7 @@ void OnePlayerGame::startGameLoop(){
             stalemateDetected = isStalmate(g,b,1);
         }
 
-        b.refreshFigureCoordinates();
+        b.refreshPieceCoordinates();
 
         //update UI if game state changed, (+ end if stalmate or check mate)
         if(checkMateDetected){
@@ -47,14 +47,14 @@ void OnePlayerGame::startGameLoop(){
             return;
         }
         
-        //pick figure and position to move to
+        //pick piece and position to move to
         std::pair< Coordinates,Coordinates > movementFromTo =  api.pickPosition(playingSide, gameRunning);
         if(!gameRunning) break;
         
         //check whether move is OK, if not -> new iteration
         bool moveIsValid = g.moveIsValid(movementFromTo.first,movementFromTo.second);
         if(!moveIsValid) continue;
-        if( Board::playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mFigure->mLetter == 'K'
+        if( Board::playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece->mLetter == 'K'
         && !kingWillNotLandIntoCheck(g,b, movementFromTo.second, 1))
             moveIsValid = false;
         if(!moveIsValid) continue;
@@ -70,24 +70,24 @@ void OnePlayerGame::startGameLoop(){
             }
         }
 
-        //checking if we are kicking out opponents figure
-        if(g.checkIfFigureWasKickedOut(movementFromTo.second) && !castleDetected){
-            char letter = Board::playField[movementFromTo.second.mRowIndex][movementFromTo.second.mColumnIndex].mFigure
+        //checking if we are kicking out opponents piece
+        if(g.checkIfPieceWasKickedOut(movementFromTo.second) && !castleDetected){
+            char letter = Board::playField[movementFromTo.second.mRowIndex][movementFromTo.second.mColumnIndex].mPiece
             ->mLetter;
 
-            g.kickout(movementFromTo.second, g.figuresOUTplayer2);
+            g.kickout(movementFromTo.second, g.piecesOUTplayer2);
             
             //end game if king was the target
             if(letter == 'K'){
-                b.moveFigure(movementFromTo.first, movementFromTo.second, true);
+                b.movePiece(movementFromTo.first, movementFromTo.second, true);
                 api.showBoard();
-                api.updateFigures(g);
+                api.updatePieces(g);
                 api.showAlert("GAME OVER , RED WINS, PRESS ANY KEY TO END");
                 return;
             }      
         }
         if(!castleDetected)
-            b.moveFigure(movementFromTo.first, movementFromTo.second, false);
+            b.movePiece(movementFromTo.first, movementFromTo.second, false);
 
         //promote pawn if it is at the end
         if(!castleDetected){
@@ -102,14 +102,14 @@ void OnePlayerGame::startGameLoop(){
         stalemateDetected = isStalmate(g,b, 1);
         checkMateDetected = isCheckMate(g,b, 1);
 
-        b.refreshFigureCoordinates();
+        b.refreshPieceCoordinates();
         //no stalmate or check mate -> pc can make a move
         if( !stalemateDetected && !checkMateDetected ){
             bool pcWin = false;
             ptrComputer->makeNextMove(g, b, pcWin);
             if(pcWin){
                 api.showBoard();
-                api.updateFigures(g);
+                api.updatePieces(g);
                 api.showAlert("GAME OVER , BLUE WINS, PRESS ANY KEY TO END");
                 return;
             }

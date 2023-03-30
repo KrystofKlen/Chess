@@ -25,46 +25,46 @@ bool breakBecausePositionBlocked(int x, int y, int side, std::list<Coordinates> 
 
 //Various function to generate moves
 
-void addMovesVertical(std::list<Coordinates> & possiblePositions, const Figure & figure);
-void addMovesHorizontal(std::list<Coordinates> & possiblePositions, const Figure & figure);
-void addMoves1Quadrant(std::list<Coordinates> & possiblePositions, const Figure & figure);
-void addMoves2Quadrant(std::list<Coordinates> & possiblePositions, const Figure & figure);
-void addMoves3Quadrant(std::list<Coordinates> & possiblePositions, const Figure & figure);
-void addMoves4Quadrant(std::list<Coordinates> & possiblePositions, const Figure & figure);
-void addMovesKnight(std::list<Coordinates> & possiblePositions,  const Figure & figure);
+void addMovesVertical(std::list<Coordinates> & possiblePositions, const Piece & piece);
+void addMovesHorizontal(std::list<Coordinates> & possiblePositions, const Piece & piece);
+void addMoves1Quadrant(std::list<Coordinates> & possiblePositions, const Piece & piece);
+void addMoves2Quadrant(std::list<Coordinates> & possiblePositions, const Piece & piece);
+void addMoves3Quadrant(std::list<Coordinates> & possiblePositions, const Piece & piece);
+void addMoves4Quadrant(std::list<Coordinates> & possiblePositions, const Piece & piece);
+void addMovesKnight(std::list<Coordinates> & possiblePositions,  const Piece & piece);
 
-//side 1 = side playing "downwards" and having figures up
-void addQuadrantsForPawnSide1(std::list<Coordinates> & possiblePositions, const Figure & figure);
+//side 1 = side playing "downwards" and having pieces up
+void addQuadrantsForPawnSide1(std::list<Coordinates> & possiblePositions, const Piece & piece);
 
-//side 1 = side playing "upwards" and having figures down
-void addQuadrantsForPawnSide2(std::list<Coordinates> & possiblePositions, const Figure & figure);
+//side 1 = side playing "upwards" and having pieces down
+void addQuadrantsForPawnSide2(std::list<Coordinates> & possiblePositions, const Piece & piece);
 
 /**
  * adds move possibilities for en passant, function returns emmidiately if
- * given figure is not Pawn 
- * @param std::list<Coordinates> & possiblePositions - possible positions of figure
- * @param const Figure & figure ... pawn
+ * given piece is not Pawn 
+ * @param std::list<Coordinates> & possiblePositions - possible positions of piece
+ * @param const Piece & piece ... pawn
  */
-void addEnPassantForPawn(std::list<Coordinates> & possiblePositions, const Figure & figure);
+void addEnPassantForPawn(std::list<Coordinates> & possiblePositions, const Piece & piece);
 
 /**
  * Adds position for king to castle
  * Moves added only if castling conditions are met!
  * @param std::list<Coordinates> & possiblePositions - possible positions of king
- * @param const Figure & figure ... pking
+ * @param const Piece & piece ... pking
  */
-void addCastlingPositionsForKing(std::list<Coordinates > & castlingPositions, const Figure & figure);
+void addCastlingPositionsForKing(std::list<Coordinates > & castlingPositions, const Piece & piece);
 
 /**
  * Differs from "addQuadrantsForPawnSide1" !!!, this function will automatically 
  * add quadrants-moves for pawn.
  * Usage: detection whether king stepped into check intentionally
  */
-void addPawnPossibleKickoutsSide1(std::list<Coordinates> & possiblePositions, const Figure & pawn);
+void addPawnPossibleKickoutsSide1(std::list<Coordinates> & possiblePositions, const Piece & pawn);
 
 /**
  * Differs from "addQuadrantsForPawnSide2" !!!, this function will automatically 
  * add quadrants-moves for pawn.
  * Usage: detection whether king stepped into check intentionally
  */
-void addPawnPossibleKickoutsSide2(std::list<Coordinates> & possiblePositions, const Figure & pawn);
+void addPawnPossibleKickoutsSide2(std::list<Coordinates> & possiblePositions, const Piece & pawn);

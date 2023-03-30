@@ -5,7 +5,7 @@ Position::Position(const Position & pos){
     mColumnIndex = pos.mColumnIndex;
     mIsFree = pos.mIsFree;
     ptrToPositionOnWhichIsPawnThatCanBeKickedUsingEnPassant = pos.ptrToPositionOnWhichIsPawnThatCanBeKickedUsingEnPassant;
-    mFigure = pos.mFigure;
+    mPiece = pos.mPiece;
 }
 
 Position::Position(){}

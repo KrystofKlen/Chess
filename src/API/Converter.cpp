@@ -25,11 +25,11 @@ void Converter::breakUpChunks(const std::string & strChunk, std::list<std::strin
     }
 }
 
-std::shared_ptr<Figure> Converter::createFigureFromChunk(const std::string & figureData){
+std::shared_ptr<Piece> Converter::createPieceFromChunk(const std::string & pieceData){
 
     int ASCII_CONSTANT = 48;
 
-    std::string::const_iterator it = figureData.begin();
+    std::string::const_iterator it = pieceData.begin();
     char letter = *it;
     it++;
     it++;

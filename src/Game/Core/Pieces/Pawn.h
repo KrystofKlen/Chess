@@ -5,7 +5,7 @@
 
 const int pawnRank = 30;
 
-class Pawn : public  Figure{
+class Pawn : public  Piece{
 public:
     Pawn(int side, Coordinates initCoordinates, int numOfStepsDone, int id);
     Pawn(const Pawn & ref);

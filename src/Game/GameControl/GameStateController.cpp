@@ -2,16 +2,16 @@
 
 bool isCheckMate(Game & g, Board & b, int sidePlaying){
 
-    std::shared_ptr<Figure> king;
-    const std::list<std::shared_ptr<Figure>>* pOpponentFiguresIn;
-    sidePlaying == 1 ? pOpponentFiguresIn =  &g.figuresINplayer2 : pOpponentFiguresIn = &g.figuresINplayer1;
+    std::shared_ptr<Piece> king;
+    const std::list<std::shared_ptr<Piece>>* pOpponentPiecesIn;
+    sidePlaying == 1 ? pOpponentPiecesIn =  &g.piecesINplayer2 : pOpponentPiecesIn = &g.piecesINplayer1;
 
     //find king
     for (int rowIndex = 0; rowIndex < 8; rowIndex++){
         for (int columnIndex = 0; columnIndex < 8; columnIndex++){
             const Position & posRef = Board::playField[rowIndex][columnIndex];
-            if( !posRef.mIsFree && posRef.mFigure->mLetter == 'K' && posRef.mFigure->mSide == sidePlaying){
-                king = posRef.mFigure;
+            if( !posRef.mIsFree && posRef.mPiece->mLetter == 'K' && posRef.mPiece->mSide == sidePlaying){
+                king = posRef.mPiece;
                 rowIndex = 8;
                 break;
             }
@@ -31,28 +31,28 @@ bool isCheckMate(Game & g, Board & b, int sidePlaying){
 
 
     std::list<Coordinates> moves;
-    std::list<std::shared_ptr<Figure>>* pKingsFigures = 
-    sidePlaying == 1 ? (pKingsFigures = &(g.figuresINplayer1)) : &g.figuresINplayer2;
-    for(auto fig : *pKingsFigures){
+    std::list<std::shared_ptr<Piece>>* pKingsPieces = 
+    sidePlaying == 1 ? (pKingsPieces = &(g.piecesINplayer1)) : &g.piecesINplayer2;
+    for(auto fig : *pKingsPieces){
         if(fig->mLetter!='K'){
             fig->getPossibleMovePositions(moves);
             for(auto & move : moves){
                 if(fig->mCoordinates == move) continue;
                 
-                bool canKickOut = g.checkIfFigureWasKickedOut(move);
-                std::shared_ptr<Figure> tmpKick;
+                bool canKickOut = g.checkIfPieceWasKickedOut(move);
+                std::shared_ptr<Piece> tmpKick;
                 if(canKickOut){
-                    tmpKick = Board::playField[move.mRowIndex][move.mColumnIndex].mFigure;
+                    tmpKick = Board::playField[move.mRowIndex][move.mColumnIndex].mPiece;
                     tmpKick->isInSimulation = false;
                 }
                 Coordinates previous = fig->mCoordinates;
-                b.moveFigure(fig->mCoordinates, move, false);
+                b.movePiece(fig->mCoordinates, move, false);
 
                 bool inCheck = kingIsInCheck(g,b,sidePlaying);
 
-                b.moveFigure(move, previous, false);
+                b.movePiece(move, previous, false);
                 if(canKickOut){
-                    Board::playField[move.mRowIndex][move.mColumnIndex].mFigure = tmpKick;
+                    Board::playField[move.mRowIndex][move.mColumnIndex].mPiece = tmpKick;
                     Board::playField[move.mRowIndex][move.mColumnIndex].mIsFree = false;
                     tmpKick->isInSimulation = true;
                 } 
@@ -66,16 +66,16 @@ bool isCheckMate(Game & g, Board & b, int sidePlaying){
 
 bool isStalmate(Game & g, Board & b, int sidePlaying){
 
-    std::shared_ptr<Figure> king;
-    const std::list<std::shared_ptr<Figure>>* pFiguresIn;
-    sidePlaying == 1 ? pFiguresIn =  &g.figuresINplayer1 : pFiguresIn = &g.figuresINplayer2;
+    std::shared_ptr<Piece> king;
+    const std::list<std::shared_ptr<Piece>>* pPiecesIn;
+    sidePlaying == 1 ? pPiecesIn =  &g.piecesINplayer1 : pPiecesIn = &g.piecesINplayer2;
 
     //find king
     for (int rowIndex = 0; rowIndex < 8; rowIndex++){
         for (int columnIndex = 0; columnIndex < 8; columnIndex++){
             const Position & posRef = Board::playField[rowIndex][columnIndex];
-            if( !posRef.mIsFree && posRef.mFigure->mLetter == 'K' && posRef.mFigure->mSide == sidePlaying){
-                king = posRef.mFigure;
+            if( !posRef.mIsFree && posRef.mPiece->mLetter == 'K' && posRef.mPiece->mSide == sidePlaying){
+                king = posRef.mPiece;
                 rowIndex = 8;
                 break;
             }
@@ -96,9 +96,9 @@ bool isStalmate(Game & g, Board & b, int sidePlaying){
     }
 
     //everywhere where king will go, he is gonna land into a check,
-    //so we will check if there is another figure to make a move
+    //so we will check if there is another piece to make a move
     //if not -> stalmate detected
-    for(auto & fig : *pFiguresIn){
+    for(auto & fig : *pPiecesIn){
         if(fig->mLetter!='K'){
             fig->getPossibleMovePositions(movesRest);
         }
@@ -111,16 +111,16 @@ bool isStalmate(Game & g, Board & b, int sidePlaying){
 
 bool kingIsInCheck(Game & g, Board & b, int sidePlaying){
 
-    std::shared_ptr<Figure> king;
-    const std::list<std::shared_ptr<Figure>>* pOpponentFiguresIn;
-    sidePlaying == 1 ? pOpponentFiguresIn =  &g.figuresINplayer2 : pOpponentFiguresIn = &g.figuresINplayer1;
+    std::shared_ptr<Piece> king;
+    const std::list<std::shared_ptr<Piece>>* pOpponentPiecesIn;
+    sidePlaying == 1 ? pOpponentPiecesIn =  &g.piecesINplayer2 : pOpponentPiecesIn = &g.piecesINplayer1;
 
     //find king
     for (int rowIndex = 0; rowIndex < 8; rowIndex++){
         for (int columnIndex = 0; columnIndex < 8; columnIndex++){
             const Position & posRef = Board::playField[rowIndex][columnIndex];
-            if( !posRef.mIsFree && posRef.mFigure->mLetter == 'K' && posRef.mFigure->mSide == sidePlaying){
-                king = posRef.mFigure;
+            if( !posRef.mIsFree && posRef.mPiece->mLetter == 'K' && posRef.mPiece->mSide == sidePlaying){
+                king = posRef.mPiece;
                 rowIndex = 8;
                 break;
             }
@@ -129,7 +129,7 @@ bool kingIsInCheck(Game & g, Board & b, int sidePlaying){
 
     //generate opponents moves
     std::list<Coordinates> opponentsMoves;
-    for(auto & fig : *pOpponentFiguresIn){
+    for(auto & fig : *pOpponentPiecesIn){
         if(fig->isInSimulation){
             fig->getPossibleMovePositions(opponentsMoves);
         } 
@@ -145,25 +145,25 @@ bool kingIsInCheck(Game & g, Board & b, int sidePlaying){
 }
 
 
-bool kingWillNotLandIntoCheck( Game & g, Board & b, Coordinates & anticipatedPosition, std::shared_ptr<Figure> king ){
+bool kingWillNotLandIntoCheck( Game & g, Board & b, Coordinates & anticipatedPosition, std::shared_ptr<Piece> king ){
 
     Coordinates currentPosition = king->mCoordinates;
     int kingSide = king->mSide;
 
     Position & anticPosRef = Board::playField[anticipatedPosition.mRowIndex][anticipatedPosition.mColumnIndex];
 
-    std::shared_ptr<Figure> tmpBackup = nullptr;
+    std::shared_ptr<Piece> tmpBackup = nullptr;
 
-    //clear position if a opponents figure present, save info to tmp
+    //clear position if a opponents piece present, save info to tmp
     if(
        !anticPosRef.mIsFree &&
-       anticPosRef.mFigure->mSide != kingSide
+       anticPosRef.mPiece->mSide != kingSide
         ){
-            tmpBackup = anticPosRef.mFigure;
+            tmpBackup = anticPosRef.mPiece;
         }
 
     //move king to anticipated position
-    b.moveFigure(currentPosition, anticipatedPosition, false);
+    b.movePiece(currentPosition, anticipatedPosition, false);
 
     std::list<Coordinates> opponentsMoves;
   
@@ -172,14 +172,14 @@ bool kingWillNotLandIntoCheck( Game & g, Board & b, Coordinates & anticipatedPos
         for (int columnIndex = 0; columnIndex < 8; columnIndex++){
             
             const Position & curPosRef = Board::playField[rowIndex][columnIndex];
-            if( !curPosRef.mIsFree && kingSide != curPosRef.mFigure->mSide ){
+            if( !curPosRef.mIsFree && kingSide != curPosRef.mPiece->mSide ){
 
-                if(curPosRef.mFigure->mLetter == 'P'){
-                    curPosRef.mFigure->mSide == 1 ? 
-                    addPawnPossibleKickoutsSide1(opponentsMoves, *curPosRef.mFigure) 
-                    : addPawnPossibleKickoutsSide2(opponentsMoves, *curPosRef.mFigure);
+                if(curPosRef.mPiece->mLetter == 'P'){
+                    curPosRef.mPiece->mSide == 1 ? 
+                    addPawnPossibleKickoutsSide1(opponentsMoves, *curPosRef.mPiece) 
+                    : addPawnPossibleKickoutsSide2(opponentsMoves, *curPosRef.mPiece);
                 }else{
-                    curPosRef.mFigure->getPossibleMovePositions(opponentsMoves);
+                    curPosRef.mPiece->getPossibleMovePositions(opponentsMoves);
                 }
 
             }
@@ -188,10 +188,10 @@ bool kingWillNotLandIntoCheck( Game & g, Board & b, Coordinates & anticipatedPos
     }
 
     //move king back
-    b.moveFigure(anticipatedPosition, currentPosition, false);
+    b.movePiece(anticipatedPosition, currentPosition, false);
 
     //reset position the king was at
-    anticPosRef.mFigure = tmpBackup;
+    anticPosRef.mPiece = tmpBackup;
     if(tmpBackup != nullptr)
         anticPosRef.mIsFree = false;
 
@@ -207,14 +207,14 @@ bool kingWillNotLandIntoCheck( Game & g, Board & b, Coordinates & anticipatedPos
 
 bool kingWillNotLandIntoCheck( Game & g, Board & b, Coordinates & anticipatedPosition, int sidePlaying ){
 
-    std::shared_ptr<Figure> king;
+    std::shared_ptr<Piece> king;
 
     //find king
     for (int rowIndex = 0; rowIndex < 8; rowIndex++){
         for (int columnIndex = 0; columnIndex < 8; columnIndex++){
             const Position & posRef = Board::playField[rowIndex][columnIndex];
-            if( !posRef.mIsFree && posRef.mFigure->mLetter == 'K' && posRef.mFigure->mSide == sidePlaying){
-                king = posRef.mFigure;
+            if( !posRef.mIsFree && posRef.mPiece->mLetter == 'K' && posRef.mPiece->mSide == sidePlaying){
+                king = posRef.mPiece;
                 rowIndex = 8;
                 break;
             }

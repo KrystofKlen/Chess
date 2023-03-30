@@ -2,11 +2,11 @@
 
 //---------- QUEEN -----------------------------------------------------------------
 Queen::Queen(int side, Coordinates initCoordinates, int numOfStepsDone, int id)
- : Figure(8,'Q',side,initCoordinates,numOfStepsDone, id, queenRank){
+ : Piece(8,'Q',side,initCoordinates,numOfStepsDone, id, queenRank){
 
 }
 Queen::Queen(const Queen & ref)
- : Figure(ref.mMaxNumberOfSteps, ref.mLetter, ref.mSide, ref.mCoordinates, ref.mNumOfStepsDone, ref.mId,queenRank ){
+ : Piece(ref.mMaxNumberOfSteps, ref.mLetter, ref.mSide, ref.mCoordinates, ref.mNumOfStepsDone, ref.mId,queenRank ){
 
 }
 void Queen::modifyRank(){

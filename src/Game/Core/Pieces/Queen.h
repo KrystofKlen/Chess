@@ -5,7 +5,7 @@
 
 const int queenRank = 250;
 
-class Queen :  public  Figure{
+class Queen :  public  Piece{
 public:
     Queen(int side, Coordinates initCoordinates, int numOfStepsDone, int id);
     Queen(const Queen & ref);

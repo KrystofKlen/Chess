@@ -10,24 +10,24 @@ class UI{
 
 public:
     
-    static std::pair<char,int> infoAboutFigures[8][8];
+    static std::pair<char,int> infoAboutPieces[8][8];
     struct Field{
         WINDOW* mPtrWindow;
         int mColorPairCode;
-        chtype charRepresentingFigure;
+        chtype charRepresentingPiece;
         int mSide;
     };
     void endScreen();
-    void setSelected(int playingSide, chtype charRepresentigFigure);
+    void setSelected(int playingSide, chtype charRepresentigPiece);
     void drawDownWindow(WINDOW** win,  int* winDownSize, int lines, const char* headline);
     void showChessBoard();
     std::pair< std::pair<int,int>, std::pair<int,int> > pickPosition(int sidePlaying );
-    void setPlayingFiguresOnScreen();
-    void setKickedFiguresOnScreen(const std::list<std::pair<char,int>> & infoAboutKickedFigures);
+    void setPlayingPiecesOnScreen();
+    void setKickedPiecesOnScreen(const std::list<std::pair<char,int>> & infoAboutKickedPieces);
     void setAlert(int COLOR_PAIR_CODE, const std::string & message);
     std::string showMenu(std::list<std::string> options);
-    void setKickedFiguresOnScreen(const std::list<std::pair<char,int>> & infoAboutKickedFigures, WINDOW* winKickedFigures);
-    char selectFigureToMoveBack(const std::vector<std::pair<char,int>> & infoAboutKickedFigures, int playingSide);
+    void setKickedPiecesOnScreen(const std::list<std::pair<char,int>> & infoAboutKickedPieces, WINDOW* winKickedPieces);
+    char selectPieceToMoveBack(const std::vector<std::pair<char,int>> & infoAboutKickedPieces, int playingSide);
     void printAscii();
     void printManualMenu();
     void printManualGame();
@@ -46,6 +46,6 @@ private:
     Field board[8][8];
     WINDOW* pWinAlert;
     WINDOW* pWinDown;
-    WINDOW* pWinKickedFigures;
+    WINDOW* pWinKickedPieces;
     WINDOW* inputWin;
 };

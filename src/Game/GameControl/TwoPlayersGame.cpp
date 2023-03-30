@@ -2,14 +2,14 @@
 
 void TwoPlayersGame::startGameLoop(){
 
-    Board::setFiguresOnBoard(g.figuresINplayer1, g.figuresINplayer2);
+    Board::setPiecesOnBoard(g.piecesINplayer1, g.piecesINplayer2);
     
     bool gameRunning = true;
 
     while(gameRunning){
         //refresh UI
         api.showBoard();
-        api.updateFigures(g);
+        api.updatePieces(g);
 
         //checkDetected = false;
         //check game state
@@ -32,14 +32,14 @@ void TwoPlayersGame::startGameLoop(){
             return;
         }
         
-        //pick figure and position to move to
+        //pick piece and position to move to
         std::pair< Coordinates,Coordinates > movementFromTo =  api.pickPosition(playingSide, gameRunning);
         if(!gameRunning) break;
         
         //check whether move is OK, if not -> new iteration
         bool moveIsValid = g.moveIsValid(movementFromTo.first,movementFromTo.second);
         if( !moveIsValid) continue;
-        if( Board::playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mFigure->mLetter == 'K'
+        if( Board::playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece->mLetter == 'K'
         && !kingWillNotLandIntoCheck(g,b, movementFromTo.second, playingSide)){
             moveIsValid = false;
         }
@@ -59,17 +59,17 @@ void TwoPlayersGame::startGameLoop(){
             }
         }
 
-        //checking if we are kicking out opponents figure
-        if(g.checkIfFigureWasKickedOut(movementFromTo.second)){
-            char letter = Board::playField[movementFromTo.second.mRowIndex][movementFromTo.second.mColumnIndex].mFigure
+        //checking if we are kicking out opponents piece
+        if(g.checkIfPieceWasKickedOut(movementFromTo.second)){
+            char letter = Board::playField[movementFromTo.second.mRowIndex][movementFromTo.second.mColumnIndex].mPiece
             ->mLetter;
-            g.kickout(movementFromTo.second, playingSide == 1 ? g.figuresOUTplayer2 : g.figuresOUTplayer1); 
+            g.kickout(movementFromTo.second, playingSide == 1 ? g.piecesOUTplayer2 : g.piecesOUTplayer1); 
             
             //end game if king was the target
             if(letter == 'K'){
-                b.moveFigure(movementFromTo.first, movementFromTo.second, true);
+                b.movePiece(movementFromTo.first, movementFromTo.second, true);
                 api.showBoard();
-                api.updateFigures(g);
+                api.updatePieces(g);
                 if(playingSide == 1){
                     api.showAlert("GAME OVER , RED WINS, PRESS ANY KEY TO END");
                 }else{
@@ -78,7 +78,7 @@ void TwoPlayersGame::startGameLoop(){
                 return;
             }     
         }
-        b.moveFigure(movementFromTo.first, movementFromTo.second, true);
+        b.movePiece(movementFromTo.first, movementFromTo.second, true);
 
         //promote pawn if it is at the end
         bool pawnAtEnd = g.checkIfPawnReachedEnd(playingSide);
@@ -92,7 +92,7 @@ void TwoPlayersGame::startGameLoop(){
         //end game if check mate 
         if(checkMateDetected){
             api.showBoard();
-            api.updateFigures(g);
+            api.updatePieces(g);
             api.showAlert("CHECK MATE, PRESS ANY KEY TO END");
             return;
         }

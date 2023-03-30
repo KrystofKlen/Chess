@@ -5,7 +5,7 @@
 
 const int bishopRank = 100;
 
-class Bishop : public  Figure{
+class Bishop : public  Piece{
 public:
     Bishop(int side, Coordinates initCoordinates, int numOfStepsDone, int id);
     Bishop(const Bishop & ref);

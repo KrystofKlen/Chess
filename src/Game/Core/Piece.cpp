@@ -1,7 +1,7 @@
 #include <list>
 #include "Piece.h"
 
-Figure::Figure(int maxNumberOfSteps, char letter, int side, 
+Piece::Piece(int maxNumberOfSteps, char letter, int side, 
 Coordinates innitCoordinates, int numOfStepsDone, int id, int rank){
     mMaxNumberOfSteps = maxNumberOfSteps;
     mLetter = letter;
@@ -12,10 +12,10 @@ Coordinates innitCoordinates, int numOfStepsDone, int id, int rank){
     mRank = rank;
 }
 
-Figure::Figure(const Figure & figure){
-    mMaxNumberOfSteps = figure.mMaxNumberOfSteps;
-    mLetter = figure.mLetter;
-    mSide = figure.mSide;
-    mCoordinates.setCoordinates( figure.mCoordinates );
-    mNumOfStepsDone = figure.mNumOfStepsDone;
+Piece::Piece(const Piece & piece){
+    mMaxNumberOfSteps = piece.mMaxNumberOfSteps;
+    mLetter = piece.mLetter;
+    mSide = piece.mSide;
+    mCoordinates.setCoordinates( piece.mCoordinates );
+    mNumOfStepsDone = piece.mNumOfStepsDone;
 }

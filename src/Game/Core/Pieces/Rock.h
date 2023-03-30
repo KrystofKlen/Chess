@@ -5,7 +5,7 @@
 
 const int rockRank = 100;
 
-class Rock : public  Figure{
+class Rock : public  Piece{
 public:
     Rock(int side, Coordinates initCoordinates, int numOfStepsDone, int id);
     Rock(const Rock & ref);

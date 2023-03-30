@@ -2,7 +2,7 @@
 #include "Coordinates.h"
 #include <list>
 
-class Figure{
+class Piece{
 
 public:
     char mLetter;
@@ -15,20 +15,20 @@ public:
     bool isInSimulation = true;
     /**
      * This function will fill possiblePositions with coordinates of positions,
-     *  which Figure(King, Queen .. or other Figure inheriting from this class) can go to
+     *  which Piece(King, Queen .. or other Piece inheriting from this class) can go to
      */
     virtual void getPossibleMovePositions(std::list<Coordinates> & possiblePositions) = 0;
 
     /**
-     * This function will modify figures rank, it is up to you how you'll implement this.
+     * This function will modify Pieces rank, it is up to you how you'll implement this.
      * Default implementation is empty.
      */
     virtual void modifyRank() = 0;
     
-    Figure(int maxNumberOfSteps, char letter, int side, 
+    Piece(int maxNumberOfSteps, char letter, int side, 
     Coordinates initCoordinates, int numOfStepsDone, int id, int rank);
-    Figure(const Figure & Figure);
-    virtual ~Figure(){}
+    Piece(const Piece & Piece);
+    virtual ~Piece(){}
 private:
     
 

@@ -2,10 +2,10 @@
 
 //---------- PAWN -----------------------------------------------------------------
 Pawn::Pawn(int side, Coordinates initCoordinates,int numOfStepsDone, int id)
- : Figure(1,'P',side,initCoordinates,numOfStepsDone, id, pawnRank){
+ : Piece(1,'P',side,initCoordinates,numOfStepsDone, id, pawnRank){
 }
 Pawn::Pawn(const Pawn & ref)
- : Figure(ref.mMaxNumberOfSteps, ref.mLetter, ref.mSide, ref.mCoordinates, ref.mNumOfStepsDone, ref.mId , pawnRank){
+ : Piece(ref.mMaxNumberOfSteps, ref.mLetter, ref.mSide, ref.mCoordinates, ref.mNumOfStepsDone, ref.mId , pawnRank){
 
 }
 

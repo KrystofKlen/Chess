@@ -25,7 +25,7 @@ public:
     /**
      * Creates actual objects from chunks
      */
-    std::shared_ptr<Figure> createFigureFromChunk(const std::string & figureData);
+    std::shared_ptr<Piece> createPieceFromChunk(const std::string & figureData);
 
     /**
      * Sets mIsFree attribute into playField

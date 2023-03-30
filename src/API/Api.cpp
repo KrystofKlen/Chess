@@ -31,7 +31,7 @@ std::pair<Coordinates,Coordinates> API::pickPosition( int sidePlaying, bool & ga
 
 void API::promotePawn(Coordinates coordinatesOfPawn,  Game & g, Board & b){
 
-    std::shared_ptr<Figure> & ref =  Board::playField[coordinatesOfPawn.mRowIndex][coordinatesOfPawn.mColumnIndex].mFigure;
+    std::shared_ptr<Piece> & ref =  Board::playField[coordinatesOfPawn.mRowIndex][coordinatesOfPawn.mColumnIndex].mPiece;
     int playingSide = ref->mSide;
 
     std::vector<std::pair<char,int>> kicked;
@@ -40,57 +40,57 @@ void API::promotePawn(Coordinates coordinatesOfPawn,  Game & g, Board & b){
     kicked.push_back({'H',playingSide});
     kicked.push_back({'R',playingSide});
 
-    std::shared_ptr<Figure> promotedFigure;
+    std::shared_ptr<Piece> promotedPiece;
 
-    char letter = ui.selectFigureToMoveBack(kicked,playingSide);
+    char letter = ui.selectPieceToMoveBack(kicked,playingSide);
     switch (letter)
     {
     case 'Q':
-        promotedFigure = std::make_shared<Queen>(playingSide, coordinatesOfPawn, 0, ref->mId);
+        promotedPiece = std::make_shared<Queen>(playingSide, coordinatesOfPawn, 0, ref->mId);
         break;
 
     case 'B':
-        promotedFigure = std::make_shared<Bishop>(playingSide, coordinatesOfPawn, 0, ref->mId);
+        promotedPiece = std::make_shared<Bishop>(playingSide, coordinatesOfPawn, 0, ref->mId);
         break;
     
     case 'H':
-        promotedFigure = std::make_shared<Knight>(playingSide, coordinatesOfPawn, 0, ref->mId);
+        promotedPiece = std::make_shared<Knight>(playingSide, coordinatesOfPawn, 0, ref->mId);
         break;
     
     case 'R':
-        promotedFigure = std::make_shared<Rock>(playingSide, coordinatesOfPawn, 0, ref->mId);
+        promotedPiece = std::make_shared<Rock>(playingSide, coordinatesOfPawn, 0, ref->mId);
         break;
     
     default:
         break;
     }
 
-    std::vector<std::shared_ptr<Figure>>::iterator itAllFigures;
-    std::list<std::shared_ptr<Figure>>::iterator itINfigures;
-    //finding figure
+    std::vector<std::shared_ptr<Piece>>::iterator itAllPieces;
+    std::list<std::shared_ptr<Piece>>::iterator itINpieces;
+    //finding piece
     if(playingSide == 1){
-        for(itAllFigures = g.figuresPlayer1.begin(); *itAllFigures != ref; itAllFigures++);
+        for(itAllPieces = g.piecesPlayer1.begin(); *itAllPieces != ref; itAllPieces++);
 
-        for(itINfigures = g.figuresINplayer1.begin(); *itINfigures != ref; itINfigures++);
+        for(itINpieces = g.piecesINplayer1.begin(); *itINpieces != ref; itINpieces++);
     }   
     else{
-        for(itAllFigures = g.figuresPlayer2.begin(); *itAllFigures != ref; itAllFigures++);
+        for(itAllPieces = g.piecesPlayer2.begin(); *itAllPieces != ref; itAllPieces++);
 
-        for(itINfigures = g.figuresINplayer2.begin(); *itINfigures != ref; itINfigures++);
+        for(itINpieces = g.piecesINplayer2.begin(); *itINpieces != ref; itINpieces++);
     }
     
-    *itINfigures = promotedFigure;
-    *itAllFigures = promotedFigure;
-    ref = promotedFigure;
+    *itINpieces = promotedPiece;
+    *itAllPieces = promotedPiece;
+    ref = promotedPiece;
 }
 
 
-void API::updateFigures( Game & g){
+void API::updatePieces( Game & g){
     
-    getInfoAboutPlayingFigures(UI::infoAboutFigures);
-    getInfoAboutKickedFigures(g);
-    ui.setPlayingFiguresOnScreen();
-    ui.setKickedFiguresOnScreen(infoAboutKickedFigures);
+    getInfoAboutPlayingPieces(UI::infoAboutPieces);
+    getInfoAboutKickedPieces(g);
+    ui.setPlayingPiecesOnScreen();
+    ui.setKickedPiecesOnScreen(infoAboutKickedPieces);
 }
 
 void API::showBoard(){
@@ -102,37 +102,37 @@ void API::showAlert( const std::string & message){
     ui.setAlert(ui.ALERT_COLOR_CODE, message);
 }
 
-void API::getInfoAboutPlayingFigures(std::pair<char,int> infoAboutFigures [Board::BOARD_SIZE][Board::BOARD_SIZE]){
+void API::getInfoAboutPlayingPieces(std::pair<char,int> infoAboutPieces [Board::BOARD_SIZE][Board::BOARD_SIZE]){
 
     for(int i = 0; i<8; i++){
         for(int j = 0; j<8; j++){
             if(! Board::playField[i][j].mIsFree){
-                infoAboutFigures[i][j] =  {
-                    Board::playField[i][j].mFigure->mLetter,
-                    Board::playField[i][j].mFigure->mSide
+                infoAboutPieces[i][j] =  {
+                    Board::playField[i][j].mPiece->mLetter,
+                    Board::playField[i][j].mPiece->mSide
                 };
             }else{
-                infoAboutFigures[i][j] = { '\0', -1 };
+                infoAboutPieces[i][j] = { '\0', -1 };
             }
         }
     }
 }
 
-void API::getInfoAboutKickedFigures(Game & g){
+void API::getInfoAboutKickedPieces(Game & g){
 
-    infoAboutKickedFigures.clear();
+    infoAboutKickedPieces.clear();
 
-    for(auto & kickedFigure : g.figuresOUTplayer1){
-        infoAboutKickedFigures.push_back(std::make_pair(kickedFigure->mLetter, kickedFigure->mSide));
+    for(auto & kickedPiece : g.piecesOUTplayer1){
+        infoAboutKickedPieces.push_back(std::make_pair(kickedPiece->mLetter, kickedPiece->mSide));
     }
-    for(auto & kickedFigure : g.figuresOUTplayer2){
-        infoAboutKickedFigures.push_back(std::make_pair(kickedFigure->mLetter, kickedFigure->mSide));
+    for(auto & kickedPiece : g.piecesOUTplayer2){
+        infoAboutKickedPieces.push_back(std::make_pair(kickedPiece->mLetter, kickedPiece->mSide));
     }
 }
 
 
-void API::appendInfoAboutFigure(const std::list<std::shared_ptr<Figure>> & figures, std::stringstream & strStream){
-    for(const auto & x : figures){
+void API::appendInfoAboutPiece(const std::list<std::shared_ptr<Piece>> & pieces, std::stringstream & strStream){
+    for(const auto & x : pieces){
             strStream <<  x->mLetter;
             strStream <<  "{" ;
             strStream <<  x.get()->mSide;
@@ -168,15 +168,15 @@ void API::getInfoAboutGameToSave( const Board & b, const Game & g, std::string &
         strStream <<"\n";
     }
 
-    //info about figures
+    //info about pieces
     strStream <<"&\n";
-    appendInfoAboutFigure(g.figuresINplayer1, strStream);
+    appendInfoAboutPiece(g.piecesINplayer1, strStream);
     strStream <<"&\n";
-    appendInfoAboutFigure(g.figuresINplayer2, strStream);
+    appendInfoAboutPiece(g.piecesINplayer2, strStream);
     strStream <<"&\n";
-    appendInfoAboutFigure(g.figuresOUTplayer1, strStream);
+    appendInfoAboutPiece(g.piecesOUTplayer1, strStream);
     strStream <<"&\n";
-    appendInfoAboutFigure(g.figuresOUTplayer2, strStream);
+    appendInfoAboutPiece(g.piecesOUTplayer2, strStream);
     strStream <<"&\n";
 
     info.append(strStream.str());
@@ -234,64 +234,64 @@ void API::convertData(Game & g, bool & isCheck, bool & isCheckMate, bool & isSta
     //set playingSide
     playingSide = std::stoi(strPlayingSide);
 
-    //create figures
+    //create pieces
     Converter conv;
     conv.setIsFreeData(strIsFree);
    
-    std::shared_ptr<Figure> ptr;
+    std::shared_ptr<Piece> ptr;
         
-    std::list<std::string> chunksFigures;
-    conv.breakUpChunks(strFiguresInPlayer1, chunksFigures);
-    for(const std::string & chunk : chunksFigures){
-        ptr = conv.createFigureFromChunk(chunk);
+    std::list<std::string> chunksPieces;
+    conv.breakUpChunks(strPiecesInPlayer1, chunksPieces);
+    for(const std::string & chunk : chunksPieces){
+        ptr = conv.createPieceFromChunk(chunk);
         if(ptr == nullptr){
             endForLoadingError();
         }
-        g.figuresPlayer1.emplace_back(ptr);
-        g.figuresINplayer1.emplace_back(ptr);
+        g.piecesPlayer1.emplace_back(ptr);
+        g.piecesINplayer1.emplace_back(ptr);
     }
-    chunksFigures.clear();
+    chunksPieces.clear();
 
-    conv.breakUpChunks(strFiguresInPlayer2, chunksFigures);
-    for(const std::string & chunk : chunksFigures){
-        ptr = conv.createFigureFromChunk(chunk);
+    conv.breakUpChunks(strPiecesInPlayer2, chunksPieces);
+    for(const std::string & chunk : chunksPieces){
+        ptr = conv.createPieceFromChunk(chunk);
         if(ptr == nullptr){
             endForLoadingError();
         }
-        g.figuresPlayer2.push_back(ptr);
-        g.figuresINplayer2.push_back(ptr);
+        g.piecesPlayer2.push_back(ptr);
+        g.piecesINplayer2.push_back(ptr);
     }
-    chunksFigures.clear();
+    chunksPieces.clear();
 
-    conv.breakUpChunks(strFiguresOUTplayer1, chunksFigures);
-    for(const std::string & chunk : chunksFigures){
-        ptr = conv.createFigureFromChunk(chunk);
+    conv.breakUpChunks(strPiecesOUTplayer1, chunksPieces);
+    for(const std::string & chunk : chunksPieces){
+        ptr = conv.createPieceFromChunk(chunk);
         if(ptr == nullptr){
             endForLoadingError();
         }
-        g.figuresPlayer1.push_back(ptr);
-        g.figuresOUTplayer1.push_back(ptr);
+        g.piecesPlayer1.push_back(ptr);
+        g.piecesOUTplayer1.push_back(ptr);
     }
-    chunksFigures.clear();
+    chunksPieces.clear();
 
-    conv.breakUpChunks(strFiguresOUTplayer2, chunksFigures);
-    for(const std::string & chunk : chunksFigures){
-        ptr = conv.createFigureFromChunk(chunk);
+    conv.breakUpChunks(strPiecesOUTplayer2, chunksPieces);
+    for(const std::string & chunk : chunksPieces){
+        ptr = conv.createPieceFromChunk(chunk);
         if(ptr == nullptr){
             endForLoadingError();
         }
-        g.figuresPlayer2.push_back(ptr);
-        g.figuresOUTplayer2.push_back(ptr);
+        g.piecesPlayer2.push_back(ptr);
+        g.piecesOUTplayer2.push_back(ptr);
     }
-    chunksFigures.clear();
+    chunksPieces.clear();
 }
 
 bool API::loadGameInfoFromFile(const std::string fileName, std::string & gameType,
 std::string & difficulty){  
     //get info from file
     bool successfullyLoaded = 
-    fo.loadGameFromFile(fileName, gameType, difficulty, strIsCheck, strIsCheckMate, strIsStalmate, strPlayingSide, strIsFree, strFiguresInPlayer1, strFiguresInPlayer2,
-        strFiguresOUTplayer1, strFiguresOUTplayer2);
+    fo.loadGameFromFile(fileName, gameType, difficulty, strIsCheck, strIsCheckMate, strIsStalmate, strPlayingSide, strIsFree, strPiecesInPlayer1, strPiecesInPlayer2,
+        strPiecesOUTplayer1, strPiecesOUTplayer2);
 
     if(!successfullyLoaded){
         return false;

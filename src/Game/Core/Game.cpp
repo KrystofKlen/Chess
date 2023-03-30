@@ -1,38 +1,38 @@
 #include "Game.h"
 #include <iostream>
 
-void Game::kickout(std::shared_ptr<Figure> figureToKickout){
-    int side = figureToKickout->mSide;
+void Game::kickout(std::shared_ptr<Piece> pieceToKickout){
+    int side = pieceToKickout->mSide;
     if(side == 1){
-        figuresOUTplayer1.push_back(figureToKickout);
+        piecesOUTplayer1.push_back(pieceToKickout);
     }else{
-        figuresOUTplayer2.push_back(figureToKickout);
+        piecesOUTplayer2.push_back(pieceToKickout);
     }
 }
 
-void Game::kickout(Coordinates coordinatesOfFigureToKickOut, std::list<std::shared_ptr<Figure>> & dstToMoveKickedFigure){
-    Position & posRef = Board::playField[coordinatesOfFigureToKickOut.mRowIndex][coordinatesOfFigureToKickOut.mColumnIndex];
-    int side = posRef.mFigure->mSide;
+void Game::kickout(Coordinates coordinatesOfPieceToKickOut, std::list<std::shared_ptr<Piece>> & dstToMoveKickedPiece){
+    Position & posRef = Board::playField[coordinatesOfPieceToKickOut.mRowIndex][coordinatesOfPieceToKickOut.mColumnIndex];
+    int side = posRef.mPiece->mSide;
     if(side == 1){
-        dstToMoveKickedFigure.push_back(posRef.mFigure);
-        figuresINplayer1.remove(posRef.mFigure);
+        dstToMoveKickedPiece.push_back(posRef.mPiece);
+        piecesINplayer1.remove(posRef.mPiece);
     }else{
-        dstToMoveKickedFigure.push_back(posRef.mFigure);
-        figuresINplayer2.remove(posRef.mFigure);
+        dstToMoveKickedPiece.push_back(posRef.mPiece);
+        piecesINplayer2.remove(posRef.mPiece);
     }
     posRef.mIsFree = true;
-    posRef.mFigure = nullptr;
+    posRef.mPiece = nullptr;
  }
 
-void Game::checkEnPassant(Coordinates selectedPosition, Coordinates figureCoordinates){
-    Position& positionWithFigure = Board::playField[figureCoordinates.mRowIndex][figureCoordinates.mColumnIndex];
+void Game::checkEnPassant(Coordinates selectedPosition, Coordinates pieceCoordinates){
+    Position& positionWithPiece = Board::playField[pieceCoordinates.mRowIndex][pieceCoordinates.mColumnIndex];
     Position& selectedPosRef = Board::playField[selectedPosition.mRowIndex][selectedPosition.mColumnIndex];
     
-    if(positionWithFigure.mFigure->mLetter != 'P') return;
+    if(positionWithPiece.mPiece->mLetter != 'P') return;
     if(!selectedPosRef.mIsFree) return;
 
     const Position* potentialTarget;
-    if(positionWithFigure.mFigure->mSide == 2){
+    if(positionWithPiece.mPiece->mSide == 2){
         if(selectedPosition.mRowIndex != 2) return;
         potentialTarget = &Board::playField[selectedPosition.mRowIndex + 1][selectedPosition.mColumnIndex];
     }else{
@@ -42,31 +42,31 @@ void Game::checkEnPassant(Coordinates selectedPosition, Coordinates figureCoordi
 
     if(
         potentialTarget->mIsFree ||
-        potentialTarget->mFigure->mLetter != 'P' ||
-        potentialTarget->mFigure->mSide == positionWithFigure.mFigure->mSide ||
-        potentialTarget->mFigure->mNumOfStepsDone != 1
+        potentialTarget->mPiece->mLetter != 'P' ||
+        potentialTarget->mPiece->mSide == positionWithPiece.mPiece->mSide ||
+        potentialTarget->mPiece->mNumOfStepsDone != 1
         ) return;
     
-    kickout(potentialTarget->mFigure->mCoordinates, positionWithFigure.mFigure->mSide == 2 ? figuresOUTplayer1 : figuresOUTplayer2);
+    kickout(potentialTarget->mPiece->mCoordinates, positionWithPiece.mPiece->mSide == 2 ? piecesOUTplayer1 : piecesOUTplayer2);
     
 }
 
-bool Game::detectCastlingAttempt( Coordinates selectedPosition , Coordinates figurePosition){
-    char letter = Board::playField[figurePosition.mRowIndex][figurePosition.mColumnIndex].mFigure.get()->mLetter;
+bool Game::detectCastlingAttempt( Coordinates selectedPosition , Coordinates piecePosition){
+    char letter = Board::playField[piecePosition.mRowIndex][piecePosition.mColumnIndex].mPiece.get()->mLetter;
     if( letter != 'K') return false;
 
-    int kingColummIndex = Board::playField[figurePosition.mRowIndex][figurePosition.mColumnIndex].mFigure.get()->mCoordinates.mColumnIndex;
+    int kingColummIndex = Board::playField[piecePosition.mRowIndex][piecePosition.mColumnIndex].mPiece.get()->mCoordinates.mColumnIndex;
     if( abs(kingColummIndex - selectedPosition.mColumnIndex) > 1) return true;
     return false;
 }
 
-bool Game::moveIsValid(Coordinates coordinatesOfFigureToMove, Coordinates selectedPosition){
+bool Game::moveIsValid(Coordinates coordinatesOfPieceToMove, Coordinates selectedPosition){
     std::list<Coordinates> possiblePositions;
-    if(coordinatesOfFigureToMove == selectedPosition) return false;
+    if(coordinatesOfPieceToMove == selectedPosition) return false;
 
-    const Position & posRef = Board::playField[coordinatesOfFigureToMove.mRowIndex][coordinatesOfFigureToMove.mColumnIndex];
+    const Position & posRef = Board::playField[coordinatesOfPieceToMove.mRowIndex][coordinatesOfPieceToMove.mColumnIndex];
 
-    posRef.mFigure->getPossibleMovePositions(possiblePositions);
+    posRef.mPiece->getPossibleMovePositions(possiblePositions);
     
     for(auto & possiblePosition : possiblePositions){
         if(possiblePosition == selectedPosition){   
@@ -76,9 +76,9 @@ bool Game::moveIsValid(Coordinates coordinatesOfFigureToMove, Coordinates select
     return false;
 }
 
-bool Game::checkIfFigureWasKickedOut(Coordinates coordinates){
-    // if position a player wants go to is not free, it means that there is another figure
-    // this figure must be a figure of other player, because moves to a position where a player already has it's figure are forbidden
+bool Game::checkIfPieceWasKickedOut(Coordinates coordinates){
+    // if position a player wants go to is not free, it means that there is another piece
+    // this piece must be a piece of other player, because moves to a position where a player already has it's piece are forbidden
     if(Board::playField[coordinates.mRowIndex][coordinates.mColumnIndex].mIsFree) return false;
     else return true;
 }
@@ -88,12 +88,12 @@ bool Game::positionReachable(int playingSide, Coordinates positionToReach){
     std::list<Coordinates> possibleMoves;
     if(playingSide == 2){
     
-        for(auto & figure : Game::figuresINplayer2){
-            figure->getPossibleMovePositions(possibleMoves);
+        for(auto & piece : Game::piecesINplayer2){
+            piece->getPossibleMovePositions(possibleMoves);
         }
     }else{
-        for(auto & figure : figuresINplayer1){
-            figure->getPossibleMovePositions(possibleMoves); 
+        for(auto & piece : piecesINplayer1){
+            piece->getPossibleMovePositions(possibleMoves); 
         }
     }
     for(auto & move : possibleMoves){
@@ -104,58 +104,58 @@ bool Game::positionReachable(int playingSide, Coordinates positionToReach){
     return false;
 }
 
-bool Game::castle(Board & b, Coordinates selectedPosition, Coordinates figureCoordinates){
-    Position& positionWithFigure = Board::playField[figureCoordinates.mRowIndex][figureCoordinates.mColumnIndex];
+bool Game::castle(Board & b, Coordinates selectedPosition, Coordinates pieceCoordinates){
+    Position& positionWithPiece = Board::playField[pieceCoordinates.mRowIndex][pieceCoordinates.mColumnIndex];
 
-    if( positionWithFigure.mIsFree || positionWithFigure.mFigure->mLetter != 'K') return false;
+    if( positionWithPiece.mIsFree || positionWithPiece.mPiece->mLetter != 'K') return false;
     
     //side 1 SHORTER
-    if(positionWithFigure.mFigure->mSide == 1 && figureCoordinates.mColumnIndex < selectedPosition.mColumnIndex ){
-        for(int columnIndex = positionWithFigure.mFigure.get()->mCoordinates.mColumnIndex; columnIndex <= selectedPosition.mColumnIndex; columnIndex++){
+    if(positionWithPiece.mPiece->mSide == 1 && pieceCoordinates.mColumnIndex < selectedPosition.mColumnIndex ){
+        for(int columnIndex = positionWithPiece.mPiece.get()->mCoordinates.mColumnIndex; columnIndex <= selectedPosition.mColumnIndex; columnIndex++){
             if(positionReachable(2, {0,columnIndex})) {
                 return false;
             }
         }
-        b.moveFigure(figureCoordinates, selectedPosition,true);
-        b.moveFigure({0,7},{0,5},true);
+        b.movePiece(pieceCoordinates, selectedPosition,true);
+        b.movePiece({0,7},{0,5},true);
         return true;;
     }
 
     //side 1 LONGER
-    if(positionWithFigure.mFigure->mSide == 1 && figureCoordinates.mColumnIndex > selectedPosition.mColumnIndex ){
-        for(int columnIndex = positionWithFigure.mFigure.get()->mCoordinates.mColumnIndex; columnIndex >= selectedPosition.mColumnIndex; columnIndex--){
+    if(positionWithPiece.mPiece->mSide == 1 && pieceCoordinates.mColumnIndex > selectedPosition.mColumnIndex ){
+        for(int columnIndex = positionWithPiece.mPiece.get()->mCoordinates.mColumnIndex; columnIndex >= selectedPosition.mColumnIndex; columnIndex--){
             if(positionReachable(2, {0,columnIndex})){
                 
                 return false;
             } 
         }
-        b.moveFigure(figureCoordinates, selectedPosition,true);
-        b.moveFigure({0,0},{0,3}, true);
+        b.movePiece(pieceCoordinates, selectedPosition,true);
+        b.movePiece({0,0},{0,3}, true);
         return true;
     }
 
     //side 2 SHORTER
-    if(positionWithFigure.mFigure->mSide == 2 && figureCoordinates.mColumnIndex < selectedPosition.mColumnIndex ){
-        for(int columnIndex = positionWithFigure.mFigure.get()->mCoordinates.mColumnIndex; columnIndex <= selectedPosition.mColumnIndex; columnIndex++){
+    if(positionWithPiece.mPiece->mSide == 2 && pieceCoordinates.mColumnIndex < selectedPosition.mColumnIndex ){
+        for(int columnIndex = positionWithPiece.mPiece.get()->mCoordinates.mColumnIndex; columnIndex <= selectedPosition.mColumnIndex; columnIndex++){
             if(positionReachable(1, {7,columnIndex})){
                 return false;
             } 
         }
-        b.moveFigure(figureCoordinates, selectedPosition,true);
-        b.moveFigure({7,7},{7,5},true);
+        b.movePiece(pieceCoordinates, selectedPosition,true);
+        b.movePiece({7,7},{7,5},true);
         return true;
     }
 
     //side 2 LONGER
-    if(positionWithFigure.mFigure->mSide == 2 && figureCoordinates.mColumnIndex > selectedPosition.mColumnIndex ){
-        for(int columnIndex = positionWithFigure.mFigure.get()->mCoordinates.mColumnIndex; columnIndex >= selectedPosition.mColumnIndex; columnIndex--){
+    if(positionWithPiece.mPiece->mSide == 2 && pieceCoordinates.mColumnIndex > selectedPosition.mColumnIndex ){
+        for(int columnIndex = positionWithPiece.mPiece.get()->mCoordinates.mColumnIndex; columnIndex >= selectedPosition.mColumnIndex; columnIndex--){
             bool r = positionReachable(1, {7,columnIndex});
             if(r){
                 return false;
             } 
         }
-        b.moveFigure(figureCoordinates, selectedPosition,true);
-        b.moveFigure({7,0},{7,3},true);
+        b.movePiece(pieceCoordinates, selectedPosition,true);
+        b.movePiece({7,0},{7,3},true);
         return true;
     }
     return false;
@@ -164,7 +164,7 @@ bool Game::castle(Board & b, Coordinates selectedPosition, Coordinates figureCoo
 bool Game::checkIfPawnReachedEnd(int playingSide){
     if(playingSide == 1){
         for(int columnIndex = 0; columnIndex<8; columnIndex++){
-            if( !Board::playField[7][columnIndex].mIsFree && Board::playField[7][columnIndex].mFigure->mLetter == 'P'){
+            if( !Board::playField[7][columnIndex].mIsFree && Board::playField[7][columnIndex].mPiece->mLetter == 'P'){
                 return true;
             }
         }
@@ -172,7 +172,7 @@ bool Game::checkIfPawnReachedEnd(int playingSide){
     }
     else{
         for(int columnIndex = 0; columnIndex<8; columnIndex++){
-            if( !Board::playField[0][columnIndex].mIsFree && Board::playField[0][columnIndex].mFigure->mLetter == 'P'){
+            if( !Board::playField[0][columnIndex].mIsFree && Board::playField[0][columnIndex].mPiece->mLetter == 'P'){
                 return true;
             }
         }
@@ -185,87 +185,87 @@ Game::Game(){
 
     //DEFAULT SETUP
     int idSerial = 0;
-    //figures side 1 default
+    //pieces side 1 default
     Coordinates c = {0,0};
-    figuresPlayer1.push_back(std::make_shared <Rock> (1, c ,0, idSerial++) );  
+    piecesPlayer1.push_back(std::make_shared <Rock> (1, c ,0, idSerial++) );  
 
     c = {0,1};
-    figuresPlayer1.push_back(std::make_shared <Knight> (1, c ,0, idSerial++) ); 
+    piecesPlayer1.push_back(std::make_shared <Knight> (1, c ,0, idSerial++) ); 
 
     c = {0,2};
-    figuresPlayer1.push_back(std::make_shared <Bishop> (1, c ,0, idSerial++) ); 
+    piecesPlayer1.push_back(std::make_shared <Bishop> (1, c ,0, idSerial++) ); 
 
     c = {0,3};
-    figuresPlayer1.push_back(std::make_shared <Queen> (1, c ,0, idSerial++) ); 
+    piecesPlayer1.push_back(std::make_shared <Queen> (1, c ,0, idSerial++) ); 
 
     c = {0,4};
-    figuresPlayer1.push_back(std::make_shared <King> (1, c ,0, idSerial++) );
+    piecesPlayer1.push_back(std::make_shared <King> (1, c ,0, idSerial++) );
 
     c = {0,5};
-    figuresPlayer1.push_back(std::make_shared <Bishop> (1, c ,0, idSerial++) );
+    piecesPlayer1.push_back(std::make_shared <Bishop> (1, c ,0, idSerial++) );
 
     c = {0,6};
-    figuresPlayer1.push_back(std::make_shared <Knight> (1, c ,0, idSerial++) ); 
+    piecesPlayer1.push_back(std::make_shared <Knight> (1, c ,0, idSerial++) ); 
 
     c = {0,7};
-    figuresPlayer1.push_back(std::make_shared <Rock> (1, c ,0, idSerial++) ); 
+    piecesPlayer1.push_back(std::make_shared <Rock> (1, c ,0, idSerial++) ); 
 
     for(int columIndex = 0; columIndex < Board::BOARD_SIZE; columIndex++){
         c = {1, columIndex};
-        figuresPlayer1.push_back(std::make_shared <Pawn> (1, c ,0, idSerial++) );
+        piecesPlayer1.push_back(std::make_shared <Pawn> (1, c ,0, idSerial++) );
     }
     
-    //figures side 2 default
+    //pieces side 2 default
     c = {7,0};
-    figuresPlayer2.push_back(std::make_shared <Rock> (2, c ,0, idSerial++) );  
+    piecesPlayer2.push_back(std::make_shared <Rock> (2, c ,0, idSerial++) );  
 
     c = {7,1};
-    figuresPlayer2.push_back(std::make_shared <Knight> (2, c ,0, idSerial++) ); 
+    piecesPlayer2.push_back(std::make_shared <Knight> (2, c ,0, idSerial++) ); 
 
     c = {7,2};
-    figuresPlayer2.push_back(std::make_shared <Bishop> (2, c ,0, idSerial++) ); 
+    piecesPlayer2.push_back(std::make_shared <Bishop> (2, c ,0, idSerial++) ); 
 
     c = {7,3};
-    figuresPlayer2.push_back(std::make_shared <Queen> (2, c ,0, idSerial++) ); 
+    piecesPlayer2.push_back(std::make_shared <Queen> (2, c ,0, idSerial++) ); 
 
     c = {7,4};
-    figuresPlayer2.push_back(std::make_shared <King> (2, c ,0, idSerial++) );
+    piecesPlayer2.push_back(std::make_shared <King> (2, c ,0, idSerial++) );
 
     c = {7,5};
-    figuresPlayer2.push_back(std::make_shared <Bishop> (2, c ,0, idSerial++) );
+    piecesPlayer2.push_back(std::make_shared <Bishop> (2, c ,0, idSerial++) );
 
     c = {7,6};
-    figuresPlayer2.push_back(std::make_shared <Knight> (2, c ,0, idSerial++) ); 
+    piecesPlayer2.push_back(std::make_shared <Knight> (2, c ,0, idSerial++) ); 
 
     c = {7,7};
-    figuresPlayer2.push_back(std::make_shared <Rock> (2, c ,0, idSerial++) ); 
+    piecesPlayer2.push_back(std::make_shared <Rock> (2, c ,0, idSerial++) ); 
 
     for(int columIndex = 0; columIndex < Board::BOARD_SIZE; columIndex++){
         c = {6, columIndex};
-        figuresPlayer2.push_back(std::make_shared <Pawn> (2, c ,0, idSerial++) );
+        piecesPlayer2.push_back(std::make_shared <Pawn> (2, c ,0, idSerial++) );
     }
 
-    //set figures IN, in the default setup there are no figures OUT
-    for(auto & x : figuresPlayer1){
-        figuresINplayer1.push_back(x);
+    //set pieces IN, in the default setup there are no pieces OUT
+    for(auto & x : piecesPlayer1){
+        piecesINplayer1.push_back(x);
     }
-    for(auto & x : figuresPlayer2){
-        figuresINplayer2.push_back(x);
+    for(auto & x : piecesPlayer2){
+        piecesINplayer2.push_back(x);
     }     
 }
 
 void Game::clearDefault(){
-    figuresPlayer1.clear();
-    figuresPlayer2.clear();
-    figuresINplayer1.clear();
-    figuresINplayer2.clear();
-    figuresOUTplayer1.clear();
-    figuresOUTplayer2.clear();
+    piecesPlayer1.clear();
+    piecesPlayer2.clear();
+    piecesINplayer1.clear();
+    piecesINplayer2.clear();
+    piecesOUTplayer1.clear();
+    piecesOUTplayer2.clear();
 }
 
 void Game::findKingsIndex(){
     int index = 0;
-    for(auto & x : figuresPlayer1){
+    for(auto & x : piecesPlayer1){
         if(x->mLetter == 'K'){
             indexOfKingSide1 = index;
             std::cout<<indexOfKingSide1<<std::endl;
@@ -275,7 +275,7 @@ void Game::findKingsIndex(){
             index++;
     }
     index = 0;
-    for(auto & x : figuresPlayer2){
+    for(auto & x : piecesPlayer2){
         if(x->mLetter == 'K'){
             indexOfKingSide2 = index;
             std::cout<<indexOfKingSide1<<std::endl;

@@ -24,9 +24,9 @@ public:
     void endForLoadingError();
 
     /**
-     * Updates figures in and out of game (including their colors, positions etc.)
+     * Updates pieces in and out of game (including their colors, positions etc.)
      */
-    void updateFigures(Game & g);
+    void updatePieces(Game & g);
 
     /**
      * shows plain chess board
@@ -40,14 +40,14 @@ public:
     void showAlert(const std::string & message);
 
     /**
-     * User will pick a figure and position, 
-     * if figure of his own side taken, and position selected, its is returned.
+     * User will pick a piece and position, 
+     * if piece of his own side taken, and position selected, its is returned.
      * NO CONTROL THAT USER MADE A MOVE CONSISTENT WITH CHESS RULES!!!
      * @param  bool & gameIsRunning ... if user presses 'q' = quit and save gameIsRunning = false, otherwise gameIsRunning = true
-     * @return std::pair<Coordinates,Coordinates> .. first = position with figure, second = position to go
+     * @return std::pair<Coordinates,Coordinates> .. first = position with piece, second = position to go
      */
     std::pair<Coordinates,Coordinates> pickPosition(int sidePlaying, bool & gameIsRunning);
-    void appendInfoAboutFigure(const std::list<std::shared_ptr<Figure>> & figures, std::stringstream & strStream );
+    void appendInfoAboutPiece(const std::list<std::shared_ptr<Piece>> & pieces, std::stringstream & strStream );
     void getInfoAboutGameToSave( const Board & b, const Game & g, std::string & info);
     void promotePawn(Coordinates coordinatesOfPawn, Game & g, Board & b);
 
@@ -94,21 +94,21 @@ private:
     UI ui;
     FileOperations fo;
 
-    std::list<std::pair<char,int>> infoAboutKickedFigures;
+    std::list<std::pair<char,int>> infoAboutKickedPieces;
 
-    void getInfoAboutPlayingFigures(std::pair<char,int> infoAboutFigures [Board::BOARD_SIZE][Board::BOARD_SIZE]);
+    void getInfoAboutPlayingPieces(std::pair<char,int> infoAboutPieces [Board::BOARD_SIZE][Board::BOARD_SIZE]);
 
-    void getInfoAboutKickedFigures(Game & g);
+    void getInfoAboutKickedPieces(Game & g);
 
     std::string strPlayingSide;
     std::string strIsCheck;
     std::string strIsCheckMate;
     std::string strIsStalmate;
     std::string strIsFree;
-    std::string strFiguresInPlayer1;
-    std::string strFiguresInPlayer2;
-    std::string strFiguresOUTplayer1;
-    std::string strFiguresOUTplayer2;
+    std::string strPiecesInPlayer1;
+    std::string strPiecesInPlayer2;
+    std::string strPiecesOUTplayer1;
+    std::string strPiecesOUTplayer2;
 
 };
 

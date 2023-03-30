@@ -5,7 +5,7 @@
 
 const int kingRank = 10000;
 
-class King : public Figure{
+class King : public Piece{
 public:
     King(int side, Coordinates initCoordinates, int numOfStepsDone, int id);
     King(const King & ref);
