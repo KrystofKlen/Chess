@@ -6,6 +6,7 @@
 #include <ctime>
 #include <unordered_map> 
 #include <cmath>
+#include "ReadingAutomata.h"
 
 class FileOperations{
 public:

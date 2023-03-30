@@ -22,7 +22,7 @@ API=$(API_PATH)Api.o $(API_PATH)Converter.o
 GAME_CONTROL=$(GAME_CONTROL_PATH)GameStateController.o $(GAME_CONTROL_PATH)GameControl.o $(GAME_CONTROL_PATH)OnePlayerGame.o $(GAME_CONTROL_PATH)TwoPlayersGame.o $(GAME_CONTROL_PATH)GameStateController.o
 CORE=$(CORE_PATH)Moves.o $(CORE_PATH)Piece.o $(CORE_PATH)Position.o $(CORE_PATH)Coordinates.o $(CORE_PATH)Board.o $(CORE_PATH)Game.o
 PIECES=$(PIECES_PATH)King.o $(PIECES_PATH)Queen.o $(PIECES_PATH)Bishop.o $(PIECES_PATH)Knight.o $(PIECES_PATH)Rock.o $(PIECES_PATH)Pawn.o
-FILE_OPERATIONS=$(FILE_OPERATIONS_PATH)FileOperations.o
+FILE_OPERATIONS=$(FILE_OPERATIONS_PATH)ReadingAutomata.o $(FILE_OPERATIONS_PATH)FileOperations.o
 APPLICATION=$(APPLICATION_PATH)Application.o
 AI=$(AI_PATH)ComputerPlayer.o $(AI_PATH)DifficultLevel.o  $(AI_PATH)EasyLevel.o  $(AI_PATH)MidLevel.o
 

@@ -8,7 +8,6 @@ bool ReadingAutomata::readComment(std::istringstream & iss){
     while ( iss >> c3 ){
         if(c2 = '*' && c3 =='/') return true;
         c2 = c3;
-        //std::cout << c2;
     }
     return false;
 }
@@ -107,7 +106,8 @@ bool ReadingAutomata::readFreePositions(std::istringstream & iss, int board[8][8
     return true;
 }
 
-ReadingAutomata::readGameFromFile(const std::string & fileContent){
+bool ReadingAutomata::readGameFromFile(const std::string & fileContent, 
+std::list<PieceFileData> & piecesIn, std::list<PieceFileData> & piecesOut){
 
     int gameType, difficulty, isCheck,isCheckMate,isStalmate,playingSide;
     std::istringstream iss (fileContent);
@@ -141,16 +141,16 @@ ReadingAutomata::readGameFromFile(const std::string & fileContent){
     // read pieces in
     readComment(iss);
     if( ! readVariable(iss) || ! readToken(iss,'{')) return false;
-    std::shared_ptr<> p = {'a',0,0,0,0,0};
+    PieceFileData p ;
     while( readChessPiece(
         iss,
         p.mLetter,
         p.mSide,
-        p.row,
-        p.col,
+        p.mRowIndex,
+        p.mColumnIndex,
         p.mNumOfStepsDone,
         p.mId) ){
-            pieces_in.push_back(p);
+            piecesIn.push_back(p);
         }
         
     
@@ -163,11 +163,11 @@ ReadingAutomata::readGameFromFile(const std::string & fileContent){
         iss,
         p.mLetter,
         p.mSide,
-        p.row,
-        p.col,
+        p.mRowIndex,
+        p.mColumnIndex,
         p.mNumOfStepsDone,
         p.mId) ){
-            pieces_out.push_back(p);
+            piecesOut.push_back(p);
         }
     if(! readToken(iss,';')) return false;
 
