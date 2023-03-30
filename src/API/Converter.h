@@ -1,12 +1,12 @@
 #pragma once
 #include <memory>
 #include <sstream>
-#include "../Game/Core/Figures/King.h"
-#include "../Game/Core/Figures/Queen.h"
-#include "../Game/Core/Figures/Bishop.h"
-#include "../Game/Core/Figures/Knight.h"
-#include "../Game/Core/Figures/Rock.h"
-#include "../Game/Core/Figures/Pawn.h"
+#include "../Game/Core/Pieces/King.h"
+#include "../Game/Core/Pieces/Queen.h"
+#include "../Game/Core/Pieces/Bishop.h"
+#include "../Game/Core/Pieces/Knight.h"
+#include "../Game/Core/Pieces/Rock.h"
+#include "../Game/Core/Pieces/Pawn.h"
 #include<iostream>
 
 class Converter{

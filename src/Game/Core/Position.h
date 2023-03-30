@@ -1,5 +1,5 @@
 #pragma once
-#include "Figure.h"
+#include "Piece.h"
 #include <memory>
 
 

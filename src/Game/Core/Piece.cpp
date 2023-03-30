@@ -1,5 +1,5 @@
 #include <list>
-#include "Figure.h"
+#include "Piece.h"
 
 Figure::Figure(int maxNumberOfSteps, char letter, int side, 
 Coordinates innitCoordinates, int numOfStepsDone, int id, int rank){

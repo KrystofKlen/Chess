@@ -1,10 +1,10 @@
 #pragma once
-#include "Figures/King.h"
-#include "Figures/Queen.h"
-#include "Figures/Bishop.h"
-#include "Figures/Knight.h"
-#include "Figures/Rock.h"
-#include "Figures/Pawn.h" 
+#include "Pieces/King.h"
+#include "Pieces/Queen.h"
+#include "Pieces/Bishop.h"
+#include "Pieces/Knight.h"
+#include "Pieces/Rock.h"
+#include "Pieces/Pawn.h" 
 #include "Board.h"
 #include <list> 
    
