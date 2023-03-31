@@ -17,24 +17,34 @@ void Application::launch(){
 
     if(choiceFromMenu == 2){
         // load game from a file
-        std::string gameType;
-        std::string difficulty;
-        bool succesfullyLoaded = api.loadGameInfoFromFile(PATH_TO_LOAD, gameType, difficulty);
+        int gameType, difficulty, isCheck, isCheckMate, isStalmate, playingSide;
+        std::list<ReadingAutomata::PieceFileData>  piecesIn;
+        std::list<ReadingAutomata::PieceFileData>  piecesOut;
+        
+        bool succesfullyLoaded = api.loadGameInfoFromFile(
+            PATH_TO_LOAD,
+            gameType,
+            difficulty,
+            isCheck,
+            isCheckMate,
+            isStalmate,
+            playingSide,
+            piecesIn,
+            piecesOut);
         if(!succesfullyLoaded){
             api.endForLoadingError();    
             return;
         }
-        if(gameType.compare("1\n") == 0){
-            chessGame = std::make_unique<OnePlayerGame> (std::stoi(difficulty));
+        if(gameType == ONE_PLAYER_GAME){
+            chessGame = std::make_unique<OnePlayerGame>(difficulty);
         }else{
             chessGame = std::make_unique<TwoPlayersGame>();
         }
-        bool isCheck,isCheckMate,isStalmate;
-        int playingSide;
 
         chessGame->g.clearDefault();
-
-        api.convertData(chessGame->g, isCheck, isCheckMate, isStalmate, playingSide);
+        
+        api.createPiecesFromFileData(chessGame->g, piecesIn, piecesOut);
+        //api.convertData(chessGame->g, isCheck, isCheckMate, isStalmate, playingSide);
 
         chessGame->setGameState(isCheck, isStalmate, isCheckMate, playingSide);
 

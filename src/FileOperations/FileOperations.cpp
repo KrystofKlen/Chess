@@ -30,6 +30,48 @@ bool FileOperations::saveGameToFile(std::string & content){
 }
 
 bool FileOperations::loadGameFromFile(
+    const std::string & fileName, 
+    int & gameType,
+    int & difficulty,
+    int & isCheck,
+    int & isCheckMate,
+    int & isStalmate,
+    int & playingSide,
+    std::list<ReadingAutomata::PieceFileData> & piecesIn,
+    std::list<ReadingAutomata::PieceFileData> & piecesOut
+){
+    std::ifstream ifs(fileName);
+    if(ifs.fail()) return false;
+
+    std::stringstream strStream;
+    std::string fileContent;
+
+    char c;
+    while(ifs.get(c)){
+        strStream<<c;
+    }
+    if(ifs.fail()) return false;
+
+    fileContent = strStream.str();
+    strStream.str("");
+
+    ReadingAutomata readingAutomata;
+    bool parsedOK = readingAutomata.readGameFromFile(
+        fileContent,
+        gameType,
+        difficulty,
+        isCheck,
+        isCheckMate,
+        isStalmate,
+        playingSide,
+        piecesIn,
+        piecesOut
+    );
+    
+    return parsedOK;
+}
+
+bool FileOperations::loadGameFromFile2(
  const std::string & fileName,
  std::string & gameType,
  std::string & difficulty,

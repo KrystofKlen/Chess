@@ -63,14 +63,35 @@ public:
      */
     void convertData( Game & g, bool & isCheck, bool & isCheckMate, bool & isStalmate, int & playingSide );
 
+
+    bool createPiecesFromFileData(
+        Game & g,
+        std::list<ReadingAutomata::PieceFileData> & piecesIn,
+        std::list<ReadingAutomata::PieceFileData> & piecesOut);
+
     /**
-     * loads game info from file
-     * @param const std::string fileName 
-     * @param std::string & gameType ... inout parameter ... "1\n" = 1 player, "2\n" = 2 players
-     * @param std::string & difficulty ... inout parameter
+     * @brief loads necessary game info from file
+     * 
+     * @param fileName 
+     * @param gameType 
+     * @param difficulty 
+     * @param isCheck 
+     * @param isCheckMate 
+     * @param isStalmate 
+     * @param playingSide 
+     * @return true 
+     * @return false 
      */
-    bool loadGameInfoFromFile ( const std::string fileName, std::string & gameType,
-     std::string & difficulty );
+    bool loadGameInfoFromFile(
+        const std::string & fileName, 
+        int & gameType,
+        int & difficulty,
+        int & isCheck,
+        int & isCheckMate,
+        int & isStalmate,
+        int & playingSide,
+        std::list<ReadingAutomata::PieceFileData> & piecesIn,
+        std::list<ReadingAutomata::PieceFileData> & piecesOut);
     
     /**
      * displays menu with following options: new game, load from file

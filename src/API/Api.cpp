@@ -209,7 +209,7 @@ void API::saveGame( const Board & b, const Game & g,
 }
 
 void API::convertData(Game & g, bool & isCheck, bool & isCheckMate, bool & isStalmate, int & playingSide){
-
+    
     // set is check
     if(strIsCheck.compare("1") == 0){
         isCheck = true;
@@ -241,7 +241,7 @@ void API::convertData(Game & g, bool & isCheck, bool & isCheckMate, bool & isSta
     std::shared_ptr<Piece> ptr;
         
     std::list<std::string> chunksPieces;
-    conv.breakUpChunks(strPiecesInPlayer1, chunksPieces);
+    //conv.breakUpChunks(strPiecesInPlayer1, chunksPieces);
     for(const std::string & chunk : chunksPieces){
         ptr = conv.createPieceFromChunk(chunk);
         if(ptr == nullptr){
@@ -286,12 +286,55 @@ void API::convertData(Game & g, bool & isCheck, bool & isCheckMate, bool & isSta
     chunksPieces.clear();
 }
 
-bool API::loadGameInfoFromFile(const std::string fileName, std::string & gameType,
-std::string & difficulty){  
+bool API::createPiecesFromFileData(
+        Game & g,
+        std::list<ReadingAutomata::PieceFileData> &piecesIn,
+        std::list<ReadingAutomata::PieceFileData> &piecesOut)
+        {   
+            Converter conv;
+            std::shared_ptr<Piece> ptr;
+
+            for(auto piece : piecesIn){
+                ptr = conv.createPieceFromFileData(piece);
+                if(piece.mSide == 1){
+                    g.piecesPlayer1.push_back(ptr);
+                    g.piecesINplayer1.push_back(ptr);
+                }else if (piece.mSide == 2){
+                    g.piecesPlayer2.push_back(ptr);
+                    g.piecesOUTplayer2.push_back(ptr);
+                }else{
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+bool API::loadGameInfoFromFile(
+        const std::string & fileName, 
+        int & gameType,
+        int & difficulty,
+        int & isCheck,
+        int & isCheckMate,
+        int & isStalmate,
+        int & playingSide,
+        std::list<ReadingAutomata::PieceFileData> & piecesIn,
+        std::list<ReadingAutomata::PieceFileData> & piecesOut
+        ){  
     //get info from file
     bool successfullyLoaded = 
-    fo.loadGameFromFile(fileName, gameType, difficulty, strIsCheck, strIsCheckMate, strIsStalmate, strPlayingSide, strIsFree, strPiecesInPlayer1, strPiecesInPlayer2,
-        strPiecesOUTplayer1, strPiecesOUTplayer2);
+        fo.loadGameFromFile(
+            fileName,
+            gameType,
+            difficulty,
+            isCheck,
+            isCheckMate,
+            isStalmate,
+            playingSide,
+            piecesIn,
+            piecesOut
+            );
 
     if(!successfullyLoaded){
         return false;

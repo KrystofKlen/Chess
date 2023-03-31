@@ -21,8 +21,16 @@ public:
      * @return true all parameters read
      * @return false not all necessary parameters provided
      */
-     bool readGameFromFile(const std::string & fileContent, 
-std::list<PieceFileData> & piecesIn, std::list<PieceFileData> & piecesOut);
+     bool readGameFromFile(
+        const std::string & fileContent, 
+        int & gameType,
+        int & difficulty,
+        int & isCheck,
+        int & isCheckMate,
+        int & isStalmate,
+        int & playingSide,
+        std::list<PieceFileData> & piecesIn,
+        std::list<PieceFileData> & piecesOut);
 private:
 
     /**

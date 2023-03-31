@@ -106,6 +106,37 @@ std::shared_ptr<Piece> Converter::createPieceFromChunk(const std::string & piece
 }
 
 
+std::shared_ptr<Piece> Converter::createPieceFromFileData(const ReadingAutomata::PieceFileData & pieceFileData){
+    Coordinates c = {pieceFileData.mRowIndex, pieceFileData.mColumnIndex};
+
+    switch (pieceFileData.mLetter)
+    {
+    case 'K':
+        return std::make_shared<King> (pieceFileData.mSide,c,pieceFileData.mNumOfStepsDone,pieceFileData.mId);
+        break;
+    case 'Q':
+        return std::make_shared<Queen> (pieceFileData.mSide,c,pieceFileData.mNumOfStepsDone,pieceFileData.mId);
+        break;
+    case 'B':
+        return std::make_shared<Bishop> (pieceFileData.mSide,c,pieceFileData.mNumOfStepsDone,pieceFileData.mId);
+        break;
+    case 'H':
+        return std::make_shared<Knight> (pieceFileData.mSide,c,pieceFileData.mNumOfStepsDone,pieceFileData.mId);
+        break;
+    case 'R':
+        return std::make_shared<Rock> (pieceFileData.mSide,c,pieceFileData.mNumOfStepsDone,pieceFileData.mId);
+        break;
+    case 'P':
+        return std::make_shared<Pawn> (pieceFileData.mSide,c,pieceFileData.mNumOfStepsDone,pieceFileData.mId);
+        break;
+    
+    default:
+        return nullptr;
+    }
+    return nullptr;
+}
+
+
 void Converter::setIsFreeData(const std::string & strIsFree){
     int strIsFreeIndex = 0;
     for(int rowIndex = 0; rowIndex < 8; rowIndex++,strIsFreeIndex++){

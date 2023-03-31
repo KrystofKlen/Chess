@@ -11,11 +11,26 @@
 class FileOperations{
 public:
 
+    bool loadGameFromFile(
+        const std::string & fileName, 
+        int & gameType,
+        int & difficulty,
+        int & isCheck,
+        int & isCheckMate,
+        int & isStalmate,
+        int & playingSide,
+        std::list<ReadingAutomata::PieceFileData> & piecesIn,
+        std::list<ReadingAutomata::PieceFileData> & piecesOut
+    );
+
     /**
+     * @brief DEPRECATED
+     * 
+     *
      * Reads from file and stores info into given parameters.
      * @return true = file was succesfully read and hash matches, otherwise false
      */
-    bool loadGameFromFile(const std::string & fileName, 
+    bool loadGameFromFile2(const std::string & fileName, 
     std::string & gameType,
     std::string & difficulty,
     std::string & isCheck,
@@ -43,4 +58,5 @@ private:
      */
     void readNextChunk(std::stringstream & strStream, char delimiter, const std::string & fileContent, std::string::const_iterator & it);
     
+
 };

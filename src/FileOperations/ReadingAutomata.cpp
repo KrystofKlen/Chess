@@ -106,10 +106,18 @@ bool ReadingAutomata::readFreePositions(std::istringstream & iss, int board[8][8
     return true;
 }
 
-bool ReadingAutomata::readGameFromFile(const std::string & fileContent, 
-std::list<PieceFileData> & piecesIn, std::list<PieceFileData> & piecesOut){
+bool ReadingAutomata::readGameFromFile(
+    const std::string & fileContent,
+    int & gameType,
+    int & difficulty,
+    int & isCheck,
+    int & isCheckMate,
+    int & isStalmate,
+    int & playingSide,
+    std::list<PieceFileData> & piecesIn,
+    std::list<PieceFileData> & piecesOut){
 
-    int gameType, difficulty, isCheck,isCheckMate,isStalmate,playingSide;
+    
     std::istringstream iss (fileContent);
     
     readComment(iss);

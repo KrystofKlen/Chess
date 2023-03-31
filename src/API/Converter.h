@@ -7,6 +7,7 @@
 #include "../Game/Core/Pieces/Knight.h"
 #include "../Game/Core/Pieces/Rock.h"
 #include "../Game/Core/Pieces/Pawn.h"
+#include "../FileOperations/FileOperations.h"
 #include<iostream>
 
 class Converter{
@@ -26,6 +27,9 @@ public:
      * Creates actual objects from chunks
      */
     std::shared_ptr<Piece> createPieceFromChunk(const std::string & figureData);
+
+
+    std::shared_ptr<Piece> createPieceFromFileData(const ReadingAutomata::PieceFileData & pieceFileData);
 
     /**
      * Sets mIsFree attribute into playField
