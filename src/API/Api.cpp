@@ -320,7 +320,8 @@ bool API::loadGameInfoFromFile(
         int & isStalmate,
         int & playingSide,
         std::list<PieceFileData> & piecesIn,
-        std::list<PieceFileData> & piecesOut
+        std::list<PieceFileData> & piecesOut,
+        int board[8][8]
         ){  
     //get info from file
     bool successfullyLoaded = 
@@ -333,7 +334,8 @@ bool API::loadGameInfoFromFile(
             isStalmate,
             playingSide,
             piecesIn,
-            piecesOut
+            piecesOut,
+            board
             );
 
     if(!successfullyLoaded){

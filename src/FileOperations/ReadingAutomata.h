@@ -22,7 +22,8 @@ public:
         int & isStalmate,
         int & playingSide,
         std::list<PieceFileData> & piecesIn,
-        std::list<PieceFileData> & piecesOut);
+        std::list<PieceFileData> & piecesOut,
+        int board[8][8]);
 private:
 
     /**
@@ -110,7 +111,16 @@ private:
     /**
      * @brief Reads section free positions
      * Expected syntax:
-     * 
+     * {
+        LINE1 = 0 0 0 0 1 0 1 0;
+        LINE2 = 0 0 0 0 1 0 1 0;
+        LINE3 = 0 0 0 0 1 0 1 0;
+        LINE4 = 0 0 0 0 1 0 1 0;
+        LINE5 = 0 0 0 0 1 0 1 0;
+        LINE6 = 0 0 0 0 1 0 1 0;
+        LINE7 = 0 0 0 0 1 0 1 0;
+        LINE8 = 0 0 0 0 1 0 1 0;
+        }
      * 
      * @param iss 
      * @param board 

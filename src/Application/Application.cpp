@@ -20,6 +20,7 @@ void Application::launch(){
         int gameType, difficulty, isCheck, isCheckMate, isStalmate, playingSide;
         std::list<PieceFileData>  piecesIn;
         std::list<PieceFileData>  piecesOut;
+        int board[8][8];
         
         bool succesfullyLoaded = api.loadGameInfoFromFile(
             PATH_TO_LOAD,
@@ -30,7 +31,8 @@ void Application::launch(){
             isStalmate,
             playingSide,
             piecesIn,
-            piecesOut);
+            piecesOut,
+            board);
         if(!succesfullyLoaded){
             api.endForLoadingError();    
             return;

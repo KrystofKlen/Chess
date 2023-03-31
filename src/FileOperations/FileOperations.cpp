@@ -38,7 +38,8 @@ bool FileOperations::loadGameFromFile(
     int & isStalmate,
     int & playingSide,
     std::list<PieceFileData> & piecesIn,
-    std::list<PieceFileData> & piecesOut
+    std::list<PieceFileData> & piecesOut,
+    int board[8][8]
 ){
     std::ifstream ifs(fileName);
     if(ifs.fail()) return false;
@@ -65,7 +66,8 @@ bool FileOperations::loadGameFromFile(
         isStalmate,
         playingSide,
         piecesIn,
-        piecesOut
+        piecesOut,
+        board
     );
     
     return parsedOK;

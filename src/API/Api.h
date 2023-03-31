@@ -91,7 +91,8 @@ public:
         int & isStalmate,
         int & playingSide,
         std::list<PieceFileData> & piecesIn,
-        std::list<PieceFileData> & piecesOut);
+        std::list<PieceFileData> & piecesOut,
+        int board[8][8]);
     
     /**
      * displays menu with following options: new game, load from file

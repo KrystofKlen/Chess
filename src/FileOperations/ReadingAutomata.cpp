@@ -115,7 +115,8 @@ bool ReadingAutomata::readGameFromFile(
     int & isStalmate,
     int & playingSide,
     std::list<PieceFileData> & piecesIn,
-    std::list<PieceFileData> & piecesOut){
+    std::list<PieceFileData> & piecesOut,
+    int board[8][8]){
 
     
     std::istringstream iss (fileContent);
@@ -178,6 +179,10 @@ bool ReadingAutomata::readGameFromFile(
             piecesOut.push_back(p);
         }
     if(! readToken(iss,';')) return false;
+
+    // read free positions
+    readComment(iss);
+    if( ! readVariable(iss) || ! readFreePositions(iss,board) || ! readToken(iss,';') ) return false;
 
     return true;
 }
