@@ -37,8 +37,8 @@ bool FileOperations::loadGameFromFile(
     int & isCheckMate,
     int & isStalmate,
     int & playingSide,
-    std::list<ReadingAutomata::PieceFileData> & piecesIn,
-    std::list<ReadingAutomata::PieceFileData> & piecesOut
+    std::list<PieceFileData> & piecesIn,
+    std::list<PieceFileData> & piecesOut
 ){
     std::ifstream ifs(fileName);
     if(ifs.fail()) return false;

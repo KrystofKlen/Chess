@@ -18,8 +18,8 @@ void Application::launch(){
     if(choiceFromMenu == 2){
         // load game from a file
         int gameType, difficulty, isCheck, isCheckMate, isStalmate, playingSide;
-        std::list<ReadingAutomata::PieceFileData>  piecesIn;
-        std::list<ReadingAutomata::PieceFileData>  piecesOut;
+        std::list<PieceFileData>  piecesIn;
+        std::list<PieceFileData>  piecesOut;
         
         bool succesfullyLoaded = api.loadGameInfoFromFile(
             PATH_TO_LOAD,

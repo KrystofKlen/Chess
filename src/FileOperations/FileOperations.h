@@ -19,8 +19,8 @@ public:
         int & isCheckMate,
         int & isStalmate,
         int & playingSide,
-        std::list<ReadingAutomata::PieceFileData> & piecesIn,
-        std::list<ReadingAutomata::PieceFileData> & piecesOut
+        std::list<PieceFileData> & piecesIn,
+        std::list<PieceFileData> & piecesOut
     );
 
     /**
@@ -56,7 +56,11 @@ private:
      * Reads text until it reaches specified delimiter.
      * @param std::stringstream & strStream ... this stream will be cleared when hitting delimiter!
      */
-    void readNextChunk(std::stringstream & strStream, char delimiter, const std::string & fileContent, std::string::const_iterator & it);
+    void readNextChunk(
+        std::stringstream & strStream, 
+        char delimiter,
+        const std::string & fileContent, 
+        std::string::const_iterator & it);
     
 
 };

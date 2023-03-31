@@ -106,7 +106,7 @@ std::shared_ptr<Piece> Converter::createPieceFromChunk(const std::string & piece
 }
 
 
-std::shared_ptr<Piece> Converter::createPieceFromFileData(const ReadingAutomata::PieceFileData & pieceFileData){
+std::shared_ptr<Piece> Converter::createPieceFromFileData(const PieceFileData & pieceFileData){
     Coordinates c = {pieceFileData.mRowIndex, pieceFileData.mColumnIndex};
 
     switch (pieceFileData.mLetter)

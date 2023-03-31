@@ -2,18 +2,10 @@
 #include <sstream>
 #include <memory>
 #include <list>
+#include "PieceFileData.h"
 
 class ReadingAutomata{
 public:
-
-    struct PieceFileData{
-        char mLetter;    
-        int mSide;
-        int mRowIndex;
-        int mColumnIndex;
-        int mNumOfStepsDone;
-        int mId;
-    };
 
     /**
      * @brief Reads info from file, where game is saved. Stores game parameters.

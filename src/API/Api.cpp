@@ -288,8 +288,8 @@ void API::convertData(Game & g, bool & isCheck, bool & isCheckMate, bool & isSta
 
 bool API::createPiecesFromFileData(
         Game & g,
-        std::list<ReadingAutomata::PieceFileData> &piecesIn,
-        std::list<ReadingAutomata::PieceFileData> &piecesOut)
+        std::list<PieceFileData> &piecesIn,
+        std::list<PieceFileData> &piecesOut)
         {   
             Converter conv;
             std::shared_ptr<Piece> ptr;
@@ -319,8 +319,8 @@ bool API::loadGameInfoFromFile(
         int & isCheckMate,
         int & isStalmate,
         int & playingSide,
-        std::list<ReadingAutomata::PieceFileData> & piecesIn,
-        std::list<ReadingAutomata::PieceFileData> & piecesOut
+        std::list<PieceFileData> & piecesIn,
+        std::list<PieceFileData> & piecesOut
         ){  
     //get info from file
     bool successfullyLoaded = 

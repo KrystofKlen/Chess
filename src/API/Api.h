@@ -66,8 +66,8 @@ public:
 
     bool createPiecesFromFileData(
         Game & g,
-        std::list<ReadingAutomata::PieceFileData> & piecesIn,
-        std::list<ReadingAutomata::PieceFileData> & piecesOut);
+        std::list<PieceFileData> & piecesIn,
+        std::list<PieceFileData> & piecesOut);
 
     /**
      * @brief loads necessary game info from file
@@ -90,8 +90,8 @@ public:
         int & isCheckMate,
         int & isStalmate,
         int & playingSide,
-        std::list<ReadingAutomata::PieceFileData> & piecesIn,
-        std::list<ReadingAutomata::PieceFileData> & piecesOut);
+        std::list<PieceFileData> & piecesIn,
+        std::list<PieceFileData> & piecesOut);
     
     /**
      * displays menu with following options: new game, load from file

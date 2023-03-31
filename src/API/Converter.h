@@ -29,7 +29,7 @@ public:
     std::shared_ptr<Piece> createPieceFromChunk(const std::string & figureData);
 
 
-    std::shared_ptr<Piece> createPieceFromFileData(const ReadingAutomata::PieceFileData & pieceFileData);
+    std::shared_ptr<Piece> createPieceFromFileData(const PieceFileData & pieceFileData);
 
     /**
      * Sets mIsFree attribute into playField
