@@ -182,7 +182,18 @@ void API::getInfoAboutGameToSave( const Board & b, const Game & g, std::string &
     info.append(strStream.str());
 }
 
-
+void saveGame2(
+    const Board & b,
+    const Game & g,
+    const std::string & gameType,
+    const std::string & difficulty,
+    const std::string & isCheck,
+    const std::string & isCheckMate,
+    const std::string & isStalmate, 
+    const std::string & playingSide
+     ){
+    
+}
 
 void API::saveGame( const Board & b, const Game & g,
  const std::string & gameType, const std::string & difficulty, const std::string & isCheck,const std::string & isCheckMate,const std::string & isStalmate, const std::string & playingSide){

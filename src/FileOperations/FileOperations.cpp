@@ -29,6 +29,37 @@ bool FileOperations::saveGameToFile(std::string & content){
     return true;
 }
 
+bool FileOperations::saveGameToFile(
+    int gameType,
+    int difficulty,
+    int isCheck,
+    int isCheckMate,
+    int isStalmate,
+    int plyingSide,
+    const std::vector<PieceFileData> & piecesIn,
+    const std::vector<PieceFileData> & piecesOut,
+    int board[8][8]
+){
+    WritingAutomata wa;
+    std::string fileContent = wa.getFileContent(
+    gameType,
+    difficulty,
+    isCheck,
+    isCheckMate,
+    isStalmate,
+    plyingSide,
+    piecesIn,
+    piecesOut,
+    board
+    );
+
+    std::ofstream ofs;
+    ofs.open("load.game");
+    if( !(ofs << fileContent)) return false;
+    ofs.close();
+    return true;
+}
+
 bool FileOperations::loadGameFromFile(
     const std::string & fileName, 
     int & gameType,

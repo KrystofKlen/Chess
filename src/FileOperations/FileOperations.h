@@ -6,7 +6,9 @@
 #include <ctime>
 #include <unordered_map> 
 #include <cmath>
+#include <vector>
 #include "ReadingAutomata.h"
+#include "WritingAutomata.h"
 
 class FileOperations{
 public:
@@ -49,6 +51,21 @@ public:
      * @param content = raw content, function will count hash and add it at the end for future control
      */
     bool saveGameToFile(std::string & content);
+
+    /**
+     * Saves game into file.
+     */
+    bool saveGameToFile(
+        int gameType,
+        int difficulty,
+        int isCheck,
+        int isCheckMate,
+        int isStalmate,
+        int plyingSide,
+        const std::vector<PieceFileData> & piecesIn,
+        const std::vector<PieceFileData> & piecesOut,
+        int board[8][8]
+    );
 private: 
     int getHash(std::string & info, long saveTime);
     bool controlHash(std::string & info);

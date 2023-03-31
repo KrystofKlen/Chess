@@ -1,5 +1,4 @@
 #pragma once
-
 #include "../Game/Core/Board.h"
 #include "../Game/Core/Game.h"
 #include "../UI/UI.h"

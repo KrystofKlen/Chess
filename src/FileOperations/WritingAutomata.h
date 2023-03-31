@@ -1,8 +1,10 @@
+#pragma once
 #include <string>
 #include <vector>
 #include <regex>
 #include "PieceFileData.h"
-#include<iostream>
+#include <iostream>
+
 class WritingAutomata{
 public:
 

@@ -1,9 +1,4 @@
-#include <string>
-#include <vector>
-#include <regex>
-#include "PieceFileData.h"
 #include "WritingAutomata.h"
-#include<iostream>
 
 std::string WritingAutomata::getFileContent(
         int gameType,
