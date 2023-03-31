@@ -100,15 +100,25 @@ void TwoPlayersGame::startGameLoop(){
     } 
     
     
-    api.saveGame(
-        b,
-        g,
-        "2",
-        "0",
-        checkDetected ? "1" : "0",
-        checkMateDetected ? "1" : "0",
-        stalemateDetected ? "1" : "0",
-        std::to_string(playingSide) 
+    // api.saveGame(
+    //     b,
+    //     g,
+    //     "2",
+    //     "0",
+    //     checkDetected ? "1" : "0",
+    //     checkMateDetected ? "1" : "0",
+    //     stalemateDetected ? "1" : "0",
+    //     std::to_string(playingSide) 
+    //     );
+    api.saveGame2(
+            b,
+            g,
+            2,
+            0,
+            checkDetected ? 1:0,
+            checkMateDetected ? 1:0,
+            stalemateDetected ? 1:0,
+            playingSide
         );
 }
 

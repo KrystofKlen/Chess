@@ -25,6 +25,15 @@ void Converter::breakUpChunks(const std::string & strChunk, std::list<std::strin
     }
 }
 
+void Converter::convertPiece(std::shared_ptr<Piece> from, PieceFileData & to){
+    to.mLetter = from->mLetter;
+    to.mSide = from->mSide;
+    to.mRowIndex = from->mCoordinates.mRowIndex;
+    to.mColumnIndex = from->mCoordinates.mColumnIndex;
+    to.mNumOfStepsDone = from->mNumOfStepsDone;
+    to.mId = from->mId;
+}
+
 std::shared_ptr<Piece> Converter::createPieceFromChunk(const std::string & pieceData){
 
     int ASCII_CONSTANT = 48;
@@ -150,3 +159,24 @@ void Converter::setIsFreeData(const std::string & strIsFree){
     }
 }
 
+void Converter::setIsFreeData(const int board[8][8]){
+    for(int rowIndex = 0; rowIndex < 8; rowIndex++){
+        for(int columnIndex = 0; columnIndex<8; columnIndex++){
+            if(board[rowIndex][columnIndex] == 1)
+                Board::playField[rowIndex][columnIndex].mIsFree = true;
+            else
+                Board::playField[rowIndex][columnIndex].mIsFree = false;
+        }
+    }
+}
+
+void Converter::getIsFreeData(int board[8][8]){
+    for(int rowIndex = 0; rowIndex < 8; rowIndex++){
+        for(int columnIndex = 0; columnIndex<8; columnIndex++){
+            if(Board::playField[rowIndex][columnIndex].mIsFree)
+                board[rowIndex][columnIndex]=1;
+            else
+                board[rowIndex][columnIndex]=0;  
+        }
+    }
+}

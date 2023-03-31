@@ -7,12 +7,13 @@ void API::closeScreen(){
     ui.endScreen();
 }
 
-void API::endForLoadingError(){
+void API::endForLoadingError(std::string str){
     ui.endScreen();
     std::cout<<"ERROR : Game could not be loaded. Possible reasons:\n";
     std::cout<<" 1. File \"load.game\" doesn't exist.\n";
     std::cout<<" 2. Unknown content of the file.\n";
     std::cout<<" 3. file was modified and the data about game is not valid.\n";
+    std::cout << str<< std::endl;
 }
 
 std::pair<Coordinates,Coordinates> API::pickPosition( int sidePlaying, bool & gameIsRunning){
@@ -182,17 +183,54 @@ void API::getInfoAboutGameToSave( const Board & b, const Game & g, std::string &
     info.append(strStream.str());
 }
 
-void saveGame2(
+void API::saveGame2(
     const Board & b,
     const Game & g,
-    const std::string & gameType,
-    const std::string & difficulty,
-    const std::string & isCheck,
-    const std::string & isCheckMate,
-    const std::string & isStalmate, 
-    const std::string & playingSide
+    int gameType,
+    int difficulty,
+    int isCheck,
+    int isCheckMate,
+    int isStalmate, 
+    int playingSide
      ){
-    
+        Converter conv;
+        std::vector<PieceFileData> piecesIn, piecesOut;
+        PieceFileData piece;
+        for(auto ptrPiece : g.piecesINplayer1){         
+            conv.convertPiece(ptrPiece, piece);
+            piecesIn.push_back(piece);
+        }
+        for(auto ptrPiece : g.piecesINplayer2){
+            conv.convertPiece(ptrPiece, piece);
+            piecesIn.push_back(piece);
+        }
+        for(auto ptrPiece : g.piecesOUTplayer1){
+            conv.convertPiece(ptrPiece,piece);
+            piecesOut.push_back(piece);
+        }
+        for(auto ptrPiece : g.piecesOUTplayer2){
+            conv.convertPiece(ptrPiece, piece);
+            piecesOut.push_back(piece);
+        }
+
+        int board[8][8];
+        conv.getIsFreeData(board);
+
+        bool saved = fo.saveGameToFile(
+            gameType,
+            difficulty,
+            isCheck,
+            isCheckMate,
+            isStalmate,
+            playingSide,
+            piecesIn,
+            piecesOut,
+            board
+        );  
+        if(saved)
+            std::cout<<"YOUR GAME WAS SAVED.\n";
+        else    
+            std::cout<<"ERROR DURING WRITING TO A FILE.\n";   
 }
 
 void API::saveGame( const Board & b, const Game & g,
@@ -219,83 +257,83 @@ void API::saveGame( const Board & b, const Game & g,
 
 }
 
-void API::convertData(Game & g, bool & isCheck, bool & isCheckMate, bool & isStalmate, int & playingSide){
+// void API::convertData(Game & g, bool & isCheck, bool & isCheckMate, bool & isStalmate, int & playingSide){
     
-    // set is check
-    if(strIsCheck.compare("1") == 0){
-        isCheck = true;
-    }else{
-        isCheck = false;
-    }
+//     // set is check
+//     if(strIsCheck.compare("1") == 0){
+//         isCheck = true;
+//     }else{
+//         isCheck = false;
+//     }
 
-    // set is check mate
-    if(strIsCheckMate.compare("1") == 0){
-        isCheckMate = true;
-    }else{
-        isCheckMate = false;
-    }
+//     // set is check mate
+//     if(strIsCheckMate.compare("1") == 0){
+//         isCheckMate = true;
+//     }else{
+//         isCheckMate = false;
+//     }
 
-    // set is Stalmate
-    if(strIsStalmate.compare("1") == 0){
-        isStalmate = true;
-    }else{
-        isStalmate = false;
-    }
+//     // set is Stalmate
+//     if(strIsStalmate.compare("1") == 0){
+//         isStalmate = true;
+//     }else{
+//         isStalmate = false;
+//     }
 
-    //set playingSide
-    playingSide = std::stoi(strPlayingSide);
+//     //set playingSide
+//     playingSide = std::stoi(strPlayingSide);
 
-    //create pieces
-    Converter conv;
-    conv.setIsFreeData(strIsFree);
+//     //create pieces
+//     Converter conv;
+//     conv.setIsFreeData(strIsFree);
    
-    std::shared_ptr<Piece> ptr;
+//     std::shared_ptr<Piece> ptr;
         
-    std::list<std::string> chunksPieces;
-    //conv.breakUpChunks(strPiecesInPlayer1, chunksPieces);
-    for(const std::string & chunk : chunksPieces){
-        ptr = conv.createPieceFromChunk(chunk);
-        if(ptr == nullptr){
-            endForLoadingError();
-        }
-        g.piecesPlayer1.emplace_back(ptr);
-        g.piecesINplayer1.emplace_back(ptr);
-    }
-    chunksPieces.clear();
+//     std::list<std::string> chunksPieces;
+//     //conv.breakUpChunks(strPiecesInPlayer1, chunksPieces);
+//     for(const std::string & chunk : chunksPieces){
+//         ptr = conv.createPieceFromChunk(chunk);
+//         if(ptr == nullptr){
+//             endForLoadingError();
+//         }
+//         g.piecesPlayer1.emplace_back(ptr);
+//         g.piecesINplayer1.emplace_back(ptr);
+//     }
+//     chunksPieces.clear();
 
-    conv.breakUpChunks(strPiecesInPlayer2, chunksPieces);
-    for(const std::string & chunk : chunksPieces){
-        ptr = conv.createPieceFromChunk(chunk);
-        if(ptr == nullptr){
-            endForLoadingError();
-        }
-        g.piecesPlayer2.push_back(ptr);
-        g.piecesINplayer2.push_back(ptr);
-    }
-    chunksPieces.clear();
+//     conv.breakUpChunks(strPiecesInPlayer2, chunksPieces);
+//     for(const std::string & chunk : chunksPieces){
+//         ptr = conv.createPieceFromChunk(chunk);
+//         if(ptr == nullptr){
+//             endForLoadingError();
+//         }
+//         g.piecesPlayer2.push_back(ptr);
+//         g.piecesINplayer2.push_back(ptr);
+//     }
+//     chunksPieces.clear();
 
-    conv.breakUpChunks(strPiecesOUTplayer1, chunksPieces);
-    for(const std::string & chunk : chunksPieces){
-        ptr = conv.createPieceFromChunk(chunk);
-        if(ptr == nullptr){
-            endForLoadingError();
-        }
-        g.piecesPlayer1.push_back(ptr);
-        g.piecesOUTplayer1.push_back(ptr);
-    }
-    chunksPieces.clear();
+//     conv.breakUpChunks(strPiecesOUTplayer1, chunksPieces);
+//     for(const std::string & chunk : chunksPieces){
+//         ptr = conv.createPieceFromChunk(chunk);
+//         if(ptr == nullptr){
+//             endForLoadingError();
+//         }
+//         g.piecesPlayer1.push_back(ptr);
+//         g.piecesOUTplayer1.push_back(ptr);
+//     }
+//     chunksPieces.clear();
 
-    conv.breakUpChunks(strPiecesOUTplayer2, chunksPieces);
-    for(const std::string & chunk : chunksPieces){
-        ptr = conv.createPieceFromChunk(chunk);
-        if(ptr == nullptr){
-            endForLoadingError();
-        }
-        g.piecesPlayer2.push_back(ptr);
-        g.piecesOUTplayer2.push_back(ptr);
-    }
-    chunksPieces.clear();
-}
+//     conv.breakUpChunks(strPiecesOUTplayer2, chunksPieces);
+//     for(const std::string & chunk : chunksPieces){
+//         ptr = conv.createPieceFromChunk(chunk);
+//         if(ptr == nullptr){
+//             endForLoadingError();
+//         }
+//         g.piecesPlayer2.push_back(ptr);
+//         g.piecesOUTplayer2.push_back(ptr);
+//     }
+//     chunksPieces.clear();
+// }
 
 bool API::createPiecesFromFileData(
         Game & g,
@@ -310,6 +348,19 @@ bool API::createPiecesFromFileData(
                 if(piece.mSide == 1){
                     g.piecesPlayer1.push_back(ptr);
                     g.piecesINplayer1.push_back(ptr);
+                }else if (piece.mSide == 2){
+                    g.piecesPlayer2.push_back(ptr);
+                    g.piecesINplayer2.push_back(ptr);
+                }else{
+                    return false;
+                }
+            }
+
+            for(auto piece : piecesOut){
+                ptr = conv.createPieceFromFileData(piece);
+                if(piece.mSide == 1){
+                    g.piecesPlayer1.push_back(ptr);
+                    g.piecesOUTplayer1.push_back(ptr);
                 }else if (piece.mSide == 2){
                     g.piecesPlayer2.push_back(ptr);
                     g.piecesOUTplayer2.push_back(ptr);
@@ -350,6 +401,10 @@ bool API::loadGameInfoFromFile(
             );
 
     if(!successfullyLoaded){
+        std::ofstream ofs;
+        ofs.open("err");
+        ofs << "HERE\n"; 
+
         return false;
     }
 

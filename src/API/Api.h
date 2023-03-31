@@ -20,7 +20,7 @@ public:
     /**
      * Application is closed, possible reasons for failed loading of file written to console
      */
-    void endForLoadingError();
+    void endForLoadingError(std::string str);
 
     /**
      * Updates pieces in and out of game (including their colors, positions etc.)
@@ -56,6 +56,17 @@ public:
     void saveGame( const Board & b, const Game & g, const std::string & gameType,
         const std::string & difficulty,
         const  std::string & isCheck,const std::string & isCheckMate, const std::string & isStalmate, const std::string & playingSide );
+
+    void saveGame2(
+    const Board & b,
+    const Game & g,
+    int gameType,
+    int difficulty,
+    int isCheck,
+    int isCheckMate,
+    int isStalmate, 
+    int playingSide
+     );
 
     /**
      * Converts text data into actual data types, and sets it

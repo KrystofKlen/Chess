@@ -93,16 +93,19 @@ bool ReadingAutomata::readFreePositions(std::istringstream & iss, int board[8][8
 
         if( ! readVariable(iss) )return false;
         for(int colIndex = 0; colIndex<8; colIndex++){
-            if ( ! readNumber(iss, board[rowIndex][colIndex]) ) return false;
+            if ( ! readNumber(iss, board[rowIndex][colIndex]) ) {
+                return false;
+            }
         }
         
         if(!readToken(iss,';') ){
             return false;
         }
     }
+    
     if( !readToken(iss,'}') ){
-            return false;
-        }
+        return false;
+    }
     return true;
 }
 
@@ -147,6 +150,7 @@ bool ReadingAutomata::readGameFromFile(
         return false;
     }
 
+
     // read pieces in
     readComment(iss);
     if( ! readVariable(iss) || ! readToken(iss,'{')) return false;
@@ -178,11 +182,12 @@ bool ReadingAutomata::readGameFromFile(
         p.mId) ){
             piecesOut.push_back(p);
         }
-    if(! readToken(iss,';')) return false;
 
+    if(! readToken(iss,';')) return false;
+ 
     // read free positions
     readComment(iss);
     if( ! readVariable(iss) || ! readFreePositions(iss,board) || ! readToken(iss,';') ) return false;
-
+    
     return true;
 }

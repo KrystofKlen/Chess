@@ -69,14 +69,14 @@ private:
 
     const std::string FREE_POSITIONS_TEMPLATE = 
     "{\n"
-    "LINE={ # # # # # # # # };\n"
-    "LINE={ # # # # # # # # };\n"
-    "LINE={ # # # # # # # # };\n"
-    "LINE={ # # # # # # # # };\n"
-    "LINE={ # # # # # # # # };\n"
-    "LINE={ # # # # # # # # };\n"
-    "LINE={ # # # # # # # # };\n"
-    "LINE={ # # # # # # # # };\n"
+    "LINEx= # # # # # # # # ;\n"
+    "LINEx= # # # # # # # # ;\n"
+    "LINEx= # # # # # # # # ;\n"
+    "LINEx= # # # # # # # # ;\n"
+    "LINEx= # # # # # # # # ;\n"
+    "LINEx= # # # # # # # # ;\n"
+    "LINEx= # # # # # # # # ;\n"
+    "LINEx= # # # # # # # # ;\n"
     "};";
 
 };

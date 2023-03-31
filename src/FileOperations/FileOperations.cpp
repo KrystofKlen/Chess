@@ -82,7 +82,7 @@ bool FileOperations::loadGameFromFile(
     while(ifs.get(c)){
         strStream<<c;
     }
-    if(ifs.fail()) return false;
+    //if(ifs.fail()) return false;
 
     fileContent = strStream.str();
     strStream.str("");
@@ -100,7 +100,6 @@ bool FileOperations::loadGameFromFile(
         piecesOut,
         board
     );
-    
     return parsedOK;
 }
 

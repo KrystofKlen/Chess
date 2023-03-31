@@ -35,5 +35,13 @@ public:
      * Sets mIsFree attribute into playField
      */
     void setIsFreeData(const std::string & strIsFree);
+
+    void setIsFreeData(const int board[8][8]);
+
+    void getIsFreeData(int board[8][8]);
+
+    void convertPiece(std::shared_ptr<Piece> from, PieceFileData & to);
+
+    
 };
 

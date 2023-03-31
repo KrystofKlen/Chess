@@ -34,7 +34,11 @@ void Application::launch(){
             piecesOut,
             board);
         if(!succesfullyLoaded){
-            api.endForLoadingError();    
+            std::string s;
+            for(auto p : piecesIn){
+                s.append(std::to_string(p.mId) + ", ");
+            }
+            api.endForLoadingError(s);    
             return;
         }
         if(gameType == ONE_PLAYER_GAME){
