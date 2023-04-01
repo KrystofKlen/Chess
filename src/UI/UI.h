@@ -23,6 +23,7 @@ public:
         int fromRow, fromCol, toRow, toCol;
     };
     void endScreen();
+    void printChessBoardDiscription();
     void showMovesHistory(const std::vector<Move> & moves);
     void setSelected(int playingSide, chtype charRepresentigPiece);
     void drawDownWindow(WINDOW** win,  int* winDownSize, int lines, const char* headline);
@@ -49,9 +50,14 @@ public:
     static const int ALERT_COLOR_CODE = 7;
 private:
     const int winSize = 3;
+    const int CHESS_BOARD_STATS_OFFSET = 1;
+    const int CHESS_BOARD_START_X = 40;
+    const int CHESS_BOARD_START_Y = 10;
+    const int STATS_WIN_X = CHESS_BOARD_START_X + (winSize*2*9) + CHESS_BOARD_STATS_OFFSET;
     Field board[8][8];
     WINDOW* pWinAlert;
     WINDOW* pWinDown;
     WINDOW* pWinKickedPieces;
     WINDOW* inputWin;
+    WINDOW* pWinChessDiscription;
 };
