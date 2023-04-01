@@ -94,6 +94,35 @@ void API::updatePieces( Game & g){
     ui.setKickedPiecesOnScreen(infoAboutKickedPieces);
 }
 
+void API::showMovesHistory(const std::list<Game::MoveHistory> & historyMoves){
+    std::vector<UI::Move> uiMoves;
+    for(auto move : historyMoves){
+        std::string playerName = "";
+        
+        if(!move.ptrPiece){
+            uiMoves.push_back({playerName,'x',0,0,0,0});
+        }else{
+            if(move.ptrPiece->mSide == 1){
+                playerName = "1";
+            }else{ 
+                playerName = "2";
+            }
+            uiMoves.push_back(
+            {
+                playerName,
+                move.ptrPiece->mLetter,
+                move.from.mRowIndex,
+                move.from.mColumnIndex,
+                move.to.mRowIndex,
+                move.to.mColumnIndex
+            }
+        );
+        }
+        
+    }
+    ui.showMovesHistory(uiMoves);
+}
+
 void API::showBoard(){
     ui.printAscii();
     ui.showChessBoard();
@@ -401,10 +430,6 @@ bool API::loadGameInfoFromFile(
             );
 
     if(!successfullyLoaded){
-        std::ofstream ofs;
-        ofs.open("err");
-        ofs << "HERE\n"; 
-
         return false;
     }
 

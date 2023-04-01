@@ -79,6 +79,7 @@ void TwoPlayersGame::startGameLoop(){
             }     
         }
         b.movePiece(movementFromTo.first, movementFromTo.second, true);
+        //g.movesHistory.push_front(movementFromTo);
 
         //promote pawn if it is at the end
         bool pawnAtEnd = g.checkIfPawnReachedEnd(playingSide);

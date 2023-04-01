@@ -12,7 +12,7 @@ public:
    std::vector<std::shared_ptr<Piece>> piecesPlayer1, piecesPlayer2;
    std::list<std::shared_ptr<Piece>> piecesOUTplayer1, piecesOUTplayer2;
    std::list<std::shared_ptr<Piece>> piecesINplayer1, piecesINplayer2;
-
+   
     void kickout(std::shared_ptr<Piece> pieceToKickout);
 
     void kickout(Coordinates coordinatesOfPieceToKickOut, std::list<std::shared_ptr<Piece>> & dstToMoveKickedPiece);
@@ -35,10 +35,23 @@ public:
 
     bool moveIsValid(Coordinates coordinatesOfPieceToMove, Coordinates selectedPosition);
 
+    void addMoveToHistory(std::pair<Coordinates, Coordinates> fromTo, std::shared_ptr<Piece> ptrPiece);
+    
+    struct MoveHistory{
+        Coordinates from,to;
+        std::shared_ptr<Piece> ptrPiece;
+    };
+
+    const std::list<MoveHistory> & getMovesHistory();
+
+
 private:
     
     int indexOfKingSide1 = 4;
     int indexOfKingSide2 = 4;
+    
+    const int LIMIT_HIST_MOVES = 5;
+    std::list<MoveHistory> movesHistory;
 
     bool positionReachable(int playingSide, Coordinates positionToReach);
 

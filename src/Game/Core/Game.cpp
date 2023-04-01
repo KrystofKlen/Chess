@@ -116,6 +116,12 @@ bool Game::castle(Board & b, Coordinates selectedPosition, Coordinates pieceCoor
                 return false;
             }
         }
+
+        addMoveToHistory({pieceCoordinates,selectedPosition},
+        positionWithPiece.mPiece);
+        addMoveToHistory({{0,7},{0,5}},
+        Board::playField[0][7].mPiece);
+
         b.movePiece(pieceCoordinates, selectedPosition,true);
         b.movePiece({0,7},{0,5},true);
         return true;;
@@ -129,6 +135,12 @@ bool Game::castle(Board & b, Coordinates selectedPosition, Coordinates pieceCoor
                 return false;
             } 
         }
+
+        addMoveToHistory({pieceCoordinates,selectedPosition},
+        positionWithPiece.mPiece);
+        addMoveToHistory({{0,0},{0,3}},
+        Board::playField[0][0].mPiece);
+
         b.movePiece(pieceCoordinates, selectedPosition,true);
         b.movePiece({0,0},{0,3}, true);
         return true;
@@ -141,6 +153,12 @@ bool Game::castle(Board & b, Coordinates selectedPosition, Coordinates pieceCoor
                 return false;
             } 
         }
+
+        addMoveToHistory({pieceCoordinates,selectedPosition},
+        positionWithPiece.mPiece);
+        addMoveToHistory({{7,7},{7,5}},
+        Board::playField[7][7].mPiece);
+
         b.movePiece(pieceCoordinates, selectedPosition,true);
         b.movePiece({7,7},{7,5},true);
         return true;
@@ -154,6 +172,12 @@ bool Game::castle(Board & b, Coordinates selectedPosition, Coordinates pieceCoor
                 return false;
             } 
         }
+
+        addMoveToHistory({pieceCoordinates,selectedPosition},
+        positionWithPiece.mPiece);
+        addMoveToHistory({{7,0},{7,3}},
+        Board::playField[7][0].mPiece);
+
         b.movePiece(pieceCoordinates, selectedPosition,true);
         b.movePiece({7,0},{7,3},true);
         return true;
@@ -180,6 +204,16 @@ bool Game::checkIfPawnReachedEnd(int playingSide){
     }
 }
 
+void Game::addMoveToHistory(std::pair<Coordinates, Coordinates> fromTo, std::shared_ptr<Piece> ptrPiece){
+    if(movesHistory.size() >= LIMIT_HIST_MOVES){
+        movesHistory.pop_back();
+    }
+    movesHistory.push_front({fromTo.first,fromTo.second,ptrPiece});
+}
+
+const std::list<Game::MoveHistory> & Game::getMovesHistory(){
+    return movesHistory;
+}
 
 Game::Game(){
 

@@ -136,12 +136,17 @@ void DifficultLevel::makeNextMove(Game & g, Board & b, bool & pcWin){
         bestMove = equalMoves[randomIndex];
         bestMoveSelected = true;
     }
+
+    g.addMoveToHistory(
+        bestMove,
+        b.playField[bestMove.first.mRowIndex][bestMove.first.mColumnIndex].mPiece);
     
     b.refreshPieceCoordinates();
     
     if(g.checkIfPieceWasKickedOut(bestMove.second)){
         kickoutByComputer(g,pcWin, bestMove.second);
     }
+    
     b.movePiece(bestMove.first, bestMove.second, true);
 }
 

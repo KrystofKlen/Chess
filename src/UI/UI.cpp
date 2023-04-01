@@ -212,6 +212,40 @@ void UI::setAlert(int COLOR_PAIR_CODE, const std::string & message){
     wrefresh(pWinAlert); 
 }
 
+void UI::showMovesHistory(const std::vector<Move> & moves){
+    int winHistorySize = 55;
+    int ASCII = 65;
+    WINDOW* winMovesHistory = newwin(25,winHistorySize, 6, winSize*2*8 + 1);   
+    refresh();
+    box(winMovesHistory,0,0);
+    int line = 2;
+    for(auto move : moves){
+
+        std::string player = "PLAYER: ";
+        player.append(move.mPlayer);
+
+        std::string piece = "PIECE: ";
+        piece += move.mLetter;
+
+        std::string from = "FROM: ";
+        char cFrom = move.fromCol+ASCII;
+        from += cFrom;
+        from.append(std::to_string(move.fromRow));
+
+        std::string to = "TO: ";
+        char cTo = move.toCol+ASCII;
+        to += cTo;
+        to.append(std::to_string(move.toRow));
+
+        mvwprintw(winMovesHistory,line,2,player.c_str());
+        mvwprintw(winMovesHistory,line,15,piece.c_str());
+        mvwprintw(winMovesHistory,line,30,from.c_str());
+        mvwprintw(winMovesHistory,line,45,to.c_str());
+        line++;
+        wrefresh(winMovesHistory);
+    }
+}
+
 void UI::drawDownWindow(WINDOW** win, int* winDownSize, int lines, const char* headline){    
     //creating window
     *winDownSize = winSize*2*8;

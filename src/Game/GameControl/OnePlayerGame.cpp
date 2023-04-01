@@ -23,6 +23,7 @@ void OnePlayerGame::startGameLoop(){
 
         //refresh UI
         api.showBoard();
+        api.showMovesHistory(g.getMovesHistory());
         api.updatePieces(g);
 
         //check game state
@@ -74,6 +75,8 @@ void OnePlayerGame::startGameLoop(){
         if(g.checkIfPieceWasKickedOut(movementFromTo.second) && !castleDetected){
             char letter = Board::playField[movementFromTo.second.mRowIndex][movementFromTo.second.mColumnIndex].mPiece
             ->mLetter;
+            
+            g.addMoveToHistory(movementFromTo,b.playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece);
 
             g.kickout(movementFromTo.second, g.piecesOUTplayer2);
             
@@ -81,14 +84,17 @@ void OnePlayerGame::startGameLoop(){
             if(letter == 'K'){
                 b.movePiece(movementFromTo.first, movementFromTo.second, true);
                 api.showBoard();
+                api.showMovesHistory(g.getMovesHistory());
                 api.updatePieces(g);
                 api.showAlert("GAME OVER , RED WINS, PRESS ANY KEY TO END");
                 return;
             }      
         }
-        if(!castleDetected)
+        if(!castleDetected){
+            g.addMoveToHistory(movementFromTo,b.playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece);
             b.movePiece(movementFromTo.first, movementFromTo.second, false);
-
+        }
+            
         //promote pawn if it is at the end
         if(!castleDetected){
             bool pawnAtEnd = g.checkIfPawnReachedEnd(playingSide);
@@ -109,6 +115,7 @@ void OnePlayerGame::startGameLoop(){
             ptrComputer->makeNextMove(g, b, pcWin);
             if(pcWin){
                 api.showBoard();
+                api.showMovesHistory(g.getMovesHistory());
                 api.updatePieces(g);
                 api.showAlert("GAME OVER , BLUE WINS, PRESS ANY KEY TO END");
                 return;

@@ -32,6 +32,8 @@ public:
      */
     void showBoard();
 
+    void showMovesHistory(const std::list<Game::MoveHistory> & historyMoves);
+
     /**
      * Displays message underneeth the chess board
      * @param const std::string & message = message to display

@@ -42,6 +42,5 @@ public:
 
     void convertPiece(std::shared_ptr<Piece> from, PieceFileData & to);
 
-    
 };
 

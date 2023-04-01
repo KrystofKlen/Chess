@@ -17,7 +17,13 @@ public:
         chtype charRepresentingPiece;
         int mSide;
     };
+    struct Move{
+        std::string mPlayer;
+        char mLetter;
+        int fromRow, fromCol, toRow, toCol;
+    };
     void endScreen();
+    void showMovesHistory(const std::vector<Move> & moves);
     void setSelected(int playingSide, chtype charRepresentigPiece);
     void drawDownWindow(WINDOW** win,  int* winDownSize, int lines, const char* headline);
     void showChessBoard();

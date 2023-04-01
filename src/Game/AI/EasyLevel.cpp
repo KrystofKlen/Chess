@@ -8,6 +8,8 @@ void EasyLevel::makeNextMove(Game & g, Board & b, bool & pcWin){
     if(g.checkIfPieceWasKickedOut(allPossibleMoves[randomIndex].second)){
         kickoutByComputer(g,pcWin,allPossibleMoves[randomIndex].second);  
     }
+    g.addMoveToHistory({allPossibleMoves[randomIndex].first, allPossibleMoves[randomIndex].second},
+    Board::playField[allPossibleMoves[randomIndex].first.mRowIndex][allPossibleMoves[randomIndex].first.mRowIndex].mPiece);
     b.movePiece(allPossibleMoves[randomIndex].first, allPossibleMoves[randomIndex].second, true);
 }
 
