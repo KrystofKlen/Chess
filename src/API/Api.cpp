@@ -124,7 +124,7 @@ void API::showMovesHistory(const std::list<Game::MoveHistory> & historyMoves){
 }
 
 void API::showBoard(){
-    ui.printAscii();
+    //ui.printAscii();
     ui.showChessBoard();
 }
 

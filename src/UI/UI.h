@@ -51,9 +51,19 @@ public:
 private:
     const int winSize = 3;
     const int CHESS_BOARD_STATS_OFFSET = 1;
-    const int CHESS_BOARD_START_X = 40;
-    const int CHESS_BOARD_START_Y = 10;
+    const int CHESS_BOARD_START_X = 0;
+    const int CHESS_BOARD_START_Y = 2;
     const int STATS_WIN_X = CHESS_BOARD_START_X + (winSize*2*9) + CHESS_BOARD_STATS_OFFSET;
+    const int STATS_Y = CHESS_BOARD_START_Y;
+    const int HISTORY_X = STATS_WIN_X;
+    const int HISTORY_Y = STATS_Y + KICKED_FIGURES_LINES + 1;
+    const int KICKED_FIGURES_LINES = 3;
+    const int KICKED_FIGURES_COLLS = winSize*2*8;
+    const int HISTORY_LINES = 15;
+    const int HISTORY_COLLS = KICKED_FIGURES_COLLS;
+    const int ALERT_X = STATS_WIN_X;
+    const int ALERT_Y = HISTORY_Y + HISTORY_LINES + 1;
+
     Field board[8][8];
     WINDOW* pWinAlert;
     WINDOW* pWinDown;

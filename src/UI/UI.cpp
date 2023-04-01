@@ -16,7 +16,7 @@ void UI::printChessBoardDiscription(){
         mvaddch(CHESS_BOARD_START_Y-winSize/2 - 1,x+=2*winSize,c);
     }
     int y = CHESS_BOARD_START_Y-winSize + winSize/2;
-    for(char c = '1'; c<='8';c++){
+    for(char c = '0'; c<='7';c++){
         mvaddch( y+=winSize,CHESS_BOARD_START_X+winSize, c);
     }
     refresh();
@@ -31,7 +31,7 @@ void UI::showChessBoard(){
 
     initWindows();
 
-    printAscii();
+    //printAscii();
     printManualGame();
     printChessBoardDiscription();
 
@@ -197,11 +197,10 @@ void UI::setPlayingPiecesOnScreen(){
 }
 
 void UI::setKickedPiecesOnScreen(const std::list<std::pair<char,int>> & infoAboutKickedPieces){    
-    int winKickedPiecesSize = winSize*2*8;
-    WINDOW* winKickedPieces = newwin(3,winKickedPiecesSize, 6,STATS_WIN_X);   
+    WINDOW* winKickedPieces = newwin(KICKED_FIGURES_LINES,KICKED_FIGURES_COLLS, STATS_Y,STATS_WIN_X);   
     refresh();
     box(winKickedPieces,0,0);
-    mvwprintw(winKickedPieces, 0, winKickedPiecesSize/2 - 7, "KICKED FIGURES");
+    mvwprintw(winKickedPieces, 0, KICKED_FIGURES_COLLS/2 - 7, "KICKED FIGURES");
     wrefresh(winKickedPieces);
 
     int column = 1;
@@ -217,7 +216,6 @@ void UI::setKickedPiecesOnScreen(const std::list<std::pair<char,int>> & infoAbou
 
 void UI::setAlert(int COLOR_PAIR_CODE, const std::string & message){
     pWinAlert = NULL;
-   // WINDOW* winAlert;
     int windowAlertSize;
     drawDownWindow(&pWinAlert,&windowAlertSize,3,"");
     mvwprintw(pWinAlert, 1, windowAlertSize/2 - message.size()/2, message.c_str());
@@ -225,40 +223,40 @@ void UI::setAlert(int COLOR_PAIR_CODE, const std::string & message){
 }
 
 void UI::showMovesHistory(const std::vector<Move> & moves){
-    int winHistorySize = 55;
     int ASCII = 65;
-    WINDOW* winMovesHistory = newwin(25,winHistorySize, 10, STATS_WIN_X); 
-    refresh();
+    WINDOW* winMovesHistory = newwin(HISTORY_LINES,HISTORY_COLLS, STATS_Y + KICKED_FIGURES_LINES + 1, HISTORY_X); 
     box(winMovesHistory,0,0);
     int line = 2;
     for(auto move : moves){
-        std::string player = "PLAYER: ";
+        std::string player = "PLAYER:";
         player.append(move.mPlayer);
 
-        std::string piece = "PIECE: ";
+        std::string piece = "PIECE:";
 
-        std::string from = "FROM: ";
+        std::string from = "FROM:";
         char cFrom = move.fromCol+ASCII;
+        from += cFrom;
         from.append(std::to_string(move.fromRow));
 
-        std::string to = "TO: ";
+        std::string to = "TO:";
         char cTo = move.toCol+ASCII;
-
+        to += cTo;
         to.append(std::to_string(move.toRow));
 
-        mvwprintw(winMovesHistory,line,2,player.c_str() );
-        mvwprintw(winMovesHistory,line,15,piece.c_str() );
+        mvwprintw(winMovesHistory,line,5,player.c_str() );
+        mvwprintw(winMovesHistory,line,16,piece.c_str() );
         if(move.mPlayer.compare("1") ==0){
             mvwaddch(winMovesHistory,line,23, move.mLetter | COLOR_PAIR(PLAYER_1_COLOR_CODE));
         }else{
             mvwaddch(winMovesHistory,line,23, move.mLetter | COLOR_PAIR(PLAYER_2_COLOR_CODE));
         }
-        mvwprintw(winMovesHistory,line,30,from.c_str() );
-        mvwprintw(winMovesHistory,line,45,to.c_str());
+        mvwprintw(winMovesHistory,line,26,from.c_str() );
+        mvwprintw(winMovesHistory,line,36,to.c_str());
         line++;
         wrefresh(winMovesHistory);
         attroff(COLOR_PAIR(PLAYER_1_COLOR_CODE));
     }
+    wrefresh(winMovesHistory);
 }
 
 void UI::drawDownWindow(WINDOW** win, int* winDownSize, int lines, const char* headline){    
@@ -267,7 +265,7 @@ void UI::drawDownWindow(WINDOW** win, int* winDownSize, int lines, const char* h
     int columnWindowFrom = 0;
     int rowWindowFrom = 3 + 8*winSize + 6;
 
-    *win = newwin(lines,*winDownSize, rowWindowFrom , columnWindowFrom);   
+    *win = newwin(lines,*winDownSize, STATS_Y + KICKED_FIGURES_LINES + HISTORY_LINES + 2 , STATS_WIN_X);   
     refresh();
     box(*win,0,0);
     mvwprintw(*win, 0, (*winDownSize)/2 - 7, headline);
@@ -298,7 +296,7 @@ std::string UI::showMenu(std::list<std::string> options){
     noecho();
     curs_set(0);
 
-    printAscii();
+    //printAscii();
     //printManualMenu();
     
     int winLines = options.size() + 2;
@@ -415,7 +413,7 @@ char UI::selectPieceToMoveBack(const std::vector<std::pair<char,int>> & playersK
 
 void UI::printAscii(){
     mvwprintw
-    (stdscr,0,0,"  ####  #    # ######  ####   ####  \n #    # #    # #      #      #      \n #      ###### #####   ####   #### \n #      #    # #           #      # \n #    # #    # #      #    # #    # \n  ####  #    # ######  ####   ####  \n");
+    (stdscr,2,0,"  ####  #    # ######  ####   ####  \n #    # #    # #      #      #      \n #      ###### #####   ####   #### \n #      #    # #           #      # \n #    # #    # #      #    # #    # \n  ####  #    # ######  ####   ####  \n");
     refresh();   
 }
 
@@ -430,7 +428,6 @@ void UI::printManualMenu(){
 
 void UI::printManualGame(){
     int rowFrom = 3 + 8*winSize + 6 + 3; 
-    mvprintw( rowFrom++, 0, "    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5    5");
     mvprintw( rowFrom++, 0, "- MOVE WITH ARROWS");
     mvprintw( rowFrom++, 0, "- q / RESIZE TERMINAL = QUIT AND SAVE");
     mvprintw( rowFrom++, 0, "- m = MOVE");

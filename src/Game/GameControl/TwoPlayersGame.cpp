@@ -9,6 +9,7 @@ void TwoPlayersGame::startGameLoop(){
     while(gameRunning){
         //refresh UI
         api.showBoard();
+        api.showMovesHistory(g.getMovesHistory());
         api.updatePieces(g);
 
         //checkDetected = false;
@@ -69,6 +70,7 @@ void TwoPlayersGame::startGameLoop(){
             if(letter == 'K'){
                 b.movePiece(movementFromTo.first, movementFromTo.second, true);
                 api.showBoard();
+                api.showMovesHistory(g.getMovesHistory());
                 api.updatePieces(g);
                 if(playingSide == 1){
                     api.showAlert("GAME OVER , RED WINS, PRESS ANY KEY TO END");
@@ -93,6 +95,7 @@ void TwoPlayersGame::startGameLoop(){
         //end game if check mate 
         if(checkMateDetected){
             api.showBoard();
+            api.showMovesHistory(g.getMovesHistory());
             api.updatePieces(g);
             api.showAlert("CHECK MATE, PRESS ANY KEY TO END");
             return;

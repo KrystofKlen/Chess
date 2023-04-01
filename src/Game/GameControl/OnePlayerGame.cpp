@@ -47,7 +47,6 @@ void OnePlayerGame::startGameLoop(){
             api.showAlert("STALMATE");
             return;
         }
-        
         //pick piece and position to move to
         std::pair< Coordinates,Coordinates > movementFromTo =  api.pickPosition(playingSide, gameRunning);
         if(!gameRunning) break;
