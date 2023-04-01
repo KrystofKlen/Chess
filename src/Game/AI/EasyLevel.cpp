@@ -9,7 +9,7 @@ void EasyLevel::makeNextMove(Game & g, Board & b, bool & pcWin){
         kickoutByComputer(g,pcWin,allPossibleMoves[randomIndex].second);  
     }
     g.addMoveToHistory({allPossibleMoves[randomIndex].first, allPossibleMoves[randomIndex].second},
-    Board::playField[allPossibleMoves[randomIndex].first.mRowIndex][allPossibleMoves[randomIndex].first.mRowIndex].mPiece);
+    Board::playField[allPossibleMoves[randomIndex].first.mRowIndex][allPossibleMoves[randomIndex].first.mColumnIndex].mPiece);
     b.movePiece(allPossibleMoves[randomIndex].first, allPossibleMoves[randomIndex].second, true);
 }
 
