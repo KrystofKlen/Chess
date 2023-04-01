@@ -88,7 +88,7 @@ int DifficultLevel::minMax(
                     tmpKick->isInSimulation = true;
                 }
 
-                if(depth == 3){
+                if(depth == MIN_MAX_DEPTH){
                     movesRank.push_back ({ evaluation,{fig->mCoordinates, move}});
                 }
                // Board::playField[move.mRowIndex][move.mColumnIndex].mPiece->isInSimulation = true;
@@ -110,7 +110,7 @@ void DifficultLevel::makeNextMove(Game & g, Board & b, bool & pcWin){
     std::list<std::pair<int, std::pair<Coordinates, Coordinates>>>  movesRank;
 
     //evaluating moves
-    minMax(g,b,false,3, movesRank);
+    minMax(g,b,false,MIN_MAX_DEPTH, movesRank);
 
     std::pair<Coordinates, Coordinates> bestMove;
 
