@@ -23,7 +23,8 @@ public:
         int & playingSide,
         std::list<PieceFileData> & piecesIn,
         std::list<PieceFileData> & piecesOut,
-        int board[8][8]
+        int board[8][8],
+        std::vector<HistoryFileData> & vctHistoryFileData
     );
 
     /**
@@ -64,7 +65,8 @@ public:
         int plyingSide,
         const std::vector<PieceFileData> & piecesIn,
         const std::vector<PieceFileData> & piecesOut,
-        int board[8][8]
+        int board[8][8],
+        const std::vector<HistoryFileData> & historyMoves
     );
 private: 
     int getHash(std::string & info, long saveTime);

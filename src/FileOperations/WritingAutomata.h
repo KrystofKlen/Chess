@@ -3,6 +3,7 @@
 #include <vector>
 #include <regex>
 #include "PieceFileData.h"
+#include "HistoryFileData.h"
 #include <iostream>
 
 class WritingAutomata{
@@ -17,17 +18,24 @@ std::string getFileContent(
         int plyingSide,
         const std::vector<PieceFileData> & piecesIn,
         const std::vector<PieceFileData> & piecesOut,
-        int board[8][8]
+        int board[8][8],
+        const std::vector<HistoryFileData> & historyMoves
     );
 
 private:
 
     std::string getFileTemplate(
         const std::vector<PieceFileData> & piecesIn,
-        const std::vector<PieceFileData> & piecesOut
+        const std::vector<PieceFileData> & piecesOut,
+        const std::vector<HistoryFileData> & historyMoves
         );
 
     std::string getFreePositions(int board[8][8]);
+
+    void setParamsHistory(
+        const HistoryFileData & historyMove,
+        std::vector<std::string> & params
+    );
 
     void setParamsPiece(
         const PieceFileData & piece,
@@ -78,5 +86,8 @@ private:
     "LINEx= # # # # # # # # ;\n"
     "LINEx= # # # # # # # # ;\n"
     "};";
+
+    const std::string HISTORY_MOVE_TEMPLATE =
+    "{\nPIECE=#;\nSIDE=#;\nCOORDINATES_FROM={#,#};\nCOORDINATED_TO={#,#};\n}";
 
 };

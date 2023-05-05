@@ -8,6 +8,7 @@
 #include "../Game/Core/Pieces/Rock.h"
 #include "../Game/Core/Pieces/Pawn.h"
 #include "../FileOperations/FileOperations.h"
+#include "../Game/Core/Game.h"
 #include<iostream>
 
 class Converter{
@@ -41,6 +42,10 @@ public:
     void getIsFreeData(int board[8][8]);
 
     void convertPiece(std::shared_ptr<Piece> from, PieceFileData & to);
+
+    void convertHistoryMove(const Game::MoveHistory & from, HistoryFileData & to);
+
+    void convertHistoryMoveFileData(const HistoryFileData & from, Game::MoveHistory & to);
 
 };
 

@@ -117,7 +117,7 @@ void TwoPlayersGame::startGameLoop(){
     api.saveGame2(
             b,
             g,
-            2,
+            API::TWO_PLAYERS_GAME,
             0,
             checkDetected ? 1:0,
             checkMateDetected ? 1:0,

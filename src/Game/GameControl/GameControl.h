@@ -19,6 +19,13 @@ public:
      */
     void setGameState(bool isCheck, bool isStalmate, bool isCheckMate, int playingSide);
 
+
+    void setGameHistoryMoves(const std::vector<Game::MoveHistory> & historyMoves){
+        for(const auto & move : historyMoves){
+            g.addMoveToHistory(move);
+        }
+    }
+
     /**
      * To be implemented ... 
      * usages: 1 player game (against PC), 2 players game

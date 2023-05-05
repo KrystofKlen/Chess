@@ -211,8 +211,12 @@ void Game::addMoveToHistory(std::pair<Coordinates, Coordinates> fromTo, std::sha
     movesHistory.push_front({fromTo.first,fromTo.second,ptrPiece});
 }
 
-const std::list<Game::MoveHistory> & Game::getMovesHistory(){
+const std::list<Game::MoveHistory> & Game::getMovesHistory() const{
     return movesHistory;
+}
+
+void Game::addMoveToHistory(const MoveHistory & move){
+    movesHistory.push_back(move);
 }
 
 Game::Game(){

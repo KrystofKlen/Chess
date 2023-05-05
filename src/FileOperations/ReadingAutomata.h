@@ -4,6 +4,8 @@
 #include <memory>
 #include <list>
 #include "PieceFileData.h"
+#include "HistoryFileData.h"
+#include "vector"
 
 class ReadingAutomata{
 public:
@@ -24,7 +26,8 @@ public:
         int & playingSide,
         std::list<PieceFileData> & piecesIn,
         std::list<PieceFileData> & piecesOut,
-        int board[8][8]);
+        int board[8][8],
+        std::vector<HistoryFileData> & vctHistoryFileData);
 private:
 
     /**
@@ -129,6 +132,25 @@ private:
      * @return false 
      */
     bool readFreePositions(std::istringstream & iss, int board[8][8] );
+
+
+    /**
+     * @brief Reads one history move
+     * Expected syntax
+     * "{
+     *      PIECE= char;
+     *      SIDE= int;
+     *      COORDINATES_FROM={int,int};
+     *      COORDINATED_TO={int,int};
+     * }";
+     * 
+     * @param iss 
+     * @param historyFileData 
+     * @return true Reading and retrieving of variables was successfull
+     * @return false 
+     */
+    bool readHistoryMove(std::istringstream & iss, HistoryFileData & historyFileData);
     
+
 };
 

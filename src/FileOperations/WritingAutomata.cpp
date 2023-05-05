@@ -9,7 +9,8 @@ std::string WritingAutomata::getFileContent(
         int plyingSide,
         const std::vector<PieceFileData> & piecesIn,
         const std::vector<PieceFileData> & piecesOut,
-        int board[8][8]
+        int board[8][8],
+        const std::vector<HistoryFileData> & historyMoves
     ){  
         std::vector<std::string> params;
         setParamsGame(
@@ -31,32 +32,45 @@ std::string WritingAutomata::getFileContent(
                 params.push_back(std::to_string(board[i][j]));
             }
         }
-        std::string fileTemplate = getFileTemplate(piecesIn,piecesOut);
+        for(auto move : historyMoves){
+            setParamsHistory(move,params);
+        }
+        std::string fileTemplate = getFileTemplate(piecesIn,piecesOut,historyMoves);
         return replace_nth_hashtags(fileTemplate,params);
     }
 
 
 std::string WritingAutomata::getFileTemplate(
     const std::vector<PieceFileData> & piecesIn,
-    const std::vector<PieceFileData> & piecesOut
+    const std::vector<PieceFileData> & piecesOut,
+    const std::vector<HistoryFileData> & historyMoves
     ){
     std::string fileContent = GAME_FILE_SAVING_TEMPLATE;
-    std::string pieces;
+    std::string strPieces;
+    std::string strHistoryMoves;
     
     fileContent.append("PIECES_IN = ");
     for(int i = 0; i<piecesIn.size(); i++){
-        pieces.append(PIECES_FILE_SAVING_TEMPLATE);
+        strPieces.append(PIECES_FILE_SAVING_TEMPLATE);
     }
-    fileContent.append( replaceHashesWithNumbers(COMPOSED_BRACKET_TEMPLATE,{pieces}) );
-    pieces.clear();
+    fileContent.append( replaceHashesWithNumbers(COMPOSED_BRACKET_TEMPLATE,{strPieces}) );
+    strPieces.clear();
     fileContent.append("PIECES_OUT = ");
     for(int i = 0; i<piecesOut.size(); i++){
-        pieces.append(PIECES_FILE_SAVING_TEMPLATE);
+        strPieces.append(PIECES_FILE_SAVING_TEMPLATE);
     }
-    fileContent.append( replaceHashesWithNumbers(COMPOSED_BRACKET_TEMPLATE,{pieces}) );
+    fileContent.append( replaceHashesWithNumbers(COMPOSED_BRACKET_TEMPLATE,{strPieces}) );
 
     fileContent.append("FREE_POSITIONS = ");
     fileContent.append(FREE_POSITIONS_TEMPLATE);
+
+    fileContent.append("HISTORY_MOVES = {");
+    for(int i = 0; i<historyMoves.size(); i++){
+        strHistoryMoves.append(HISTORY_MOVE_TEMPLATE);
+    }
+    fileContent.append(strHistoryMoves);
+    fileContent.append("}");
+    
     return fileContent;
 }
 
@@ -80,6 +94,19 @@ void WritingAutomata::setParamsPiece(
     params.push_back(std::to_string(piece.mColumnIndex));
     params.push_back(std::to_string(piece.mNumOfStepsDone));
     params.push_back(std::to_string(piece.mId));
+}
+
+void WritingAutomata::setParamsHistory(
+    const HistoryFileData & historyMove,
+    std::vector<std::string> & params
+){
+    params.push_back(std::string(1,historyMove.mLetter));
+    params.push_back(std::to_string(historyMove.mSide));
+    params.push_back(std::to_string(historyMove.mCoordinateFromRowIndex));
+    params.push_back(std::to_string(historyMove.mCoordinateFromColIndex));
+    params.push_back(std::to_string(historyMove.mCoordinateToRowIndex));
+    params.push_back(std::to_string(historyMove.mCoordinateToColIndex));
+
 }
 
 void WritingAutomata::setParamsGame(

@@ -20,6 +20,7 @@ void Application::launch(){
         int gameType, difficulty, isCheck, isCheckMate, isStalmate, playingSide;
         std::list<PieceFileData>  piecesIn;
         std::list<PieceFileData>  piecesOut;
+        std::vector<HistoryFileData> vctHistoryFileData;
         int board[8][8];
         
         bool succesfullyLoaded = api.loadGameInfoFromFile(
@@ -32,19 +33,19 @@ void Application::launch(){
             playingSide,
             piecesIn,
             piecesOut,
-            board);
+            board,
+            vctHistoryFileData);
         if(!succesfullyLoaded){
-            std::string s;
-            for(auto p : piecesIn){
-                s.append(std::to_string(p.mId) + ", ");
-            }
+            std::string s = "here";
             api.endForLoadingError(s);    
             return;
         }
-        if(gameType == ONE_PLAYER_GAME){
+        if(gameType == API::ONE_PLAYER_GAME){
             chessGame = std::make_unique<OnePlayerGame>(difficulty);
-        }else{
+        }else if (gameType == API::TWO_PLAYERS_GAME){
             chessGame = std::make_unique<TwoPlayersGame>();
+        }else {
+            std::cout<<"GAME DIFFICULTY HAS WRONG NUMBER, 0 = ONE PLAYER GAME, 2 = TWO PLAYERS GAME\n"<<std::endl;
         }
 
         chessGame->g.clearDefault();
@@ -53,6 +54,7 @@ void Application::launch(){
         //api.convertData(chessGame->g, isCheck, isCheckMate, isStalmate, playingSide);
 
         chessGame->setGameState(isCheck, isStalmate, isCheckMate, playingSide);
+        api.addHistoryMoves(vctHistoryFileData,chessGame->g);
 
     }else{
         //starting a new game
@@ -72,7 +74,6 @@ void Application::launch(){
     chessGame->g.findKingsIndex();
     chessGame->startGameLoop();
     api.closeScreen();
-
 }
 
 bool Application::checkTerminalRequirements(){

@@ -9,8 +9,6 @@ class Application{
 public:
     void launch();
 private:
-    const int ONE_PLAYER_GAME = 0;
-    const int TWO_PLAYERS_GAME = 1;
     void select();
     static const int minTerminalRows = 43;
     static const int minTerminalColumns = 50;

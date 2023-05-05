@@ -42,8 +42,9 @@ public:
         std::shared_ptr<Piece> ptrPiece;
     };
 
-    const std::list<MoveHistory> & getMovesHistory();
+    const std::list<MoveHistory> & getMovesHistory() const;
 
+    void addMoveToHistory(const MoveHistory & move);
 
 private:
     

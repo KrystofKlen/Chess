@@ -9,6 +9,8 @@
 class API{
 public:
     static const int END_FLAG = -1;
+    static const int ONE_PLAYER_GAME = 0;
+    static const int TWO_PLAYERS_GAME = 1;
     
     API();
 
@@ -76,6 +78,9 @@ public:
     void convertData( Game & g, bool & isCheck, bool & isCheckMate, bool & isStalmate, int & playingSide );
 
 
+    void addHistoryMoves(const std::vector<HistoryFileData> & vctHistoryFileData, Game & g);
+
+
     bool createPiecesFromFileData(
         Game & g,
         std::list<PieceFileData> & piecesIn,
@@ -104,7 +109,8 @@ public:
         int & playingSide,
         std::list<PieceFileData> & piecesIn,
         std::list<PieceFileData> & piecesOut,
-        int board[8][8]);
+        int board[8][8],
+        std::vector<HistoryFileData> & vctHistoryFileData);
     
     /**
      * displays menu with following options: new game, load from file
@@ -127,6 +133,7 @@ private:
 
     UI ui;
     FileOperations fo;
+    Converter conv;
 
     std::list<std::pair<char,int>> infoAboutKickedPieces;
 

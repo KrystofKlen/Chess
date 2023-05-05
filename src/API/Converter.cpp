@@ -34,6 +34,27 @@ void Converter::convertPiece(std::shared_ptr<Piece> from, PieceFileData & to){
     to.mId = from->mId;
 }
 
+void Converter::convertHistoryMove(const Game::MoveHistory & from, HistoryFileData & to){
+    to.mLetter = from.ptrPiece.get()->mLetter;
+    to.mSide = from.ptrPiece.get()->mSide;
+    to.mCoordinateFromRowIndex = from.from.mRowIndex;
+    to.mCoordinateFromColIndex = from.from.mColumnIndex;
+    to.mCoordinateToRowIndex = from.to.mRowIndex;
+    to.mCoordinateToColIndex = from.to.mColumnIndex;
+}
+
+void Converter::convertHistoryMoveFileData(const HistoryFileData & from, Game::MoveHistory & to){
+    int DOESNT_MATTER = 0;
+    to.ptrPiece = createPieceFromFileData(
+        {from.mLetter,from.mSide,DOESNT_MATTER,DOESNT_MATTER,DOESNT_MATTER,DOESNT_MATTER}
+        );
+    to.from.mRowIndex = from.mCoordinateFromRowIndex;
+    to.from.mColumnIndex = from.mCoordinateFromColIndex;
+    to.to.mRowIndex = from.mCoordinateToRowIndex;
+    to.to.mColumnIndex = from.mCoordinateToColIndex;
+}
+
+
 std::shared_ptr<Piece> Converter::createPieceFromChunk(const std::string & pieceData){
 
     int ASCII_CONSTANT = 48;

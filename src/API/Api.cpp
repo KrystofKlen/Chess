@@ -241,10 +241,18 @@ void API::saveGame2(
             conv.convertPiece(ptrPiece, piece);
             piecesOut.push_back(piece);
         }
-
+        
         int board[8][8];
         conv.getIsFreeData(board);
 
+        std::vector<HistoryFileData> historyMovesFileData;
+        HistoryFileData historyFileData;
+        auto historyMoves = g.getMovesHistory();
+        for(auto move : historyMoves){
+            conv.convertHistoryMove(move,historyFileData);
+            historyMovesFileData.push_back(historyFileData);
+        }
+       
         bool saved = fo.saveGameToFile(
             gameType,
             difficulty,
@@ -254,13 +262,23 @@ void API::saveGame2(
             playingSide,
             piecesIn,
             piecesOut,
-            board
+            board,
+            historyMovesFileData
         );  
         if(saved)
             std::cout<<"YOUR GAME WAS SAVED.\n";
         else    
             std::cout<<"ERROR DURING WRITING TO A FILE.\n";   
 }
+
+void API::addHistoryMoves(const std::vector<HistoryFileData> & vctHistoryFileData, Game & g){
+    Game::MoveHistory move;
+    for(const auto & moveFileData : vctHistoryFileData){        
+        conv.convertHistoryMoveFileData(moveFileData,move);
+        g.addMoveToHistory(move);
+    }
+}
+
 
 void API::saveGame( const Board & b, const Game & g,
  const std::string & gameType, const std::string & difficulty, const std::string & isCheck,const std::string & isCheckMate,const std::string & isStalmate, const std::string & playingSide){
@@ -412,7 +430,8 @@ bool API::loadGameInfoFromFile(
         int & playingSide,
         std::list<PieceFileData> & piecesIn,
         std::list<PieceFileData> & piecesOut,
-        int board[8][8]
+        int board[8][8],
+        std::vector<HistoryFileData> & vctHistoryFileData
         ){  
     //get info from file
     bool successfullyLoaded = 
@@ -426,7 +445,8 @@ bool API::loadGameInfoFromFile(
             playingSide,
             piecesIn,
             piecesOut,
-            board
+            board,
+            vctHistoryFileData
             );
 
     if(!successfullyLoaded){

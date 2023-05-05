@@ -38,7 +38,8 @@ bool FileOperations::saveGameToFile(
     int plyingSide,
     const std::vector<PieceFileData> & piecesIn,
     const std::vector<PieceFileData> & piecesOut,
-    int board[8][8]
+    int board[8][8],
+    const std::vector<HistoryFileData> & historyMoves
 ){
     WritingAutomata wa;
     std::string fileContent = wa.getFileContent(
@@ -50,8 +51,8 @@ bool FileOperations::saveGameToFile(
     plyingSide,
     piecesIn,
     piecesOut,
-    board
-    );
+    board,
+    historyMoves);
 
     std::ofstream ofs;
     ofs.open("load.game");
@@ -70,7 +71,8 @@ bool FileOperations::loadGameFromFile(
     int & playingSide,
     std::list<PieceFileData> & piecesIn,
     std::list<PieceFileData> & piecesOut,
-    int board[8][8]
+    int board[8][8],
+    std::vector<HistoryFileData> & vctHistoryFileData
 ){
     std::ifstream ifs(fileName);
     if(ifs.fail()) return false;
@@ -82,7 +84,6 @@ bool FileOperations::loadGameFromFile(
     while(ifs.get(c)){
         strStream<<c;
     }
-    //if(ifs.fail()) return false;
 
     fileContent = strStream.str();
     strStream.str("");
@@ -98,8 +99,10 @@ bool FileOperations::loadGameFromFile(
         playingSide,
         piecesIn,
         piecesOut,
-        board
+        board,
+        vctHistoryFileData
     );
+    
     return parsedOK;
 }
 

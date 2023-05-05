@@ -137,7 +137,7 @@ void OnePlayerGame::startGameLoop(){
         api.saveGame2(
             b,
             g,
-            1,
+            API::ONE_PLAYER_GAME,
             mDifficulty,
             checkDetected ? 1:0,
             checkMateDetected ? 1:0,

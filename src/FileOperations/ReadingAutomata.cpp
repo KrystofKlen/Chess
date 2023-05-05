@@ -109,6 +109,53 @@ bool ReadingAutomata::readFreePositions(std::istringstream & iss, int board[8][8
     return true;
 }
 
+bool ReadingAutomata::readHistoryMove(std::istringstream & iss, HistoryFileData & historyFileData){
+    if( ! readToken(iss,'{') ) return false;
+
+    if( ! readVariable(iss) ) return false;
+    readChar(iss,historyFileData.mLetter);
+    if( !readToken(iss,';') ){
+        return false;
+    }
+
+    if( ! readVariable(iss) ) return false;
+    readNumber(iss,historyFileData.mSide);
+    if( !readToken(iss,';') ){
+        return false;
+    }
+
+    if( ! readVariable(iss) ) return false;
+
+    if( !readToken(iss,'{') 
+    || ! readNumber(iss,historyFileData.mCoordinateFromRowIndex) 
+    || ! readToken(iss,',') 
+    || ! readNumber(iss,historyFileData.mCoordinateFromColIndex) 
+    || ! readToken(iss,'}')
+    ){
+        return false;
+    }
+
+    if(!readToken(iss,';')) return false;
+
+    if( ! readVariable(iss) ) return false;
+
+    if( !readToken(iss,'{') 
+    || ! readNumber(iss,historyFileData.mCoordinateToRowIndex) 
+    || ! readToken(iss,',') 
+    || ! readNumber(iss,historyFileData.mCoordinateToColIndex) 
+    || ! readToken(iss,'}')
+    ){
+        return false;
+    }
+
+    if(!readToken(iss,';')) return false;
+    if(!readToken(iss,'}')) return false;
+    return true;
+}
+
+
+
+
 bool ReadingAutomata::readGameFromFile(
     const std::string & fileContent,
     int & gameType,
@@ -119,8 +166,8 @@ bool ReadingAutomata::readGameFromFile(
     int & playingSide,
     std::list<PieceFileData> & piecesIn,
     std::list<PieceFileData> & piecesOut,
-    int board[8][8]){
-
+    int board[8][8],
+    std::vector<HistoryFileData> & vctHistoryFileData){
     
     std::istringstream iss (fileContent);
     
@@ -149,7 +196,6 @@ bool ReadingAutomata::readGameFromFile(
     if( ! readVariable(iss) || ! readNumber(iss,playingSide) || ! readToken(iss,';') ){
         return false;
     }
-
 
     // read pieces in
     readComment(iss);
@@ -188,6 +234,17 @@ bool ReadingAutomata::readGameFromFile(
     // read free positions
     readComment(iss);
     if( ! readVariable(iss) || ! readFreePositions(iss,board) || ! readToken(iss,';') ) return false;
+
+    // read history moves
+    readComment(iss);
+    if( !readVariable(iss) || !readToken(iss,'{')  ) return false;
+    HistoryFileData historyFileData;
+    while( readHistoryMove(
+        iss,
+        historyFileData
+    )){
+        vctHistoryFileData.push_back(historyFileData);
+    }
     
     return true;
 }
