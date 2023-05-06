@@ -13,3 +13,4 @@ static const char BISHOP = 'B';
 static const char KNIGHT = 'H';
 static const char ROCK = 'R';
 static const char PAWN = 'P';
+static const int MIN_MAX_DEPTH = 3;

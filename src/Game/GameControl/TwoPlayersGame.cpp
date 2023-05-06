@@ -62,31 +62,15 @@ void TwoPlayersGame::startGameLoop(){
 
         //checking if we are kicking out opponents piece
         if(g.checkIfPieceWasKickedOut(movementFromTo.second)){
-            char letter = Board::playField[movementFromTo.second.mRowIndex][movementFromTo.second.mColumnIndex].mPiece
-            ->mLetter;
-            g.kickout(movementFromTo.second, playingSide == 1 ? g.piecesOUTplayer2 : g.piecesOUTplayer1); 
-            
-            //end game if king was the target
-            if(letter == KING){
-                b.movePiece(movementFromTo.first, movementFromTo.second, true);
-                api.showBoard();
-                api.showMovesHistory(g.getMovesHistory());
-                api.updatePieces(g);
-                if(playingSide == 1){
-                    api.showAlert("GAME OVER , RED WINS, PRESS ANY KEY TO END");
-                }else{
-                    api.showAlert("GAME OVER , BLUE WINS, PRESS ANY KEY TO END");
-                }
-                return;
-            }     
+            handleKickout(movementFromTo);
+            if(gameIsOver) return;   
         }
         b.movePiece(movementFromTo.first, movementFromTo.second, true);
         //g.movesHistory.push_front(movementFromTo);
 
         //promote pawn if it is at the end
-        bool pawnAtEnd = g.checkIfPawnReachedEnd(playingSide);
-        if(pawnAtEnd){
-            api.promotePawn(movementFromTo.second,  g,b);
+        if(!castleDetected){
+            handlePawnPromotion(movementFromTo);
         }
 
         //updating game state
@@ -103,17 +87,6 @@ void TwoPlayersGame::startGameLoop(){
         swapSides();
     } 
     
-    
-    // api.saveGame(
-    //     b,
-    //     g,
-    //     "2",
-    //     "0",
-    //     checkDetected ? "1" : "0",
-    //     checkMateDetected ? "1" : "0",
-    //     stalemateDetected ? "1" : "0",
-    //     std::to_string(playingSide) 
-    //     );
     api.saveGame2(
             b,
             g,
@@ -124,5 +97,26 @@ void TwoPlayersGame::startGameLoop(){
             stalemateDetected ? 1:0,
             playingSide
         );
+}
+
+
+void TwoPlayersGame::handleKickout(const std::pair< Coordinates,Coordinates > & movementFromTo){
+    char letter = Board::playField[movementFromTo.second.mRowIndex][movementFromTo.second.mColumnIndex].mPiece
+            ->mLetter;
+    g.kickout(movementFromTo.second, playingSide == 1 ? g.piecesOUTplayer2 : g.piecesOUTplayer1); 
+    
+    //end game if king was the target
+    if(letter == KING){
+        b.movePiece(movementFromTo.first, movementFromTo.second, true);
+        api.showBoard();
+        api.showMovesHistory(g.getMovesHistory());
+        api.updatePieces(g);
+        if(playingSide == 1){
+            api.showAlert("GAME OVER , RED WINS, PRESS ANY KEY TO END");
+        }else{
+            api.showAlert("GAME OVER , BLUE WINS, PRESS ANY KEY TO END");
+        }
+        gameIsOver = true;
+    }  
 }
 

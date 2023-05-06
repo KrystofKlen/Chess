@@ -23,7 +23,4 @@ public:
      * If more moves have the same (lowest evaluation), random move from these is picked.
      */
     void makeNextMove(Game & g, Board & b, bool & pcWin);
-private:
-    const int MIN_MAX_DEPTH = 3;
-
 };

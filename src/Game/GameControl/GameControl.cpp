@@ -20,3 +20,12 @@ GameControl::GameControl(){
     stalemateDetected = false; 
 }
 
+void GameControl::handlePawnPromotion(const std::pair< Coordinates,Coordinates > & movementFromTo){
+    bool pawnAtEnd = g.checkIfPawnReachedEnd(playingSide);
+    if(pawnAtEnd){
+        api.promotePawn(movementFromTo.second,  g,b);
+    }
+}
+
+
+

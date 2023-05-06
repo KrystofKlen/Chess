@@ -16,6 +16,7 @@ int DifficultLevel::minMax(
     
     //player 1 searches maximum
     int maxFound = -1000000000;
+    
     if(maxSearch){  
         // loop all pieces in game
         for(auto & fig : g.piecesINplayer1){

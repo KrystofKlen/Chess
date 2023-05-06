@@ -18,4 +18,9 @@ public:
 private:
     std::unique_ptr<ComputerPlayer> ptrComputer;
     int mDifficulty;
+
+    void handleKickout(const std::pair< Coordinates,Coordinates > & movementFromTo);
+
+    void makeMoveForPC();
+
 };

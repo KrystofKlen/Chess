@@ -72,22 +72,8 @@ void OnePlayerGame::startGameLoop(){
 
         //checking if we are kicking out opponents piece
         if(g.checkIfPieceWasKickedOut(movementFromTo.second) && !castleDetected){
-            char letter = Board::playField[movementFromTo.second.mRowIndex][movementFromTo.second.mColumnIndex].mPiece
-            ->mLetter;
-            
-            g.addMoveToHistory(movementFromTo,b.playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece);
-
-            g.kickout(movementFromTo.second, g.piecesOUTplayer2);
-            
-            //end game if king was the target
-            if(letter == KING){
-                b.movePiece(movementFromTo.first, movementFromTo.second, true);
-                api.showBoard();
-                api.showMovesHistory(g.getMovesHistory());
-                api.updatePieces(g);
-                api.showAlert("GAME OVER , RED WINS, PRESS ANY KEY TO END");
-                return;
-            }      
+            handleKickout(movementFromTo);  
+            if(gameIsOver) return;    
         }
         if(!castleDetected){
             g.addMoveToHistory(movementFromTo,b.playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece);
@@ -96,10 +82,8 @@ void OnePlayerGame::startGameLoop(){
             
         //promote pawn if it is at the end
         if(!castleDetected){
-            bool pawnAtEnd = g.checkIfPawnReachedEnd(playingSide);
-            if(pawnAtEnd){
-                api.promotePawn(movementFromTo.second,  g,b);
-            }
+            handlePawnPromotion(movementFromTo);
+            if(gameIsOver) return;   
         }
         
 
@@ -110,38 +94,51 @@ void OnePlayerGame::startGameLoop(){
         b.refreshPieceCoordinates();
         //no stalmate or check mate -> pc can make a move
         if( !stalemateDetected && !checkMateDetected ){
-            bool pcWin = false;
-            ptrComputer->makeNextMove(g, b, pcWin);
-            if(pcWin){
-                api.showBoard();
-                api.showMovesHistory(g.getMovesHistory());
-                api.updatePieces(g);
-                api.showAlert("GAME OVER , BLUE WINS, PRESS ANY KEY TO END");
-                return;
-            }
+            makeMoveForPC();
+            if(gameIsOver) return;
         } 
     } 
     
+    api.saveGame2(
+        b,
+        g,
+        ONE_PLAYER_GAME,
+        mDifficulty,
+        checkDetected ? 1:0,
+        checkMateDetected ? 1:0,
+        stalemateDetected ? 1:0,
+        playingSide
+    );
+}
 
-    // api.saveGame(
-    //     b,
-    //     g,
-    //     "1",
-    //     std::to_string(mDifficulty),
-    //     checkDetected ? "1" : "0",
-    //     checkMateDetected ? "1" : "0",
-    //     stalemateDetected ? "1" : "0",
-    //     std::to_string(playingSide) 
-    //     );
+void OnePlayerGame::handleKickout(const std::pair< Coordinates,Coordinates > & movementFromTo){
+    char letter = Board::playField[movementFromTo.second.mRowIndex][movementFromTo.second.mColumnIndex].mPiece
+            ->mLetter;
+            
+    g.addMoveToHistory(movementFromTo,b.playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece);
 
-        api.saveGame2(
-            b,
-            g,
-            ONE_PLAYER_GAME,
-            mDifficulty,
-            checkDetected ? 1:0,
-            checkMateDetected ? 1:0,
-            stalemateDetected ? 1:0,
-            playingSide
-        );
+    g.kickout(movementFromTo.second, g.piecesOUTplayer2);
+    
+    //end game if king was the target
+    if(letter == KING){
+        b.movePiece(movementFromTo.first, movementFromTo.second, true);
+        api.showBoard();
+        api.showMovesHistory(g.getMovesHistory());
+        api.updatePieces(g);
+        api.showAlert("GAME OVER , RED WINS, PRESS ANY KEY TO END");
+        gameIsOver = true;
+    }      
+}
+
+void OnePlayerGame::makeMoveForPC(){
+    bool pcWin = false;
+    ptrComputer->makeNextMove(g, b, pcWin);
+
+    if(pcWin){
+        api.showBoard();
+        api.showMovesHistory(g.getMovesHistory());
+        api.updatePieces(g);
+        api.showAlert("GAME OVER , BLUE WINS, PRESS ANY KEY TO END");
+        gameIsOver = true;
+    }
 }

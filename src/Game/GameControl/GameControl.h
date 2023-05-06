@@ -38,6 +38,11 @@ protected:
     int playingSide;
     bool checkDetected;
     bool checkMateDetected;
-    bool stalemateDetected;    
+    bool stalemateDetected;   
+    bool gameIsOver = false; 
+
+    virtual void handleKickout(const std::pair< Coordinates,Coordinates > & movementFromTo) = 0;
+
+    void handlePawnPromotion(const std::pair< Coordinates,Coordinates > & movementFromTo);
 };
 
