@@ -9,6 +9,7 @@
 #include <vector>
 #include "ReadingAutomata.h"
 #include "WritingAutomata.h"
+#include "../Game/ConstantsGame.h"
 
 class FileOperations{
 public:
@@ -26,26 +27,6 @@ public:
         int board[8][8],
         std::vector<HistoryFileData> & vctHistoryFileData
     );
-
-    /**
-     * @brief DEPRECATED
-     * 
-     *
-     * Reads from file and stores info into given parameters.
-     * @return true = file was succesfully read and hash matches, otherwise false
-     */
-    bool loadGameFromFile2(const std::string & fileName, 
-    std::string & gameType,
-    std::string & difficulty,
-    std::string & isCheck,
-    std::string & isCheckMate,
-    std::string & isStalmate,
-    std::string & playingSide,
-    std::string & positionIsFreeData,
-    std::string & in1,
-    std::string & in2,
-    std::string & out1,
-    std::string & out2);
 
     /**
      * Saves game into file.
@@ -69,18 +50,7 @@ public:
         const std::vector<HistoryFileData> & historyMoves
     );
 private: 
-    int getHash(std::string & info, long saveTime);
-    bool controlHash(std::string & info);
-
-    /**
-     * Reads text until it reaches specified delimiter.
-     * @param std::stringstream & strStream ... this stream will be cleared when hitting delimiter!
-     */
-    void readNextChunk(
-        std::stringstream & strStream, 
-        char delimiter,
-        const std::string & fileContent, 
-        std::string::const_iterator & it);
-    
-
+    FileVerifier fileVerifier;
+    ReadingAutomata readingAutomata;
+    WritingAutomata writingAutomata;
 };

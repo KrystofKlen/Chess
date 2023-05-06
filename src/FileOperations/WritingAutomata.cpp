@@ -74,6 +74,12 @@ std::string WritingAutomata::getFileTemplate(
     return fileContent;
 }
 
+std::string WritingAutomata::addVerification(std::string & fileContent){
+    int key = fileVerifier.getVerificationKeyForFile(fileContent);
+    std::string strHash = VERIFICATION_TEMPLATE;
+    return replace_nth_hashtags(VERIFICATION_TEMPLATE,{std::to_string(key)});
+}
+
 std::string WritingAutomata::getFreePositions(int board[8][8]){
     std::vector<std::string> params;
     for(int rowIndex = 0; rowIndex<8; rowIndex++){

@@ -56,6 +56,7 @@ bool Application::loadFromFile(std::unique_ptr<GameControl> &chessGame){
         piecesOut,
         board,
         vctHistoryFileData);
+        
     if(!succesfullyLoaded){
         api.endForLoadingError();    
         return false;

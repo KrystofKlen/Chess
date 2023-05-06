@@ -5,6 +5,7 @@
 #include "PieceFileData.h"
 #include "HistoryFileData.h"
 #include <iostream>
+#include "FileVerifier.h"
 
 class WritingAutomata{
 public:
@@ -21,6 +22,8 @@ std::string getFileContent(
         int board[8][8],
         const std::vector<HistoryFileData> & historyMoves
     );
+
+std::string addVerification(std::string & fileContent);
 
 private:
 
@@ -60,6 +63,9 @@ private:
 
     std::string replace_hashtags(std::string str, std::string replacement);
 
+    FileVerifier fileVerifier;
+
+    const std::string VERIFICATION_TEMPLATE = "VERIFICATION=#;\n";
 
     const std::string GAME_FILE_SAVING_TEMPLATE = 
     "GAME_TYPE=#;\n"

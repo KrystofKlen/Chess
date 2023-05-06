@@ -279,30 +279,6 @@ void API::addHistoryMoves(const std::vector<HistoryFileData> & vctHistoryFileDat
 }
 
 
-void API::saveGame( const Board & b, const Game & g,
- const std::string & gameType, const std::string & difficulty, const std::string & isCheck,const std::string & isCheckMate,const std::string & isStalmate, const std::string & playingSide){
-    std::string content;
-    content.append(gameType);
-    content.append("\n&\n");
-    content.append(difficulty);
-    content.append("\n&\n");
-    content.append(isCheck);
-    content.append("\n&\n");
-    content.append(isCheckMate);
-    content.append("\n&\n");
-    content.append(isStalmate);
-    content.append("\n&\n");
-    content.append(playingSide);
-    content.append("\n&\n");
-    getInfoAboutGameToSave( b, g, content);
-    bool saved = fo.saveGameToFile(content);
-    if(saved)
-        std::cout<<"YOUR GAME WAS SAVED.\n";
-    else    
-        std::cout<<"ERROR DURING WRITING TO A FILE.\n"; 
-
-}
-
 // void API::convertData(Game & g, bool & isCheck, bool & isCheckMate, bool & isStalmate, int & playingSide){
     
 //     // set is check
@@ -434,20 +410,19 @@ bool API::loadGameInfoFromFile(
         ){  
     //get info from file
     bool successfullyLoaded = 
-        // fo.loadGameFromFile(
-        //     fileName,
-        //     gameType,
-        //     difficulty,
-        //     isCheck,
-        //     isCheckMate,
-        //     isStalmate,
-        //     playingSide,
-        //     piecesIn,
-        //     piecesOut,
-        //     board,
-        //     vctHistoryFileData
-        //     );
-        false;
+        fo.loadGameFromFile(
+            fileName,
+            gameType,
+            difficulty,
+            isCheck,
+            isCheckMate,
+            isStalmate,
+            playingSide,
+            piecesIn,
+            piecesOut,
+            board,
+            vctHistoryFileData
+            );
 
     if(!successfullyLoaded){
         return false;
@@ -458,7 +433,7 @@ bool API::loadGameInfoFromFile(
 
 int API::selectNewGameOrLoadFromFile(){
     
-    std::string choice = ui.showMenu({"NEW GAME", "LOAD GAME"});
+    std::string choice = ui.showMenu({"NEW GAME", "LOAD GAME", "LOAD UNVERIFIED GAME"});
     if(choice.compare("END") == 0){
         return END_FLAG;
     }

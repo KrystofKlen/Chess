@@ -1,4 +1,6 @@
 #include "ReadingAutomata.h"
+#include <fstream>
+
 
 bool ReadingAutomata::readComment(std::istringstream & iss){
     char c1,c2,c3;
@@ -154,8 +156,6 @@ bool ReadingAutomata::readHistoryMove(std::istringstream & iss, HistoryFileData 
 }
 
 
-
-
 bool ReadingAutomata::readGameFromFile(
     const std::string & fileContent,
     int & gameType,
@@ -248,3 +248,19 @@ bool ReadingAutomata::readGameFromFile(
     
     return true;
 }
+
+bool ReadingAutomata::readVerification(std::string verificationPart, int & verification){
+    std::istringstream iss (verificationPart);
+    readComment(iss);
+    if( ! readVariable(iss) || ! readNumber(iss,verification) ) return false;
+    return true;
+}
+
+void ReadingAutomata::splitVerificationAndFile(std::string &fileContent, std::string &verificationPart, std::string &gamePart){
+    size_t pos = fileContent.find(';');
+    if(pos == std::string::npos) return;
+    verificationPart = fileContent.substr(0,pos+1);
+    gamePart = fileContent.substr(pos+2,fileContent.size());
+}
+
+
