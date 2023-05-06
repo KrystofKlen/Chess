@@ -6,7 +6,7 @@
 #include "Pieces/Rock.h"
 #include "Pieces/Pawn.h" 
 #include "Board.h"
-#include "../Constants.h"
+#include "../ConstantsEngine.h"
 #include <list> 
    
 enum CastlingSide {SHORTER_SIDE, LONGER_SIDE};

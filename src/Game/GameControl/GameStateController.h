@@ -1,5 +1,5 @@
 #pragma once
-#include "../Core/Game.h"
+#include "../Engine/Core/Game.h"
 
 bool kingWillNotLandIntoCheck(Game & g , Coordinates & anticipatedPosition, std::shared_ptr<Piece> king);
 

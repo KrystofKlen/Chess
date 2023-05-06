@@ -2,10 +2,10 @@
 #include "GameControl.h"
 #include "GameStateController.h"
 
-#include "../AI/ComputerPlayer.h"
-#include "../AI/EasyLevel.h"
-#include "../AI/MidLevel.h"
-#include "../AI/DifficultLevel.h"
+#include "../Engine/AI/ComputerPlayer.h"
+#include "../Engine/AI/EasyLevel.h"
+#include "../Engine/AI/MidLevel.h"
+#include "../Engine/AI/DifficultLevel.h"
 
 class OnePlayerGame : public GameControl{
 public:

@@ -11,10 +11,10 @@ UI_PATH=src/UI/
 APPLICATION_PATH=src/Application/
 API_PATH=src/API/
 GAME_CONTROL_PATH=src/Game/GameControl/
-CORE_PATH=src/Game/Core/
-PIECES_PATH=src/Game/Core/Pieces/
+CORE_PATH=src/Game/Engine/Core/
+PIECES_PATH=src/Game/Engine/Core/Pieces/
 FILE_OPERATIONS_PATH=src/FileOperations/
-AI_PATH=src/Game/AI/
+AI_PATH=src/Game/Engine/AI/
 
 #Variables for files in folders
 UI=$(UI_PATH)/UI.o

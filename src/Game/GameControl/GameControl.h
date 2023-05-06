@@ -1,9 +1,9 @@
 #pragma once
 
 #include "../../API/Api.h"
-#include "../Core/Game.h"
-#include "../Core/Board.h"
-#include "../Constants.h"
+#include "../Engine/Core/Game.h"
+#include "../Engine/Core/Board.h"
+#include "../Engine/ConstantsEngine.h"
 #include <memory>
 
 

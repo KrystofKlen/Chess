@@ -11,8 +11,7 @@ void TwoPlayersGame::startGameLoop(){
         api.showBoard();
         api.showMovesHistory(g.getMovesHistory());
         api.updatePieces(g);
-
-        //checkDetected = false;
+        
         //check game state
         checkDetected = kingIsInCheck(g,b,playingSide);
         if(checkDetected){
