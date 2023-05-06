@@ -23,4 +23,21 @@ public:
      * If more moves have the same (lowest evaluation), random move from these is picked.
      */
     void makeNextMove(Game & g, Board & b, bool & pcWin);
+
+private:
+
+    /**
+     * @brief Kick out piece just for Min Max purposes
+     * 
+     */
+    void temporarilyKickOut(std::shared_ptr<Piece> & kickedPiece, Coordinates move);
+
+    void returnTemporarilyKickedPiece(std::shared_ptr<Piece> & kickedPiece, Coordinates to);
+    
+    int evaluateImportanceOfKickedPiece(std::shared_ptr<Piece> & kickedPiece);
+
+    int evaluateMove(Game &g, Board &b, std::shared_ptr<Piece> &fig, 
+    const Coordinates &move, bool maxSearch, int depth, 
+    std::list<std::pair<int, std::pair<Coordinates, Coordinates>>> &movesRank);
+
 };

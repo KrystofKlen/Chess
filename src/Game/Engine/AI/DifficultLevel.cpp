@@ -10,14 +10,15 @@ int DifficultLevel::minMax(
     std::list<std::pair<int, std::pair<Coordinates, Coordinates>>> & movesRank
     )
     {
+
+    // return if depth == 0 -- botom of decision tree reached   
     if(depth == 0){
         return  evaluetePlayField(g);
     } 
     
-    //player 1 searches maximum
-    int maxFound = -1000000000;
-    
     if(maxSearch){  
+        //player 1 searches maximum
+        int maxFound = -1000000000;
         // loop all pieces in game
         for(auto & fig : g.piecesINplayer1){
             if(!fig->isInSimulation) continue;
@@ -26,73 +27,28 @@ int DifficultLevel::minMax(
             fig->getPossibleMovePositions(moves);
             for(auto & move : moves){
                 if(fig->mCoordinates == move) continue;
-                
-                int evaluation = 0;
-                bool canKickOut = g.checkIfPieceWasKickedOut(move);
-                std::shared_ptr<Piece> tmpKick;
-                if(canKickOut){
-                    tmpKick = Board::playField[move.mRowIndex][move.mColumnIndex].mPiece;
-                    tmpKick->isInSimulation = false;
-                        evaluation += 10*tmpKick->mRank;
-                }
-                Coordinates previous = fig->mCoordinates;
-                b.movePiece(fig->mCoordinates, move, false);
-
-                evaluation += minMax(g,b,!maxSearch,depth - 1,movesRank);
-
-                b.movePiece(move, previous, false);
-                if(canKickOut){
-                    Board::playField[move.mRowIndex][move.mColumnIndex].mPiece = tmpKick;
-                    Board::playField[move.mRowIndex][move.mColumnIndex].mIsFree = false;
-                    tmpKick->isInSimulation = true;
-                }               
-
+                int evaluation = evaluateMove(g,b,fig,move,maxSearch,depth,movesRank);           
                 if(evaluation > maxFound){
                     maxFound = evaluation;
                 }
             }
-            
         }
         return maxFound;
     }
     //player 2 (PC) searches minimum
     else{
-        // loop all pieces in game
         int minFound = 1000000000;
+        // loop all pieces in game
         for(auto & fig : g.piecesINplayer2){
             if(!fig->isInSimulation) continue;
             std::list<Coordinates> moves;
             fig->getPossibleMovePositions(moves);
-            std::shared_ptr<Piece> tmpKick;
             for(auto & move : moves){
                 if(fig->mCoordinates == move) continue;
-
-                int evaluation = 0;
-                bool canKickOut = g.checkIfPieceWasKickedOut(move);
-                if(canKickOut){
-                    tmpKick = Board::playField[move.mRowIndex][move.mColumnIndex].mPiece;
-                    tmpKick->isInSimulation = false;
-                    evaluation -= 10*tmpKick->mRank;
-                }
-                Coordinates previous = fig->mCoordinates;
-                
-                b.movePiece(fig->mCoordinates, move, false);
-
-                evaluation += minMax(g,b,!maxSearch,depth - 1,movesRank);
-
-                //move back
-                b.movePiece(move, previous, false);
-                if(canKickOut){
-                    Board::playField[move.mRowIndex][move.mColumnIndex].mPiece = tmpKick;
-                    Board::playField[move.mRowIndex][move.mColumnIndex].mPiece->mCoordinates = {move.mRowIndex, move.mColumnIndex};
-                    Board::playField[move.mRowIndex][move.mColumnIndex].mIsFree = false;
-                    tmpKick->isInSimulation = true;
-                }
-
+                int evaluation = evaluateMove(g,b,fig,move,maxSearch,depth,movesRank);
                 if(depth == MIN_MAX_DEPTH){
                     movesRank.push_back ({ evaluation,{fig->mCoordinates, move}});
                 }
-               // Board::playField[move.mRowIndex][move.mColumnIndex].mPiece->isInSimulation = true;
                 if(evaluation < minFound){
                     minFound = evaluation;
                 }
@@ -102,12 +58,9 @@ int DifficultLevel::minMax(
     }
 }
 
+
 void DifficultLevel::makeNextMove(Game & g, Board & b, bool & pcWin){
     
-    std::vector<std::pair<int, Coordinates>> vctRankMoves;
-    
-    std::pair<Coordinates,Coordinates> bm;
-
     std::list<std::pair<int, std::pair<Coordinates, Coordinates>>>  movesRank;
 
     //evaluating moves
@@ -118,13 +71,13 @@ void DifficultLevel::makeNextMove(Game & g, Board & b, bool & pcWin){
     //looking for min
     int minRank = 1000000000;
     std::vector<std::pair<Coordinates, Coordinates>> equalMoves;
-    for(auto & x : movesRank){
-        if(x.first == minRank){
-            equalMoves.push_back(x.second);
-        }else if (x.first < minRank){
+    for(auto & move : movesRank){
+        if(move.first == minRank){
+            equalMoves.push_back(move.second);
+        }else if (move.first < minRank){
             equalMoves.clear();
-            equalMoves.push_back(x.second);
-            minRank = x.first;
+            equalMoves.push_back(move.second);
+            minRank = move.first;
         }
     }   
 
@@ -181,6 +134,46 @@ int DifficultLevel::evaluetePlayField(Game& g){
 
     //player 1 -> MAX, player 2-> MIN
     return diffPlayer1 - diffPlayer2;
+}
+
+int DifficultLevel::evaluateImportanceOfKickedPiece(std::shared_ptr<Piece> & kickedPiece){
+    return 10 * kickedPiece->mRank;
+}
+
+int DifficultLevel::evaluateMove(Game &g, Board &b, std::shared_ptr<Piece> &fig, const Coordinates &move, bool maxSearch, int depth, std::list<std::pair<int, std::pair<Coordinates, Coordinates>>> &movesRank){
+    int evaluation = 0;
+    bool canKickOut = g.checkIfPieceWasKickedOut(move);
+
+    std::shared_ptr<Piece> tmpKick;
+    if(canKickOut){
+        temporarilyKickOut(tmpKick,move);
+        int importanceOfKickedPiece = evaluateImportanceOfKickedPiece(tmpKick);
+        evaluation += maxSearch ? importanceOfKickedPiece : (-1)*importanceOfKickedPiece;
+    }
+    // save coordinates of piece, so that it can be put back, when we return from recursive calls
+    Coordinates previous = fig->mCoordinates;
+    b.movePiece(fig->mCoordinates, move, false);
+    // explore options with recursion
+    evaluation += minMax(g,b,!maxSearch,depth - 1,movesRank);
+
+    //move back
+    b.movePiece(move, previous, false);
+    if(canKickOut){
+        returnTemporarilyKickedPiece(tmpKick,move);
+    }
+    return evaluation;
+}
+
+void DifficultLevel::temporarilyKickOut(std::shared_ptr<Piece> & kickedPiece, Coordinates move){
+    kickedPiece = Board::playField[move.mRowIndex][move.mColumnIndex].mPiece;
+    kickedPiece->isInSimulation = false;
+}
+
+void DifficultLevel::returnTemporarilyKickedPiece(std::shared_ptr<Piece> & kickedPiece, Coordinates to){
+    Board::playField[to.mRowIndex][to.mColumnIndex].mPiece = kickedPiece;
+    Board::playField[to.mRowIndex][to.mColumnIndex].mPiece->mCoordinates = {to.mRowIndex, to.mColumnIndex};
+    Board::playField[to.mRowIndex][to.mColumnIndex].mIsFree = false;
+    kickedPiece->isInSimulation = true;
 }
 
 DifficultLevel::DifficultLevel(){
