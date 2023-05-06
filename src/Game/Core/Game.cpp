@@ -28,7 +28,7 @@ void Game::checkEnPassant(Coordinates selectedPosition, Coordinates pieceCoordin
     Position& positionWithPiece = Board::playField[pieceCoordinates.mRowIndex][pieceCoordinates.mColumnIndex];
     Position& selectedPosRef = Board::playField[selectedPosition.mRowIndex][selectedPosition.mColumnIndex];
     
-    if(positionWithPiece.mPiece->mLetter != 'P') return;
+    if(positionWithPiece.mPiece->mLetter != PAWN) return;
     if(!selectedPosRef.mIsFree) return;
 
     const Position* potentialTarget;
@@ -42,7 +42,7 @@ void Game::checkEnPassant(Coordinates selectedPosition, Coordinates pieceCoordin
 
     if(
         potentialTarget->mIsFree ||
-        potentialTarget->mPiece->mLetter != 'P' ||
+        potentialTarget->mPiece->mLetter != PAWN ||
         potentialTarget->mPiece->mSide == positionWithPiece.mPiece->mSide ||
         potentialTarget->mPiece->mNumOfStepsDone != 1
         ) return;
@@ -53,7 +53,7 @@ void Game::checkEnPassant(Coordinates selectedPosition, Coordinates pieceCoordin
 
 bool Game::detectCastlingAttempt( Coordinates selectedPosition , Coordinates piecePosition){
     char letter = Board::playField[piecePosition.mRowIndex][piecePosition.mColumnIndex].mPiece.get()->mLetter;
-    if( letter != 'K') return false;
+    if( letter != KING) return false;
 
     int kingColummIndex = Board::playField[piecePosition.mRowIndex][piecePosition.mColumnIndex].mPiece.get()->mCoordinates.mColumnIndex;
     if( abs(kingColummIndex - selectedPosition.mColumnIndex) > 1) return true;
@@ -107,7 +107,7 @@ bool Game::positionReachable(int playingSide, Coordinates positionToReach){
 bool Game::castle(Board & b, Coordinates selectedPosition, Coordinates pieceCoordinates){
     Position& positionWithPiece = Board::playField[pieceCoordinates.mRowIndex][pieceCoordinates.mColumnIndex];
 
-    if( positionWithPiece.mIsFree || positionWithPiece.mPiece->mLetter != 'K') return false;
+    if( positionWithPiece.mIsFree || positionWithPiece.mPiece->mLetter != KING) return false;
     
     //side 1 SHORTER
     if(positionWithPiece.mPiece->mSide == 1 && pieceCoordinates.mColumnIndex < selectedPosition.mColumnIndex ){
@@ -187,7 +187,7 @@ bool Game::castle(Board & b, Coordinates selectedPosition, Coordinates pieceCoor
 
 bool Game::checkIfPawnReachedEnd(int playingSide){
     if(playingSide == 1){
-        for(int columnIndex = 0; columnIndex<8; columnIndex++){
+        for(int columnIndex = 0; columnIndex<Board::BOARD_SIZE; columnIndex++){
             if( !Board::playField[7][columnIndex].mIsFree && Board::playField[7][columnIndex].mPiece->mLetter == 'P'){
                 return true;
             }
@@ -195,7 +195,7 @@ bool Game::checkIfPawnReachedEnd(int playingSide){
         return false;
     }
     else{
-        for(int columnIndex = 0; columnIndex<8; columnIndex++){
+        for(int columnIndex = 0; columnIndex<Board::BOARD_SIZE; columnIndex++){
             if( !Board::playField[0][columnIndex].mIsFree && Board::playField[0][columnIndex].mPiece->mLetter == 'P'){
                 return true;
             }
@@ -304,7 +304,7 @@ void Game::clearDefault(){
 void Game::findKingsIndex(){
     int index = 0;
     for(auto & x : piecesPlayer1){
-        if(x->mLetter == 'K'){
+        if(x->mLetter == KING){
             indexOfKingSide1 = index;
             std::cout<<indexOfKingSide1<<std::endl;
         }
@@ -314,7 +314,7 @@ void Game::findKingsIndex(){
     }
     index = 0;
     for(auto & x : piecesPlayer2){
-        if(x->mLetter == 'K'){
+        if(x->mLetter == KING){
             indexOfKingSide2 = index;
             std::cout<<indexOfKingSide1<<std::endl;
         }

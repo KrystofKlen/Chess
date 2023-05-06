@@ -8,11 +8,6 @@
 
 class API{
 public:
-    static const int END_FLAG = -1;
-    static const int ONE_PLAYER_GAME = 0;
-    static const int TWO_PLAYERS_GAME = 1;
-    static const int NEW_GAME_SELECTED = 2;
-    static const int LOAD_GAME_FROM_FILE_SELECTED = 3;
     
     API();
 

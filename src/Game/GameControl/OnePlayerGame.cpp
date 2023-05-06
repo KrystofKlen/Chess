@@ -54,7 +54,7 @@ void OnePlayerGame::startGameLoop(){
         //check whether move is OK, if not -> new iteration
         bool moveIsValid = g.moveIsValid(movementFromTo.first,movementFromTo.second);
         if(!moveIsValid) continue;
-        if( Board::playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece->mLetter == 'K'
+        if( Board::playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece->mLetter == KING
         && !kingWillNotLandIntoCheck(g,b, movementFromTo.second, 1))
             moveIsValid = false;
         if(!moveIsValid) continue;
@@ -80,7 +80,7 @@ void OnePlayerGame::startGameLoop(){
             g.kickout(movementFromTo.second, g.piecesOUTplayer2);
             
             //end game if king was the target
-            if(letter == 'K'){
+            if(letter == KING){
                 b.movePiece(movementFromTo.first, movementFromTo.second, true);
                 api.showBoard();
                 api.showMovesHistory(g.getMovesHistory());
@@ -137,7 +137,7 @@ void OnePlayerGame::startGameLoop(){
         api.saveGame2(
             b,
             g,
-            API::ONE_PLAYER_GAME,
+            ONE_PLAYER_GAME,
             mDifficulty,
             checkDetected ? 1:0,
             checkMateDetected ? 1:0,

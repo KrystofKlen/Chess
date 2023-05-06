@@ -104,27 +104,27 @@ std::shared_ptr<Piece> Converter::createPieceFromChunk(const std::string & piece
 
     switch (letter)
     {
-    case 'K':
+    case KING:
         c = {rowIndex,columnIndexIndex};
         return std::make_shared<King> (side,c,numOfStepsDone,id);
         break;
-    case 'Q':
+    case QUEEN:
         c = {rowIndex,columnIndexIndex};
         return std::make_shared<Queen> (side,c,numOfStepsDone,id);
         break;
-    case 'B':
+    case BISHOP:
         c = {rowIndex,columnIndexIndex};
         return std::make_shared<Bishop> (side,c,numOfStepsDone,id);
         break;
-    case 'H':
+    case KNIGHT:
         c = {rowIndex,columnIndexIndex};
         return std::make_shared<Knight> (side,c,numOfStepsDone,id);
         break;
-    case 'R':
+    case ROCK:
         c = {rowIndex,columnIndexIndex};
         return std::make_shared<Rock> (side,c,numOfStepsDone,id);
         break;
-    case 'P':
+    case PAWN:
         c = {rowIndex,columnIndexIndex};
         return std::make_shared<Pawn> (side,c,numOfStepsDone,id);
         break;
@@ -141,22 +141,22 @@ std::shared_ptr<Piece> Converter::createPieceFromFileData(const PieceFileData & 
 
     switch (pieceFileData.mLetter)
     {
-    case 'K':
+    case KING:
         return std::make_shared<King> (pieceFileData.mSide,c,pieceFileData.mNumOfStepsDone,pieceFileData.mId);
         break;
-    case 'Q':
+    case QUEEN:
         return std::make_shared<Queen> (pieceFileData.mSide,c,pieceFileData.mNumOfStepsDone,pieceFileData.mId);
         break;
-    case 'B':
+    case BISHOP:
         return std::make_shared<Bishop> (pieceFileData.mSide,c,pieceFileData.mNumOfStepsDone,pieceFileData.mId);
         break;
-    case 'H':
+    case KNIGHT:
         return std::make_shared<Knight> (pieceFileData.mSide,c,pieceFileData.mNumOfStepsDone,pieceFileData.mId);
         break;
-    case 'R':
+    case ROCK:
         return std::make_shared<Rock> (pieceFileData.mSide,c,pieceFileData.mNumOfStepsDone,pieceFileData.mId);
         break;
-    case 'P':
+    case PAWN:
         return std::make_shared<Pawn> (pieceFileData.mSide,c,pieceFileData.mNumOfStepsDone,pieceFileData.mId);
         break;
     

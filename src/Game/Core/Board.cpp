@@ -3,8 +3,8 @@
 Position Board::playField[BOARD_SIZE][BOARD_SIZE];
 
 void Board::refreshPieceCoordinates(){
-    for (int rowIndex = 0; rowIndex < 8; rowIndex++){
-        for (int columnIndex = 0; columnIndex < 8; columnIndex++){
+    for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
+        for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
             const Position & posRef = Board::playField[rowIndex][columnIndex];
             if( !posRef.mIsFree ){
                 posRef.mPiece->mCoordinates = {rowIndex, columnIndex};

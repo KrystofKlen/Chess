@@ -40,7 +40,7 @@ void ComputerPlayer::generateAllMoves(Game & g, std::vector<std::pair<Coordinate
     char letter = Board::playField[to.mRowIndex][to.mColumnIndex]
     .mPiece->mLetter;
     g.kickout(to, g.piecesOUTplayer1);  
-    if(letter == 'K'){
+    if(letter == KING){
         pcWin = true;
         return;
     }

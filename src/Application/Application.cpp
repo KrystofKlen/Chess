@@ -11,11 +11,11 @@ void Application::launch(){
     std::unique_ptr<GameControl> chessGame;
 
     int choiceFromMenu = api.selectNewGameOrLoadFromFile();
-    if(choiceFromMenu == API::END_FLAG){
+    if(choiceFromMenu == END_FLAG){
         return;
     }
 
-    if(choiceFromMenu == API::LOAD_GAME_FROM_FILE_SELECTED){
+    if(choiceFromMenu == LOAD_GAME_FROM_FILE_SELECTED){
         bool successfullyLoaded = loadFromFile(chessGame);
         if(!successfullyLoaded) return;
     }else{
@@ -60,9 +60,9 @@ bool Application::loadFromFile(std::unique_ptr<GameControl> &chessGame){
         api.endForLoadingError();    
         return false;
     }
-    if(gameType == API::ONE_PLAYER_GAME){
+    if(gameType == ONE_PLAYER_GAME){
         chessGame = std::make_unique<OnePlayerGame>(difficulty);
-    }else if (gameType == API::TWO_PLAYERS_GAME){
+    }else if (gameType == TWO_PLAYERS_GAME){
         chessGame = std::make_unique<TwoPlayersGame>();
     }else {
         std::cout<<"GAME DIFFICULTY HAS WRONG NUMBER, 0 = ONE PLAYER GAME, 2 = TWO PLAYERS GAME\n"<<std::endl;
@@ -82,10 +82,10 @@ bool Application::loadFromFile(std::unique_ptr<GameControl> &chessGame){
 void Application::startNewGame(int choiceFromMenu, std::unique_ptr<GameControl> &chessGame){
     //starting a new game
     choiceFromMenu = api.selectOnePlayerOrTwoPlayers();
-    if(choiceFromMenu == API::END_FLAG){
+    if(choiceFromMenu == END_FLAG){
         return;
     }
-    if(choiceFromMenu == API::ONE_PLAYER_GAME){
+    if(choiceFromMenu == ONE_PLAYER_GAME){
         //game against computer
         int difficulty = api.askForDifficulty();
         chessGame = std::make_unique<OnePlayerGame>(difficulty);

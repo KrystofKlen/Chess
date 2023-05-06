@@ -35,29 +35,29 @@ void API::promotePawn(Coordinates coordinatesOfPawn,  Game & g, Board & b){
     int playingSide = ref->mSide;
 
     std::vector<std::pair<char,int>> kicked;
-    kicked.push_back({'Q',playingSide});
-    kicked.push_back({'B',playingSide});
-    kicked.push_back({'H',playingSide});
-    kicked.push_back({'R',playingSide});
+    kicked.push_back({QUEEN,playingSide});
+    kicked.push_back({BISHOP,playingSide});
+    kicked.push_back({KNIGHT,playingSide});
+    kicked.push_back({ROCK,playingSide});
 
     std::shared_ptr<Piece> promotedPiece;
 
     char letter = ui.selectPieceToMoveBack(kicked,playingSide);
     switch (letter)
     {
-    case 'Q':
+    case QUEEN:
         promotedPiece = std::make_shared<Queen>(playingSide, coordinatesOfPawn, 0, ref->mId);
         break;
 
-    case 'B':
+    case BISHOP:
         promotedPiece = std::make_shared<Bishop>(playingSide, coordinatesOfPawn, 0, ref->mId);
         break;
     
-    case 'H':
+    case KNIGHT:
         promotedPiece = std::make_shared<Knight>(playingSide, coordinatesOfPawn, 0, ref->mId);
         break;
     
-    case 'R':
+    case ROCK:
         promotedPiece = std::make_shared<Rock>(playingSide, coordinatesOfPawn, 0, ref->mId);
         break;
     

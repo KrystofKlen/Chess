@@ -156,8 +156,8 @@ int DifficultLevel::evaluetePlayField(Game& g){
     int rankPlayer2After = 0;
 
     //counting ranksAfter at the end of minmax
-    for(int rowIndex = 0; rowIndex<8; rowIndex++){
-        for(int columnIndex = 0; columnIndex<8; columnIndex++ ){
+    for(int rowIndex = 0; rowIndex<Board::BOARD_SIZE; rowIndex++){
+        for(int columnIndex = 0; columnIndex<Board::BOARD_SIZE; columnIndex++ ){
             const Position & posRef = Board::playField[rowIndex][columnIndex];
             if(!posRef.mIsFree)
                 posRef.mPiece->mSide == 1 ? rankPlayer1After += posRef.mPiece->mRank : rankPlayer2After += posRef.mPiece->mRank;

@@ -7,12 +7,12 @@ bool isCheckMate(Game & g, Board & b, int sidePlaying){
     sidePlaying == 1 ? pOpponentPiecesIn =  &g.piecesINplayer2 : pOpponentPiecesIn = &g.piecesINplayer1;
 
     //find king
-    for (int rowIndex = 0; rowIndex < 8; rowIndex++){
-        for (int columnIndex = 0; columnIndex < 8; columnIndex++){
+    for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
+        for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
             const Position & posRef = Board::playField[rowIndex][columnIndex];
-            if( !posRef.mIsFree && posRef.mPiece->mLetter == 'K' && posRef.mPiece->mSide == sidePlaying){
+            if( !posRef.mIsFree && posRef.mPiece->mLetter == KING && posRef.mPiece->mSide == sidePlaying){
                 king = posRef.mPiece;
-                rowIndex = 8;
+                rowIndex = Board::BOARD_SIZE;
                 break;
             }
         }     
@@ -35,7 +35,7 @@ bool isCheckMate(Game & g, Board & b, int sidePlaying){
     std::list<std::shared_ptr<Piece>>* pKingsPieces = 
     sidePlaying == 1 ? (pKingsPieces = &(g.piecesINplayer1)) : &g.piecesINplayer2;
     for(auto fig : *pKingsPieces){
-        if(fig->mLetter!='K'){
+        if(fig->mLetter!=KING){
             fig->getPossibleMovePositions(moves);
             for(auto & move : moves){
                 if(fig->mCoordinates == move) continue;
@@ -72,12 +72,12 @@ bool isStalmate(Game & g, Board & b, int sidePlaying){
     sidePlaying == 1 ? pPiecesIn =  &g.piecesINplayer1 : pPiecesIn = &g.piecesINplayer2;
 
     //find king
-    for (int rowIndex = 0; rowIndex < 8; rowIndex++){
-        for (int columnIndex = 0; columnIndex < 8; columnIndex++){
+    for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
+        for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
             const Position & posRef = Board::playField[rowIndex][columnIndex];
-            if( !posRef.mIsFree && posRef.mPiece->mLetter == 'K' && posRef.mPiece->mSide == sidePlaying){
+            if( !posRef.mIsFree && posRef.mPiece->mLetter == KING && posRef.mPiece->mSide == sidePlaying){
                 king = posRef.mPiece;
-                rowIndex = 8;
+                rowIndex = Board::BOARD_SIZE;
                 break;
             }
         }     
@@ -100,7 +100,7 @@ bool isStalmate(Game & g, Board & b, int sidePlaying){
     //so we will check if there is another piece to make a move
     //if not -> stalmate detected
     for(auto & fig : *pPiecesIn){
-        if(fig->mLetter!='K'){
+        if(fig->mLetter!=KING){
             fig->getPossibleMovePositions(movesRest);
         }
         if(movesRest.size() > 0) return false;
@@ -117,12 +117,12 @@ bool kingIsInCheck(Game & g, Board & b, int sidePlaying){
     sidePlaying == 1 ? pOpponentPiecesIn =  &g.piecesINplayer2 : pOpponentPiecesIn = &g.piecesINplayer1;
 
     //find king
-    for (int rowIndex = 0; rowIndex < 8; rowIndex++){
-        for (int columnIndex = 0; columnIndex < 8; columnIndex++){
+    for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
+        for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
             const Position & posRef = Board::playField[rowIndex][columnIndex];
-            if( !posRef.mIsFree && posRef.mPiece->mLetter == 'K' && posRef.mPiece->mSide == sidePlaying){
+            if( !posRef.mIsFree && posRef.mPiece->mLetter == KING && posRef.mPiece->mSide == sidePlaying){
                 king = posRef.mPiece;
-                rowIndex = 8;
+                rowIndex = Board::BOARD_SIZE;
                 break;
             }
         }     
@@ -169,13 +169,13 @@ bool kingWillNotLandIntoCheck( Game & g, Board & b, Coordinates & anticipatedPos
     std::list<Coordinates> opponentsMoves;
   
     //fill opponentsPossibleMoves
-    for (int rowIndex = 0; rowIndex < 8; rowIndex++){
-        for (int columnIndex = 0; columnIndex < 8; columnIndex++){
+    for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
+        for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
             
             const Position & curPosRef = Board::playField[rowIndex][columnIndex];
             if( !curPosRef.mIsFree && kingSide != curPosRef.mPiece->mSide ){
 
-                if(curPosRef.mPiece->mLetter == 'P'){
+                if(curPosRef.mPiece->mLetter == PAWN){
                     curPosRef.mPiece->mSide == 1 ? 
                     addPawnPossibleKickoutsSide1(opponentsMoves, *curPosRef.mPiece) 
                     : addPawnPossibleKickoutsSide2(opponentsMoves, *curPosRef.mPiece);
@@ -210,12 +210,12 @@ bool kingWillNotLandIntoCheck( Game & g, Board & b, Coordinates & anticipatedPos
     std::shared_ptr<Piece> king;
 
     //find king
-    for (int rowIndex = 0; rowIndex < 8; rowIndex++){
-        for (int columnIndex = 0; columnIndex < 8; columnIndex++){
+    for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
+        for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
             const Position & posRef = Board::playField[rowIndex][columnIndex];
-            if( !posRef.mIsFree && posRef.mPiece->mLetter == 'K' && posRef.mPiece->mSide == sidePlaying){
+            if( !posRef.mIsFree && posRef.mPiece->mLetter == KING && posRef.mPiece->mSide == sidePlaying){
                 king = posRef.mPiece;
-                rowIndex = 8;
+                rowIndex = Board::BOARD_SIZE;
                 break;
             }
         }     
@@ -226,12 +226,12 @@ bool kingWillNotLandIntoCheck( Game & g, Board & b, Coordinates & anticipatedPos
 }
 
 // void findKing(std::shared_ptr<Piece> & king, int sidePlaying){
-//     for (int rowIndex = 0; rowIndex < 8; rowIndex++){
-//         for (int columnIndex = 0; columnIndex < 8; columnIndex++){
+//     for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
+//         for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
 //             const Position & posRef = Board::playField[rowIndex][columnIndex];
 //             if( !posRef.mIsFree && posRef.mPiece->mLetter == 'K' && posRef.mPiece->mSide == sidePlaying){
 //                 king = posRef.mPiece;
-//                 rowIndex = 8;
+//                 rowIndex = Board::BOARD_SIZE;
 //                 break;
 //             }
 //         }     
