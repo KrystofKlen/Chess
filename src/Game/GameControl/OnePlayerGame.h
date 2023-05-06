@@ -11,7 +11,7 @@ class OnePlayerGame : public GameControl{
 public:
 
     /**
-     * @param int difficulty ... 1 = easy, 2 = mid, 3 = difficult
+     * @param int difficulty
      */
     OnePlayerGame(int difficulty);
     void startGameLoop();

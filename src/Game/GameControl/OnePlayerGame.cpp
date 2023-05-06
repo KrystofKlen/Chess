@@ -2,9 +2,9 @@
 
 OnePlayerGame::OnePlayerGame(int difficulty){
     mDifficulty = difficulty;
-    if(difficulty == 1){
+    if(difficulty == EASY_LEVEL){
         ptrComputer = std::make_unique<EasyLevel>();
-    }else if(difficulty == 2){
+    }else if(difficulty == MID_LEVEL){
         ptrComputer = std::make_unique<MidLevel>();
     }else{
         ptrComputer = std::make_unique<DifficultLevel>();

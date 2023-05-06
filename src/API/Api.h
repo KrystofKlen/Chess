@@ -4,13 +4,15 @@
 #include "../UI/UI.h"
 #include "../FileOperations/FileOperations.h"
 #include "Converter.h"
-
+#include "../Game/Constants.h"
 
 class API{
 public:
     static const int END_FLAG = -1;
     static const int ONE_PLAYER_GAME = 0;
     static const int TWO_PLAYERS_GAME = 1;
+    static const int NEW_GAME_SELECTED = 2;
+    static const int LOAD_GAME_FROM_FILE_SELECTED = 3;
     
     API();
 
@@ -22,7 +24,7 @@ public:
     /**
      * Application is closed, possible reasons for failed loading of file written to console
      */
-    void endForLoadingError(std::string str);
+    void endForLoadingError();
 
     /**
      * Updates pieces in and out of game (including their colors, positions etc.)

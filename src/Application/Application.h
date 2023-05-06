@@ -16,6 +16,9 @@ private:
     bool checkTerminalRequirements();
     const std::string PATH_TO_LOAD="load.game";
 
+    bool loadFromFile(std::unique_ptr<GameControl> & chessGame);
+    void startNewGame(int choiceFromMenu, std::unique_ptr<GameControl> & chessGame);
+
     API api;
 
 };

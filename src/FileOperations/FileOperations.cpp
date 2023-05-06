@@ -56,7 +56,10 @@ bool FileOperations::saveGameToFile(
 
     std::ofstream ofs;
     ofs.open("load.game");
-    if( !(ofs << fileContent)) return false;
+    if( !(ofs << fileContent)){
+        ofs.close();
+        return false;
+    } 
     ofs.close();
     return true;
 }
@@ -75,7 +78,10 @@ bool FileOperations::loadGameFromFile(
     std::vector<HistoryFileData> & vctHistoryFileData
 ){
     std::ifstream ifs(fileName);
-    if(ifs.fail()) return false;
+    if(ifs.fail()){
+        ifs.close();
+        return false;
+    } 
 
     std::stringstream strStream;
     std::string fileContent;

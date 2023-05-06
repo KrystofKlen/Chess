@@ -34,7 +34,7 @@ doc:
 
 compile: game
 
-game: src/main.o  $(CORE) $(PIECES) $(GAME_CONTROL) $(AI) $(API) $(UI) $(FILE_OPERATIONS)  $(APPLICATION)   
+game: src/main.o  $(CORE) $(PIECES) $(GAME_CONTROL) $(AI) $(API) $(UI) $(FILE_OPERATIONS)  $(APPLICATION) 
 	$(LD) $(CXXFLAGS) -o $@ $^ -lncurses 
 
 %.o: %.cpp

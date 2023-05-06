@@ -17,6 +17,7 @@ bool isCheckMate(Game & g, Board & b, int sidePlaying){
             }
         }     
     }
+    //findKing(king,sidePlaying);
 
     //check if king at his current position is in check
     if( !kingIsInCheck(g,b,sidePlaying)) return false;
@@ -183,8 +184,7 @@ bool kingWillNotLandIntoCheck( Game & g, Board & b, Coordinates & anticipatedPos
                 }
 
             }
-        }  
-        
+        }    
     }
 
     //move king back
@@ -220,6 +220,21 @@ bool kingWillNotLandIntoCheck( Game & g, Board & b, Coordinates & anticipatedPos
             }
         }     
     }
+   // findKing(king,sidePlaying);
 
     return kingWillNotLandIntoCheck(g,b, anticipatedPosition, king);
 }
+
+// void findKing(std::shared_ptr<Piece> & king, int sidePlaying){
+//     for (int rowIndex = 0; rowIndex < 8; rowIndex++){
+//         for (int columnIndex = 0; columnIndex < 8; columnIndex++){
+//             const Position & posRef = Board::playField[rowIndex][columnIndex];
+//             if( !posRef.mIsFree && posRef.mPiece->mLetter == 'K' && posRef.mPiece->mSide == sidePlaying){
+//                 king = posRef.mPiece;
+//                 rowIndex = 8;
+//                 break;
+//             }
+//         }     
+//     }
+// }
+

@@ -2,6 +2,10 @@
 #define COLOR_BACKGROUND 0
 #define COLOR_OTHER_FIELD 145
 #define SELECTED_FIELD_COLOR 118
+#include <signal.h>
+#include <cstdlib>
+#include <iostream>
+#include <csignal>
 
 std::pair<char,int> UI::infoAboutPieces[8][8];
 
@@ -72,6 +76,7 @@ void UI::showChessBoard(){
 }
 
 std::pair< std::pair<int,int>, std::pair<int,int> > UI::pickPosition(int sidePlaying){
+    
     keypad(stdscr, true);
     int keyPressed = 0;
     int rowSelected = 0;
@@ -152,6 +157,13 @@ std::pair< std::pair<int,int>, std::pair<int,int> > UI::pickPosition(int sidePla
             freeWindows();
             endwin(); 
             return{{-1,-1}, {-1,-1}};
+        case ('^' + 'C') :
+            endScreen();
+            keypad(stdscr, false);
+            freeWindows();
+            endwin(); 
+            return{{-1,-1}, {-1,-1}};
+
                 
         default:
             continue;
@@ -224,7 +236,7 @@ void UI::setAlert(int COLOR_PAIR_CODE, const std::string & message){
 
 void UI::showMovesHistory(const std::vector<Move> & moves){
     int ASCII = 65;
-    WINDOW* winMovesHistory = newwin(HISTORY_LINES,HISTORY_COLLS, STATS_Y + KICKED_FIGURES_LINES + 1, HISTORY_X); 
+    winMovesHistory = newwin(HISTORY_LINES,HISTORY_COLLS, STATS_Y + KICKED_FIGURES_LINES + 1, HISTORY_X); 
     box(winMovesHistory,0,0);
     int line = 2;
     for(auto move : moves){
@@ -257,6 +269,7 @@ void UI::showMovesHistory(const std::vector<Move> & moves){
         attroff(COLOR_PAIR(PLAYER_1_COLOR_CODE));
     }
     wrefresh(winMovesHistory);
+    
 }
 
 void UI::drawDownWindow(WINDOW** win, int* winDownSize, int lines, const char* headline){    
@@ -445,6 +458,8 @@ void UI::freeWindows(){
     delwin(pWinAlert);
     delwin(pWinKickedPieces);
     delwin(pWinDown);
+    delwin(pWinChessDiscription);
+    delwin(winMovesHistory);
 }
 
 void UI::initWindows(){

@@ -70,4 +70,5 @@ private:
     WINDOW* pWinKickedPieces;
     WINDOW* inputWin;
     WINDOW* pWinChessDiscription;
+    WINDOW* winMovesHistory;
 };

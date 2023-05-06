@@ -7,13 +7,12 @@ void API::closeScreen(){
     ui.endScreen();
 }
 
-void API::endForLoadingError(std::string str){
+void API::endForLoadingError(){
     ui.endScreen();
     std::cout<<"ERROR : Game could not be loaded. Possible reasons:\n";
     std::cout<<" 1. File \"load.game\" doesn't exist.\n";
     std::cout<<" 2. Unknown content of the file.\n";
     std::cout<<" 3. file was modified and the data about game is not valid.\n";
-    std::cout << str<< std::endl;
 }
 
 std::pair<Coordinates,Coordinates> API::pickPosition( int sidePlaying, bool & gameIsRunning){
@@ -435,19 +434,20 @@ bool API::loadGameInfoFromFile(
         ){  
     //get info from file
     bool successfullyLoaded = 
-        fo.loadGameFromFile(
-            fileName,
-            gameType,
-            difficulty,
-            isCheck,
-            isCheckMate,
-            isStalmate,
-            playingSide,
-            piecesIn,
-            piecesOut,
-            board,
-            vctHistoryFileData
-            );
+        // fo.loadGameFromFile(
+        //     fileName,
+        //     gameType,
+        //     difficulty,
+        //     isCheck,
+        //     isCheckMate,
+        //     isStalmate,
+        //     playingSide,
+        //     piecesIn,
+        //     piecesOut,
+        //     board,
+        //     vctHistoryFileData
+        //     );
+        false;
 
     if(!successfullyLoaded){
         return false;
@@ -462,8 +462,8 @@ int API::selectNewGameOrLoadFromFile(){
     if(choice.compare("END") == 0){
         return END_FLAG;
     }
-    if(choice.compare("NEW GAME") == 0) return 1;
-    else return 2;
+    if(choice.compare("NEW GAME") == 0) return NEW_GAME_SELECTED;
+    else return LOAD_GAME_FROM_FILE_SELECTED;
 }
 
 int API::selectOnePlayerOrTwoPlayers(){
@@ -472,8 +472,8 @@ int API::selectOnePlayerOrTwoPlayers(){
     if(choice.compare("END") == 0){
         return END_FLAG;
     }
-    if(choice.compare("ONE PLAYER") == 0) return 1;
-    else return 2;
+    if(choice.compare("ONE PLAYER") == 0) return ONE_PLAYER_GAME;
+    else return TWO_PLAYERS_GAME;
 }
 
 int API::askForDifficulty(){
@@ -482,7 +482,7 @@ int API::askForDifficulty(){
     if(choice.compare("END") == 0){
         return END_FLAG;
     }
-    if(choice.compare("EASY") == 0) return 1;
-    else if(choice.compare("MID") == 0) return 2;
-    else return 3;
+    if(choice.compare("EASY") == 0) return EASY_LEVEL;
+    else if(choice.compare("MID") == 0) return MID_LEVEL;
+    else return DIFFICULT_LEVEL;
 }
