@@ -25,14 +25,16 @@ enum CastlingSide {SHORTER_SIDE, LONGER_SIDE};
 bool breakBecausePositionBlocked(int x, int y, int side, std::list<Coordinates> & possiblePositions);
 
 //Various function to generate moves
-
+void addMovesVerticalAndHorizontal(std::list<Coordinates> & possiblePositions, const Piece & piece, int rowChange, int colChange);
 void addMovesVertical(std::list<Coordinates> & possiblePositions, const Piece & piece);
 void addMovesHorizontal(std::list<Coordinates> & possiblePositions, const Piece & piece);
+void addMovesInDirection(std::list<Coordinates> &possiblePositions, const Piece &piece, int rowOffset, int colOffset);
 void addMoves1Quadrant(std::list<Coordinates> & possiblePositions, const Piece & piece);
 void addMoves2Quadrant(std::list<Coordinates> & possiblePositions, const Piece & piece);
 void addMoves3Quadrant(std::list<Coordinates> & possiblePositions, const Piece & piece);
 void addMoves4Quadrant(std::list<Coordinates> & possiblePositions, const Piece & piece);
 void addMovesKnight(std::list<Coordinates> & possiblePositions,  const Piece & piece);
+bool canEnPassantCapture(const Piece& piece, int dx, int dy);
 
 //side 1 = side playing "downwards" and having pieces up
 void addQuadrantsForPawnSide1(std::list<Coordinates> & possiblePositions, const Piece & piece);

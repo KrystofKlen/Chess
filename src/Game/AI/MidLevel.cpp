@@ -12,7 +12,6 @@ void MidLevel::makeNextMove(Game & g, Board & b, bool & pcWin){
     g.addMoveToHistory({highestRankMove.first, highestRankMove.second},
     Board::playField[highestRankMove.first.mRowIndex][highestRankMove.first.mColumnIndex].mPiece);
     b.movePiece(highestRankMove.first, highestRankMove.second, true);
-    
 }
 
 MidLevel::MidLevel() {

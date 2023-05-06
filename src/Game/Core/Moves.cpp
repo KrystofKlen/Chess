@@ -14,256 +14,133 @@ bool breakBecausePositionBlocked(Coordinates coordinates, int side, std::list<Co
 }
 
 
-void addMovesVertical(std::list<Coordinates> & possiblePositions, const Piece & piece){
+void addMovesVerticalAndHorizontal(std::list<Coordinates> & possiblePositions, const Piece & piece, int rowChange, int colChange){
     int i;
     
     for(i = 1; i <= piece.mMaxNumberOfSteps ; i++){
+        int newRow = piece.mCoordinates.mRowIndex + (i * rowChange);
+        int newCol = piece.mCoordinates.mColumnIndex + (i * colChange);
 
-        if(piece.mCoordinates.mRowIndex + i <  Board::BOARD_SIZE){
-            if (breakBecausePositionBlocked(
-                {piece.mCoordinates.mRowIndex + i, piece.mCoordinates.mColumnIndex}, 
-                piece.mSide, possiblePositions))
+        if(newRow >= 0 && newRow < Board::BOARD_SIZE && newCol >= 0 && newCol < Board::BOARD_SIZE){
+            if (breakBecausePositionBlocked({newRow, newCol}, piece.mSide, possiblePositions))
                 break;
             else
-                possiblePositions.push_back(
-                    {piece.mCoordinates.mRowIndex + i,piece.mCoordinates.mColumnIndex});
+                possiblePositions.push_back({newRow, newCol});
         }
     }
+}
 
-    for(i = 1; i <= piece.mMaxNumberOfSteps ; i++){
-        if(piece.mCoordinates.mRowIndex - i >= 0){
-            if (breakBecausePositionBlocked(
-                {piece.mCoordinates.mRowIndex - i, piece.mCoordinates.mColumnIndex},
-                 piece.mSide, possiblePositions))
-                break;
-            else
-                possiblePositions.push_back({piece.mCoordinates.mRowIndex - i, piece.mCoordinates.mColumnIndex});
-        }
-    }
+void addMovesVertical(std::list<Coordinates> & possiblePositions, const Piece & piece){
+    addMovesVerticalAndHorizontal(possiblePositions, piece, 1, 0);
+    addMovesVerticalAndHorizontal(possiblePositions, piece, -1, 0);
 }
 
 void addMovesHorizontal(std::list<Coordinates> & possiblePositions, const Piece & piece){
-    
-    int i;
-    for(i = 1; i <= piece.mMaxNumberOfSteps; i++){
-
-        if(piece.mCoordinates.mColumnIndex + i < Board::BOARD_SIZE){
-            if (breakBecausePositionBlocked(
-                {piece.mCoordinates.mRowIndex , piece.mCoordinates.mColumnIndex + i},
-                 piece.mSide, possiblePositions))
-                break;
-            else
-                possiblePositions.push_back({piece.mCoordinates.mRowIndex, piece.mCoordinates.mColumnIndex + i});
-        } 
-    }
-
-    for(i = 1; i <= piece.mMaxNumberOfSteps; i++){
-        if(piece.mCoordinates.mColumnIndex - i >= 0){
-            if (breakBecausePositionBlocked(
-                {piece.mCoordinates.mRowIndex , piece.mCoordinates.mColumnIndex - i},
-                 piece.mSide, possiblePositions))
-                break;
-            else
-                possiblePositions.push_back({piece.mCoordinates.mRowIndex, piece.mCoordinates.mColumnIndex  - i});
-        } 
-    }
- 
+    addMovesVerticalAndHorizontal(possiblePositions, piece, 0, 1);
+    addMovesVerticalAndHorizontal(possiblePositions, piece, 0, -1);
 }
 
-void addMoves1Quadrant(std::list<Coordinates> & possiblePositions, const Piece & piece){
-    for(int i = 1; i <= piece.mMaxNumberOfSteps; i++){
-        if(piece.mCoordinates.mColumnIndex + i < Board::BOARD_SIZE && piece.mCoordinates.mRowIndex - i >= 0){
-            if (breakBecausePositionBlocked(
-                {piece.mCoordinates.mRowIndex - i, piece.mCoordinates.mColumnIndex + i }, 
-                piece.mSide, possiblePositions))
-                break;
-            else
-                possiblePositions.push_back({piece.mCoordinates.mRowIndex - i, piece.mCoordinates.mColumnIndex + i });
+void addMovesInDirection(std::list<Coordinates> &possiblePositions, const Piece &piece, int rowOffset, int colOffset) {
+    for (int i = 1; i <= piece.mMaxNumberOfSteps; i++) {
+        int newRow = piece.mCoordinates.mRowIndex + (i * rowOffset);
+        int newCol = piece.mCoordinates.mColumnIndex + (i * colOffset);
+        if (newRow >= Board::BOARD_SIZE || newCol >= Board::BOARD_SIZE || newRow < 0 || newCol < 0)
+            break;
+        if (breakBecausePositionBlocked({newRow, newCol}, piece.mSide, possiblePositions))
+            break;
+        else
+            possiblePositions.push_back({newRow, newCol});
+    }
+}
+
+void addMoves1Quadrant(std::list<Coordinates> &possiblePositions, const Piece &piece) {
+    addMovesInDirection(possiblePositions, piece, -1, 1);
+}
+
+void addMoves2Quadrant(std::list<Coordinates> &possiblePositions, const Piece &piece) {
+    addMovesInDirection(possiblePositions, piece, -1, -1);
+}
+
+void addMoves3Quadrant(std::list<Coordinates> &possiblePositions, const Piece &piece) {
+    addMovesInDirection(possiblePositions, piece, 1, -1);
+}
+
+void addMoves4Quadrant(std::list<Coordinates> &possiblePositions, const Piece &piece) {
+    addMovesInDirection(possiblePositions, piece, 1, 1);
+}
+
+
+void addQuadrantsForPawn(std::list<Coordinates>& possiblePositions, const Piece& piece, int rowModifier, int columnModifier) {
+    int newRow = piece.mCoordinates.mRowIndex + rowModifier;
+    int newCol = piece.mCoordinates.mColumnIndex + columnModifier;
+
+    // check I am within board bounds
+    if (newRow >= 0 && newRow < Board::BOARD_SIZE && newCol >= 0 && newCol < Board::BOARD_SIZE) {
+        Position& pos = Board::playField[newRow][newCol];
+        // if position is occupied by other side, we can add move
+        if (!pos.mIsFree && pos.mPiece->mSide != piece.mSide) {
+            possiblePositions.push_back({ newRow, newCol });
         }
     }
 }
 
-void addMoves2Quadrant(std::list<Coordinates> & possiblePositions, const Piece & piece){
-    for(int i = 1; i <= piece.mMaxNumberOfSteps; i++){
-        if(piece.mCoordinates.mColumnIndex - i >= 0 && piece.mCoordinates.mRowIndex - i >= 0){
-            if (breakBecausePositionBlocked(
-                {piece.mCoordinates.mRowIndex - i, piece.mCoordinates.mColumnIndex - i},
-                 piece.mSide, possiblePositions))
-                break;
-            else
-                possiblePositions.push_back(
-                    {piece.mCoordinates.mRowIndex - i, piece.mCoordinates.mColumnIndex - i}
-                );
-        }
-    }
+void addQuadrantsForPawnSide1(std::list<Coordinates>& possiblePositions, const Piece& piece) {
+    addQuadrantsForPawn(possiblePositions, piece, 1, -1);
+    addQuadrantsForPawn(possiblePositions, piece, 1, 1);
 }
 
-void addMoves3Quadrant(std::list<Coordinates> & possiblePositions, const Piece & piece){
-    for(int i = 1; i <= piece.mMaxNumberOfSteps; i++){
-        if(piece.mCoordinates.mColumnIndex - i >= 0 && piece.mCoordinates.mRowIndex + i < Board::BOARD_SIZE){
-            if (breakBecausePositionBlocked(
-                {piece.mCoordinates.mRowIndex + i, piece.mCoordinates.mColumnIndex - i},
-                 piece.mSide, possiblePositions))
-                break;
-            else
-                possiblePositions.push_back({piece.mCoordinates.mRowIndex + i, piece.mCoordinates.mColumnIndex - i});
-        }
-    }
-}
-
-void addMoves4Quadrant(std::list<Coordinates> & possiblePositions, const Piece & piece){
-    for(int i = 1; i <= piece.mMaxNumberOfSteps; i++){
-        if(piece.mCoordinates.mColumnIndex + i < Board::BOARD_SIZE && piece.mCoordinates.mRowIndex + i < Board::BOARD_SIZE){
-            if (breakBecausePositionBlocked(
-                {piece.mCoordinates.mRowIndex + i, piece.mCoordinates.mColumnIndex + i },
-                piece.mSide, possiblePositions))
-                break;
-            else
-                possiblePositions.push_back( {piece.mCoordinates.mRowIndex + i, piece.mCoordinates.mColumnIndex + i });
-        }
-    }
-}
-
-void addQuadrantsForPawnSide1(std::list<Coordinates> & possiblePositions, const Piece & piece){
-
-    if( piece.mCoordinates.mColumnIndex - 1 >= 0 && piece.mCoordinates.mRowIndex + 1 < Board::BOARD_SIZE &&
-        !Board::playField[piece.mCoordinates.mRowIndex + 1][piece.mCoordinates.mColumnIndex - 1].mIsFree && 
-    Board::playField[piece.mCoordinates.mRowIndex + 1][piece.mCoordinates.mColumnIndex - 1].mPiece->mSide != piece.mSide){
-        possiblePositions.push_back({piece.mCoordinates.mRowIndex + 1, piece.mCoordinates.mColumnIndex - 1});
-    }
-
-    if( piece.mCoordinates.mColumnIndex + 1 < Board::BOARD_SIZE && piece.mCoordinates.mRowIndex + 1 < Board::BOARD_SIZE &&
-        !Board::playField[piece.mCoordinates.mRowIndex + 1][piece.mCoordinates.mColumnIndex + 1].mIsFree && 
-    Board::playField[piece.mCoordinates.mRowIndex + 1][piece.mCoordinates.mColumnIndex + 1].mPiece->mSide != piece.mSide){
-        possiblePositions.push_back({piece.mCoordinates.mRowIndex + 1, piece.mCoordinates.mColumnIndex + 1});
-    }    
-}
-
-void addQuadrantsForPawnSide2(std::list<Coordinates> & possiblePositions, const Piece & piece){
-    
-    if( piece.mCoordinates.mColumnIndex - 1 >= 0 && piece.mCoordinates.mRowIndex - 1 >= 0 &&
-        !Board::playField[piece.mCoordinates.mRowIndex - 1][piece.mCoordinates.mColumnIndex - 1].mIsFree && 
-        Board::playField[piece.mCoordinates.mRowIndex - 1][piece.mCoordinates.mColumnIndex - 1].mPiece->mSide != piece.mSide){
-            possiblePositions.push_back({ piece.mCoordinates.mRowIndex - 1, piece.mCoordinates.mColumnIndex - 1});
-    }
-    if( piece.mCoordinates.mColumnIndex + 1 < Board::BOARD_SIZE && piece.mCoordinates.mRowIndex - 1 >= 0 &&
-        !Board::playField[piece.mCoordinates.mRowIndex - 1][piece.mCoordinates.mColumnIndex + 1].mIsFree && 
-    Board::playField[piece.mCoordinates.mRowIndex - 1][piece.mCoordinates.mColumnIndex + 1].mPiece->mSide != piece.mSide){
-        possiblePositions.push_back({piece.mCoordinates.mRowIndex - 1, piece.mCoordinates.mColumnIndex + 1});
-    }
+void addQuadrantsForPawnSide2(std::list<Coordinates>& possiblePositions, const Piece& piece) {
+    addQuadrantsForPawn(possiblePositions, piece, -1, -1);
+    addQuadrantsForPawn(possiblePositions, piece, -1, 1);
 }
 
 void addMovesKnight(std::list<Coordinates> & possiblePositions,  const Piece & piece){
-    
-    if(piece.mCoordinates.mColumnIndex + 2 < Board::BOARD_SIZE){
-        if(piece.mCoordinates.mRowIndex - 1 >= 0){
-            Position & posRef = Board::playField[piece.mCoordinates.mRowIndex - 1][piece.mCoordinates.mColumnIndex + 2];
+    int rowOffsets[] = {-1, -1, 1, 1, -2, -2, 2, 2};
+    int colOffsets[] = {2, -2, 2, -2, 1, -1, 1, -1};
+    int maxPossibleMovesKnightCanHave = 8;
 
-            if(posRef.mIsFree
-             || posRef.mPiece->mSide != piece.mSide)
-                possiblePositions.push_back({piece.mCoordinates.mRowIndex - 1, piece.mCoordinates.mColumnIndex + 2});
-        }
-        if(piece.mCoordinates.mRowIndex + 1 < Board::BOARD_SIZE){
-            Position & posRef = Board::playField[piece.mCoordinates.mRowIndex + 1][piece.mCoordinates.mColumnIndex + 2];
-            if(posRef.mIsFree
-             || posRef.mPiece->mSide != piece.mSide)
-            possiblePositions.push_back({piece.mCoordinates.mRowIndex + 1, piece.mCoordinates.mColumnIndex + 2});
-        }
-    }
-    if(piece.mCoordinates.mColumnIndex - 2 >= 0){
-        if(piece.mCoordinates.mRowIndex - 1 >= 0){
-            Position & posRef = Board::playField[piece.mCoordinates.mRowIndex - 1][piece.mCoordinates.mColumnIndex - 2];
+    for(int i = 0; i < maxPossibleMovesKnightCanHave; i++){
+        int newRow = piece.mCoordinates.mRowIndex + rowOffsets[i];
+        int newCol = piece.mCoordinates.mColumnIndex + colOffsets[i];
 
-            if(posRef.mIsFree
-             || posRef.mPiece->mSide != piece.mSide)
-            possiblePositions.push_back({piece.mCoordinates.mRowIndex - 1, piece.mCoordinates.mColumnIndex - 2});
-        }
-        if(piece.mCoordinates.mRowIndex + 1 < Board::BOARD_SIZE){
-            Position & posRef = Board::playField[piece.mCoordinates.mRowIndex + 1][piece.mCoordinates.mColumnIndex - 2];
-    
-            if(posRef.mIsFree
-             || posRef.mPiece->mSide != piece.mSide)
-            possiblePositions.push_back({piece.mCoordinates.mRowIndex + 1, piece.mCoordinates.mColumnIndex - 2});
-        }
-    }
-    if(piece.mCoordinates.mRowIndex + 2 < Board::BOARD_SIZE){
-        if(piece.mCoordinates.mColumnIndex + 1 < Board::BOARD_SIZE){
-            Position & posRef = Board::playField[piece.mCoordinates.mRowIndex + 2][piece.mCoordinates.mColumnIndex + 1];
+        if(newRow >= 0 && newRow < Board::BOARD_SIZE && newCol >= 0 && newCol < Board::BOARD_SIZE){
+            Position & posRef = Board::playField[newRow][newCol];
 
-            if(posRef.mIsFree
-             || posRef.mPiece->mSide != piece.mSide)
-            possiblePositions.push_back({piece.mCoordinates.mRowIndex + 2, piece.mCoordinates.mColumnIndex + 1});
-        }
-        if(piece.mCoordinates.mColumnIndex - 1 >= 0){
-            Position & posRef = Board::playField[piece.mCoordinates.mRowIndex + 2][piece.mCoordinates.mColumnIndex - 1];
-            if(posRef.mIsFree
-             || posRef.mPiece->mSide != piece.mSide)
-            possiblePositions.push_back({piece.mCoordinates.mRowIndex + 2, piece.mCoordinates.mColumnIndex - 1 });
-        }
-    }
-    if(piece.mCoordinates.mRowIndex - 2 >= 0){
-        if(piece.mCoordinates.mColumnIndex + 1 < Board::BOARD_SIZE){
-            Position & posRef = Board::playField[piece.mCoordinates.mRowIndex - 2][piece.mCoordinates.mColumnIndex + 1];
-
-            if(posRef.mIsFree
-             || posRef.mPiece->mSide != piece.mSide)
-            possiblePositions.push_back({piece.mCoordinates.mRowIndex - 2, piece.mCoordinates.mColumnIndex + 1 });
-        }
-        if(piece.mCoordinates.mColumnIndex - 1 >= 0){
-            Position & posRef = Board::playField[piece.mCoordinates.mRowIndex - 2][piece.mCoordinates.mColumnIndex - 1];
-
-            if(posRef.mIsFree
-             || posRef.mPiece->mSide != piece.mSide)
-            possiblePositions.push_back({piece.mCoordinates.mRowIndex - 2, piece.mCoordinates.mColumnIndex - 1});
+            if(posRef.mIsFree || posRef.mPiece->mSide != piece.mSide){
+                possiblePositions.push_back({newRow, newCol});
+            }
         }
     }
 }
 
-void addEnPassantForPawn(std::list<Coordinates> & possiblePositions, const Piece & piece){
 
-    Position & posRef = Board::playField[piece.mCoordinates.mRowIndex][piece.mCoordinates.mColumnIndex - 1];
-    Position & posRef2 = Board::playField[piece.mCoordinates.mRowIndex][piece.mCoordinates.mColumnIndex + 1];
+bool canEnPassantCapture(const Piece& piece, int dx, int dy) {
+    int row = piece.mCoordinates.mRowIndex;
+    int col = piece.mCoordinates.mColumnIndex;
+    int side = piece.mSide;
+    Position& posRef = Board::playField[row][col + dx];
+    return row == (side == 1 ? 4 : 3) && col + dx >= 0 && col + dx < Board::BOARD_SIZE
+        && !posRef.mIsFree && posRef.mPiece->mLetter == PAWN && posRef.mPiece->mSide != side
+        && posRef.mPiece->mNumOfStepsDone == 1 && Board::playField[row + dy][col + dx].mIsFree;
+}
 
-    if(piece.mSide == 1 && piece.mCoordinates.mRowIndex == 4){
 
-        if(piece.mCoordinates.mColumnIndex - 1 >= 0 && !Board::playField[piece.mCoordinates.mRowIndex][piece.mCoordinates.mColumnIndex - 1].mIsFree &&
-        posRef.mPiece->mLetter == PAWN &&
-        posRef.mPiece->mSide != piece.mSide &&
-        posRef.mPiece->mNumOfStepsDone == 1 &&
-        Board::playField[piece.mCoordinates.mRowIndex + 1][piece.mCoordinates.mColumnIndex - 1].mIsFree
-        ){
-            possiblePositions.push_back({piece.mCoordinates.mRowIndex + 1, piece.mCoordinates.mColumnIndex - 1 });
-        }
+void addEnPassantForPawn(std::list<Coordinates>& possiblePositions, const Piece& piece) {
 
-        if(piece.mCoordinates.mColumnIndex + 1 < Board::BOARD_SIZE && !posRef2.mIsFree &&
-        posRef2.mPiece->mLetter == PAWN &&
-        posRef2.mPiece->mSide != piece.mSide &&
-        posRef2.mPiece->mNumOfStepsDone == 1 &&
-        Board::playField[piece.mCoordinates.mRowIndex + 1][piece.mCoordinates.mColumnIndex + 1].mIsFree
-        ){
-            possiblePositions.push_back({piece.mCoordinates.mRowIndex + 1, piece.mCoordinates.mColumnIndex + 1});
-        }
+    if (canEnPassantCapture(piece, -1, 1)) {
+        possiblePositions.push_back({ piece.mCoordinates.mRowIndex + 1, piece.mCoordinates.mColumnIndex - 1 });
     }
 
-    if(piece.mSide == 2 && piece.mCoordinates.mRowIndex == 3){
-        
-        if(piece.mCoordinates.mColumnIndex - 1 >= 0 && !posRef.mIsFree &&
-        posRef.mPiece->mLetter == PAWN &&
-        posRef.mPiece->mSide != piece.mSide &&
-        posRef.mPiece->mNumOfStepsDone == 1 &&
-        Board::playField[piece.mCoordinates.mRowIndex - 1][piece.mCoordinates.mColumnIndex - 1].mIsFree){
-            possiblePositions.push_back({ piece.mCoordinates.mRowIndex - 1, piece.mCoordinates.mColumnIndex - 1});
-            
-        }
+    if (canEnPassantCapture(piece, 1, 1)) {
+        possiblePositions.push_back({ piece.mCoordinates.mRowIndex + 1, piece.mCoordinates.mColumnIndex + 1 });
+    }
 
-        if(piece.mCoordinates.mColumnIndex + 1 < Board::BOARD_SIZE && 
-        !posRef2.mIsFree &&
-        posRef2.mPiece->mLetter == PAWN &&
-        posRef2.mPiece->mSide != piece.mSide &&
-        posRef2.mPiece->mNumOfStepsDone == 1 &&
-        Board::playField[piece.mCoordinates.mRowIndex - 1][piece.mCoordinates.mColumnIndex + 1].mIsFree ){
-            possiblePositions.push_back({ piece.mCoordinates.mRowIndex - 1, piece.mCoordinates.mColumnIndex + 1});
-        }
+    if (canEnPassantCapture(piece, -1, -1)) {
+        possiblePositions.push_back({ piece.mCoordinates.mRowIndex - 1, piece.mCoordinates.mColumnIndex - 1 });
+    }
+
+    if (canEnPassantCapture(piece, 1, -1)) {
+        possiblePositions.push_back({ piece.mCoordinates.mRowIndex - 1, piece.mCoordinates.mColumnIndex + 1 });
     }
 }
 
