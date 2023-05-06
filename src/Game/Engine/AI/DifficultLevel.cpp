@@ -10,7 +10,8 @@ int DifficultLevel::minMax(
     std::list<std::pair<int, std::pair<Coordinates, Coordinates>>> & movesRank
     )
     {
-
+    
+    int bestMove = 100000000; // signs the best move(the lever score the better) for cumputer
     // return if depth == 0 -- botom of decision tree reached   
     if(depth == 0){
         return  evaluetePlayField(g);
@@ -46,11 +47,13 @@ int DifficultLevel::minMax(
             for(auto & move : moves){
                 if(fig->mCoordinates == move) continue;
                 int evaluation = evaluateMove(g,b,fig,move,maxSearch,depth,movesRank);
-                if(depth == MIN_MAX_DEPTH){
-                    movesRank.push_back ({ evaluation,{fig->mCoordinates, move}});
-                }
                 if(evaluation < minFound){
                     minFound = evaluation;
+                }
+                if(depth == MIN_MAX_DEPTH){
+                    if(minFound <= bestMove){
+                        movesRank.push_back ({ evaluation,{fig->mCoordinates, move}});
+                    }
                 }
             }            
         }
