@@ -67,7 +67,7 @@ bool FileOperations::loadGameFromFile(
     strStream.str("");
 
     readingAutomata.splitVerificationAndFile(fullFileContent,verificationContent,gameContent);
-
+    //throw std::runtime_error(std::to_string(ACCEPT_ONLY_VERIFIED_FILES));
     if( ACCEPT_ONLY_VERIFIED_FILES ){
         int key = -1;
         readingAutomata.readVerification(verificationContent,key);

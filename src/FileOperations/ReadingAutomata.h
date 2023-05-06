@@ -7,7 +7,6 @@
 #include "HistoryFileData.h"
 #include "vector"
 #include "FileVerifier.h"
-#include "../Game/ConstantsGame.h"
 
 class ReadingAutomata
 {

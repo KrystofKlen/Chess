@@ -1,11 +1,10 @@
 #pragma once
+#include "../config/ConstantsGame.h"
 #include "../Game/Engine/Core/Board.h"
 #include "../Game/Engine/Core/Game.h"
 #include "../UI/UI.h"
 #include "../FileOperations/FileOperations.h"
 #include "Converter.h"
-#include "../Game/ConstantsGame.h"
-#include "../Game/Engine/ConstantsEngine.h"
 
 class API{
 public:

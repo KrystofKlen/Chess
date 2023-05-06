@@ -9,7 +9,7 @@
 #include <vector>
 #include "ReadingAutomata.h"
 #include "WritingAutomata.h"
-#include "../Game/ConstantsGame.h"
+#include "../config/ConstantsGame.h"
 
 class FileOperations{
 public:

@@ -5,7 +5,6 @@
 #include <memory>
 #include "Board.h"
 #include "Coordinates.h"
-#include "../ConstantsEngine.h"
 
 class Game{
 public:
