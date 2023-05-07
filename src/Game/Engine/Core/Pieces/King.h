@@ -3,8 +3,7 @@
 #include "../Moves.h"
 #include "../Coordinates.h"
 
-const int kingRank = 10000;
-
+// Recommenden rank = 10000
 class King : public Piece{
 public:
     King(int side, Coordinates initCoordinates, int numOfStepsDone, int id);

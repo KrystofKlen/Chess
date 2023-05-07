@@ -3,7 +3,7 @@
 #include "../Moves.h"
 #include "../Coordinates.h"
 
-const int bishopRank = 100;
+// Recommended rank = 100
 
 class Bishop : public  Piece{
 public:

@@ -1,5 +1,6 @@
 #pragma once
 #include "Coordinates.h"
+#include "../../../config/ConstantsEngine.h"
 #include <list>
 
 class Piece{

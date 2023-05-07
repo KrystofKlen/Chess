@@ -1,11 +1,11 @@
 #include "Bishop.h"
 //---------- BISHOP -----------------------------------------------------------------
 Bishop::Bishop(int side, Coordinates initCoordinates, int numOfStepsDone, int id)
- : Piece(8,'B',side,initCoordinates,numOfStepsDone, id, bishopRank){
+ : Piece(8,'B',side,initCoordinates,numOfStepsDone, id, BISHOP_RANK){
 
 }
 Bishop::Bishop(const Bishop & ref)
- : Piece( ref.mMaxNumberOfSteps , ref.mLetter, ref.mSide, ref.mCoordinates, ref.mNumOfStepsDone, ref.mId, bishopRank){
+ : Piece( ref.mMaxNumberOfSteps , ref.mLetter, ref.mSide, ref.mCoordinates, ref.mNumOfStepsDone, ref.mId, BISHOP_RANK){
 
 }
 

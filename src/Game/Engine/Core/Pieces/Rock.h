@@ -3,7 +3,7 @@
 #include "../Moves.h"
 #include "../Coordinates.h"
 
-const int rockRank = 100;
+// recommenden rank = 100
 
 class Rock : public  Piece{
 public:

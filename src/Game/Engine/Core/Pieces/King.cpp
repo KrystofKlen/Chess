@@ -2,11 +2,11 @@
 
 //---------- KING -----------------------------------------------------------------
 King::King(int side, Coordinates initCoordinates, int numOfStepsDone, int id)
- : Piece(1,'K',side,initCoordinates,numOfStepsDone, id, kingRank){
+ : Piece(1,'K',side,initCoordinates,numOfStepsDone, id, KING_RANK){
     mCastlePossible = true;
 }
 King::King(const King & ref)
- : Piece(ref.mSide, ref.mLetter,ref.mSide, ref.mCoordinates, ref.mNumOfStepsDone, ref.mId, kingRank ){
+ : Piece(ref.mSide, ref.mLetter,ref.mSide, ref.mCoordinates, ref.mNumOfStepsDone, ref.mId, KING_RANK ){
 
 }
 

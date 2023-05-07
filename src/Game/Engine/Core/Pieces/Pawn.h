@@ -3,7 +3,7 @@
 #include "../Moves.h"
 #include "../Coordinates.h"
 
-const int pawnRank = 30;
+// Recommended rank = 30
 
 class Pawn : public  Piece{
 public:

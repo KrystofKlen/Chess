@@ -2,10 +2,10 @@
 
 //---------- PAWN -----------------------------------------------------------------
 Pawn::Pawn(int side, Coordinates initCoordinates,int numOfStepsDone, int id)
- : Piece(1,'P',side,initCoordinates,numOfStepsDone, id, pawnRank){
+ : Piece(1,'P',side,initCoordinates,numOfStepsDone, id, PAWN_RANK){
 }
 Pawn::Pawn(const Pawn & ref)
- : Piece(ref.mMaxNumberOfSteps, ref.mLetter, ref.mSide, ref.mCoordinates, ref.mNumOfStepsDone, ref.mId , pawnRank){
+ : Piece(ref.mMaxNumberOfSteps, ref.mLetter, ref.mSide, ref.mCoordinates, ref.mNumOfStepsDone, ref.mId , PAWN_RANK){
 
 }
 
