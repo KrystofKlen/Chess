@@ -1,30 +1,5 @@
 #include "Converter.h"
 
-
-void Converter::readNextChunk(std::stringstream & strStream, char delimiter, const std::string & fileContent, std::string::const_iterator & it){
-    strStream.str("");
-    while(*it != delimiter){
-        strStream<<*it;
-        it++;
-    }
-    it++;
-    it++;
-}
-
-void Converter::breakUpChunks(const std::string & strChunk, std::list<std::string> & chunks){
-    std::stringstream strStream;
-    std::string::const_iterator it = strChunk.begin();
-    while(it != strChunk.end()){
-        while(*it != '\n'){
-            strStream<<*it;
-            it++;
-        }
-        chunks.push_back(strStream.str());
-        strStream.str("");
-        it++;
-    }
-}
-
 void Converter::convertPiece(std::shared_ptr<Piece> from, PieceFileData & to){
     to.mLetter = from->mLetter;
     to.mSide = from->mSide;
@@ -53,88 +28,6 @@ void Converter::convertHistoryMoveFileData(const HistoryFileData & from, Game::M
     to.to.mRowIndex = from.mCoordinateToRowIndex;
     to.to.mColumnIndex = from.mCoordinateToColIndex;
 }
-
-
-std::shared_ptr<Piece> Converter::createPieceFromChunk(const std::string & pieceData){
-
-    int ASCII_CONSTANT = 48;
-
-    std::string::const_iterator it = pieceData.begin();
-    char letter = *it;
-    it++;
-    it++;
-    int side = *it - ASCII_CONSTANT;
-    it++;
-    it++;
-    it++;
-    int rowIndex = *it - ASCII_CONSTANT;
-    it++;
-    it++;
-    int columnIndexIndex = *it - ASCII_CONSTANT;
-    it++;
-    it++;
-    it++;
-    std::string buffer;
-    while(*it != ','){
-        buffer.push_back(*it);
-        it++;
-    }
-
-    int numOfStepsDone;
-    try{
-        numOfStepsDone = std::stoi(buffer);
-    }catch(...) {
-        return nullptr;
-    }
-    it++;
-    buffer.clear();
-    while(*it != '}'){
-        buffer.push_back(*it);
-        it++;
-    }
-
-    int id;
-    try{
-        id = std::stoi(buffer);
-    }catch(...){
-        return nullptr;
-    }
-    
-    Coordinates c;
-
-    switch (letter)
-    {
-    case KING:
-        c = {rowIndex,columnIndexIndex};
-        return std::make_shared<King> (side,c,numOfStepsDone,id);
-        break;
-    case QUEEN:
-        c = {rowIndex,columnIndexIndex};
-        return std::make_shared<Queen> (side,c,numOfStepsDone,id);
-        break;
-    case BISHOP:
-        c = {rowIndex,columnIndexIndex};
-        return std::make_shared<Bishop> (side,c,numOfStepsDone,id);
-        break;
-    case KNIGHT:
-        c = {rowIndex,columnIndexIndex};
-        return std::make_shared<Knight> (side,c,numOfStepsDone,id);
-        break;
-    case ROCK:
-        c = {rowIndex,columnIndexIndex};
-        return std::make_shared<Rock> (side,c,numOfStepsDone,id);
-        break;
-    case PAWN:
-        c = {rowIndex,columnIndexIndex};
-        return std::make_shared<Pawn> (side,c,numOfStepsDone,id);
-        break;
-    
-    default:
-        return nullptr;
-    }
-    return nullptr;
-}
-
 
 std::shared_ptr<Piece> Converter::createPieceFromFileData(const PieceFileData & pieceFileData){
     Coordinates c = {pieceFileData.mRowIndex, pieceFileData.mColumnIndex};

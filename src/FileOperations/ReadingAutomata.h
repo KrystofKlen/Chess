@@ -32,6 +32,12 @@ public:
 
     bool readVerification(std::string verificationPart, int &Verification);
 
+    /**
+    Splits the file content string into two parts: the verification part and the game part.
+    @param fileContent The string containing the content of the file.
+    @param verificationPart A reference to a string that will contain the verification part of the file.
+    @param gamePart A reference to a string that will contain the game part of the file.
+    */
     void splitVerificationAndFile(std::string &fileContent, std::string &verificationPart, std::string &gamePart);
 
 private:

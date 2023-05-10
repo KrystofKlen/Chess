@@ -134,8 +134,19 @@ private:
 
     std::list<std::pair<char,int>> infoAboutKickedPieces;
 
+    /**
+     * @brief Get information about the pieces that have been kicked out of the board during the game.
+     * 
+     * @param g The Game object to get information from.
+     */
     void getInfoAboutPlayingPieces(std::pair<char,int> infoAboutPieces [Board::BOARD_SIZE][Board::BOARD_SIZE]);
 
+    /**
+     * @brief Get information about playing pieces on the board.
+     * 
+     * @param infoAboutPieces A 2D array of pairs representing the position and side of the playing pieces.
+     *                        If a position is empty, the pair will have a null character and a side of -1.
+     */
     void getInfoAboutKickedPieces(Game & g);
 
     std::string strPlayingSide;
