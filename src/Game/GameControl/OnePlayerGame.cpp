@@ -60,6 +60,7 @@ void OnePlayerGame::startGameLoop(){
         if(!moveIsValid) continue;
 
         //move is OK ... checking for en passant and castling
+        g.addMoveToHistory(movementFromTo,b.playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece);
         g.checkEnPassant(movementFromTo.second,movementFromTo.first);
 
         bool castleDetected = g.detectCastlingAttempt(movementFromTo.second, movementFromTo.first);
@@ -76,7 +77,6 @@ void OnePlayerGame::startGameLoop(){
             if(gameIsOver) return;    
         }
         if(!castleDetected){
-            g.addMoveToHistory(movementFromTo,b.playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece);
             b.movePiece(movementFromTo.first, movementFromTo.second, false);
         }
             
@@ -115,8 +115,6 @@ void OnePlayerGame::handleKickout(const std::pair< Coordinates,Coordinates > & m
     char letter = Board::playField[movementFromTo.second.mRowIndex][movementFromTo.second.mColumnIndex].mPiece
             ->mLetter;
             
-    g.addMoveToHistory(movementFromTo,b.playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece);
-
     g.kickout(movementFromTo.second, g.piecesOUTplayer2);
     
     //end game if king was the target

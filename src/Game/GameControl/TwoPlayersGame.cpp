@@ -46,6 +46,7 @@ void TwoPlayersGame::startGameLoop(){
         if(!moveIsValid) continue;
 
         //move is OK ... checking for en passant and castling
+        g.addMoveToHistory(movementFromTo,b.playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece);
         g.checkEnPassant(movementFromTo.second,movementFromTo.first);
 
         bool castleDetected = g.detectCastlingAttempt(movementFromTo.second, movementFromTo.first);
@@ -102,6 +103,8 @@ void TwoPlayersGame::startGameLoop(){
 void TwoPlayersGame::handleKickout(const std::pair< Coordinates,Coordinates > & movementFromTo){
     char letter = Board::playField[movementFromTo.second.mRowIndex][movementFromTo.second.mColumnIndex].mPiece
             ->mLetter;
+    
+    g.addMoveToHistory(movementFromTo,b.playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece);
     g.kickout(movementFromTo.second, playingSide == 1 ? g.piecesOUTplayer2 : g.piecesOUTplayer1); 
     
     //end game if king was the target
