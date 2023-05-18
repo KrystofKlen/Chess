@@ -42,7 +42,7 @@ void UI::showChessBoard(){
     start_color();
 
     init_pair(BACKGROUND_PAIR_CODE,COLOR_OTHER_FIELD, COLOR_BACKGROUND);
-    init_pair(BLACK_PAIR_CODE,COLOR_BLACK, COLOR_BLACK);
+    init_pair(YELLOW_PAIR_CODE,COLOR_YELLOW, COLOR_YELLOW);
     init_pair(WHITE_PAIR_CODE,COLOR_OTHER_FIELD, COLOR_OTHER_FIELD);
     init_pair(SELECTED_FIELD_CODE,COLOR_BLACK, SELECTED_FIELD_COLOR);
     init_pair(PLAYER_1_COLOR_CODE,COLOR_WHITE, COLOR_RED);
@@ -63,7 +63,7 @@ void UI::showChessBoard(){
                             
             if(prevBlack){
                 board[rowIndex][columnIndex].mColorPairCode = 2;
-                wbkgd(board[rowIndex][columnIndex].mPtrWindow, COLOR_PAIR(BLACK_PAIR_CODE));
+                wbkgd(board[rowIndex][columnIndex].mPtrWindow, COLOR_PAIR(YELLOW_PAIR_CODE));
             }else{
                 board[rowIndex][columnIndex].mColorPairCode = 3;
                 wbkgd(board[rowIndex][columnIndex].mPtrWindow, COLOR_PAIR(WHITE_PAIR_CODE));
@@ -125,7 +125,7 @@ std::pair< std::pair<int,int>, std::pair<int,int> > UI::pickPosition(int sidePla
             attron(A_BOLD);
             if(selectedField.mSide != sidePlaying){   
                 //field with no piece, or piece of other player selected  
-                setAlert( BLACK_PAIR_CODE,"WRONG CHOICE");
+                setAlert( YELLOW_PAIR_CODE,"WRONG CHOICE");
                 break;
             }
             setSelected( sidePlaying,selectedField.charRepresentingPiece);

@@ -42,7 +42,7 @@ public:
     void freeWindows();
 
     static const int BACKGROUND_PAIR_CODE = 1;
-    static const int BLACK_PAIR_CODE = 2;
+    static const int YELLOW_PAIR_CODE = 2;
     static const int WHITE_PAIR_CODE = 3;
     static const int SELECTED_FIELD_CODE = 4;
     static const int PLAYER_1_COLOR_CODE = 5;
