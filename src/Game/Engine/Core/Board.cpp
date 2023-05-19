@@ -14,7 +14,7 @@ void Board::refreshPieceCoordinates(){
 }
 
 
-
+#include <iostream>
 void Board::movePiece(Coordinates from, Coordinates to, bool shouldIncreaseNumberOfSteps){
     if( playField[from.mRowIndex][from.mColumnIndex].mIsFree) return;
     if( from == to) return;
@@ -29,8 +29,10 @@ void Board::movePiece(Coordinates from, Coordinates to, bool shouldIncreaseNumbe
     playField[to.mRowIndex][to.mColumnIndex].mPiece->mCoordinates.mRowIndex = to.mRowIndex;
     playField[to.mRowIndex][to.mColumnIndex].mPiece->mCoordinates.mColumnIndex = to.mColumnIndex;
 
-    if(shouldIncreaseNumberOfSteps)
+    if(shouldIncreaseNumberOfSteps){        
         playField[to.mRowIndex][to.mColumnIndex].mPiece->mNumOfStepsDone++;
+    }
+        
         
 }
 

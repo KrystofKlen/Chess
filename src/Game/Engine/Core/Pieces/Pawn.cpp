@@ -12,6 +12,7 @@ Pawn::Pawn(const Pawn & ref)
 void Pawn::modifyRank(){
     //To be implemented
 }
+
 void Pawn::getPossibleMovePositions(std::list<Coordinates> & possiblePositions){
     
     if(this->mSide == 2){
@@ -22,7 +23,7 @@ void Pawn::getPossibleMovePositions(std::list<Coordinates> & possiblePositions){
             addQuadrantsForPawnSide2(possiblePositions, *this);
         }
 
-        if(mNumOfStepsDone == 0 && Board::playField[this->mCoordinates.mRowIndex - 2][this->mCoordinates.mColumnIndex].mIsFree){
+        if(Pawn::mNumOfStepsDone == 0 && Board::playField[this->mCoordinates.mRowIndex - 2][this->mCoordinates.mColumnIndex].mIsFree){
             possiblePositions.push_back({this->mCoordinates.mRowIndex - 2, this->mCoordinates.mColumnIndex });
         }
 
@@ -34,7 +35,7 @@ void Pawn::getPossibleMovePositions(std::list<Coordinates> & possiblePositions){
             addQuadrantsForPawnSide1(possiblePositions, *this);
         }
 
-        if(mNumOfStepsDone == 0 && Board::playField[this->mCoordinates.mRowIndex + 2][this->mCoordinates.mColumnIndex].mIsFree){
+        if(Pawn::mNumOfStepsDone == 0 && Board::playField[this->mCoordinates.mRowIndex + 2][this->mCoordinates.mColumnIndex].mIsFree){
             possiblePositions.push_back({ this->mCoordinates.mRowIndex + 2, this->mCoordinates.mColumnIndex});
         }
     }
