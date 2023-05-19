@@ -223,12 +223,7 @@ void API::getInfoAboutGameToSave( const Board & b, const Game & g, std::string &
 void API::saveGame(
     const Board & b,
     const Game & g,
-    int gameType,
-    int difficulty,
-    int isCheck,
-    int isCheckMate,
-    int isStalmate, 
-    int playingSide
+    const SaveData & saveData
      ){
         Converter conv;
         std::vector<PieceFileData> piecesIn, piecesOut;
@@ -262,12 +257,7 @@ void API::saveGame(
         }
        
         bool saved = fo.saveGameToFile(
-            gameType,
-            difficulty,
-            isCheck,
-            isCheckMate,
-            isStalmate,
-            playingSide,
+            saveData,
             piecesIn,
             piecesOut,
             board,

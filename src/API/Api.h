@@ -56,16 +56,7 @@ public:
     void getInfoAboutGameToSave( const Board & b, const Game & g, std::string & info);
     void promotePawn(Coordinates coordinatesOfPawn, Game & g, Board & b);
 
-    void saveGame(
-    const Board & b,
-    const Game & g,
-    int gameType,
-    int difficulty,
-    int isCheck,
-    int isCheckMate,
-    int isStalmate, 
-    int playingSide
-     );
+    void saveGame( const Board & b,const Game & g, const SaveData & saveData);
 
     /**
      * Converts text data into actual data types, and sets it

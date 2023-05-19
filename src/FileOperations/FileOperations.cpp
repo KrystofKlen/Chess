@@ -1,24 +1,14 @@
 #include "FileOperations.h"
 
 bool FileOperations::saveGameToFile(
-    int gameType,
-    int difficulty,
-    int isCheck,
-    int isCheckMate,
-    int isStalmate,
-    int plyingSide,
+    const SaveData & saveData,
     const std::vector<PieceFileData> & piecesIn,
     const std::vector<PieceFileData> & piecesOut,
     int board[8][8],
     const std::vector<HistoryFileData> & historyMoves
 ){
     std::string fileContent = writingAutomata.getFileContent(
-    gameType,
-    difficulty,
-    isCheck,
-    isCheckMate,
-    isStalmate,
-    plyingSide,
+    saveData,
     piecesIn,
     piecesOut,
     board,

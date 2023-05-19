@@ -67,12 +67,14 @@ void TwoPlayersGame::startGameLoop(){
     apiBase->saveGame(
             b,
             g,
+            {
             TWO_PLAYERS_GAME,
             0,
             checkDetected ? 1:0,
             checkMateDetected ? 1:0,
             stalemateDetected ? 1:0,
             playingSide
+            }
         );
 }
 

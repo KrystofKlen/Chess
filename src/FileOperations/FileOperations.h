@@ -57,12 +57,7 @@ public:
     @return true if the game was successfully saved to a file, false otherwise.
     */
     bool saveGameToFile(
-        int gameType,
-        int difficulty,
-        int isCheck,
-        int isCheckMate,
-        int isStalmate,
-        int plyingSide,
+        const SaveData & saveData,
         const std::vector<PieceFileData> & piecesIn,
         const std::vector<PieceFileData> & piecesOut,
         int board[8][8],

@@ -6,17 +6,13 @@
 #include "HistoryFileData.h"
 #include <iostream>
 #include "FileVerifier.h"
+#include "../API/SaveData.h"
 
 class WritingAutomata{
 public:
 
 std::string getFileContent(
-        int gameType,
-        int difficulty,
-        int isCheck,
-        int isCheckMate,
-        int isStalmate,
-        int plyingSide,
+        const SaveData & saveData,
         const std::vector<PieceFileData> & piecesIn,
         const std::vector<PieceFileData> & piecesOut,
         int board[8][8],
@@ -46,12 +42,7 @@ private:
     );
 
     void setParamsGame(
-        int gameType,
-        int difficulty,
-        int isCheck,
-        int isCheckMate,
-        int isStalmate,
-        int plyingSide,
+        const SaveData & saveData,
         std::vector<std::string> & params
         );
 

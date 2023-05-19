@@ -1,26 +1,14 @@
 #include "WritingAutomata.h"
 
 std::string WritingAutomata::getFileContent(
-        int gameType,
-        int difficulty,
-        int isCheck,
-        int isCheckMate,
-        int isStalmate,
-        int plyingSide,
+        const SaveData & saveData,
         const std::vector<PieceFileData> & piecesIn,
         const std::vector<PieceFileData> & piecesOut,
         int board[8][8],
         const std::vector<HistoryFileData> & historyMoves
     ){  
         std::vector<std::string> params;
-        setParamsGame(
-            gameType,
-            difficulty,
-            isCheck,
-            isCheckMate,
-            isStalmate,
-            plyingSide,
-            params);
+        setParamsGame(saveData,params);
         for(auto piece : piecesIn){
             setParamsPiece(piece, params);
         }
@@ -116,21 +104,16 @@ void WritingAutomata::setParamsHistory(
 }
 
 void WritingAutomata::setParamsGame(
-    int gameType,
-    int difficulty,
-    int isCheck,
-    int isCheckMate,
-    int isStalmate,
-    int plyingSide,
+    const SaveData & saveData,
     std::vector<std::string> & params
     )
     {
-    params.push_back(std::to_string(gameType));
-    params.push_back(std::to_string(difficulty));
-    params.push_back(std::to_string(isCheck));
-    params.push_back(std::to_string(isCheckMate));
-    params.push_back(std::to_string(isStalmate));
-    params.push_back(std::to_string(plyingSide));
+    params.push_back(std::to_string(saveData.gameType));
+    params.push_back(std::to_string(saveData.difficulty));
+    params.push_back(std::to_string(saveData.isCheck));
+    params.push_back(std::to_string(saveData.isCheckMate));
+    params.push_back(std::to_string(saveData.isStalmate));
+    params.push_back(std::to_string(saveData.playingSide));
 }
 
 

@@ -76,12 +76,14 @@ void OnePlayerGame::startGameLoop(){
     apiBase->saveGame(
         b,
         g,
+        {
         ONE_PLAYER_GAME,
         mDifficulty,
         checkDetected ? 1:0,
         checkMateDetected ? 1:0,
         stalemateDetected ? 1:0,
         playingSide
+        }
     );
 }
 
