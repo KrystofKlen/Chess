@@ -25,12 +25,12 @@ void OnePlayerGame::startGameLoop(){
         apiBase->update(g);
 
         //check game state
-        checkDetected = kingIsInCheck(g,b,1);
+        checkDetected = kingIsInCheck(playingSide);
         if(checkDetected){
-            checkMateDetected = isCheckMate(g,b,1);
+            checkMateDetected = isCheckMate(playingSide);
         }
         if(!checkDetected){
-            stalemateDetected = isStalmate(g,b,1);
+            stalemateDetected = isStalmate(playingSide);
         }
 
         b.refreshPieceCoordinates();
@@ -54,7 +54,7 @@ void OnePlayerGame::startGameLoop(){
         bool moveIsValid = g.moveIsValid(movementFromTo.first,movementFromTo.second);
         if(!moveIsValid) continue;
         if( Board::playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece->mLetter == KING
-        && !kingWillNotLandIntoCheck(g,b, movementFromTo.second, 1))
+        && !kingWillNotLandIntoCheck(movementFromTo.second, 1))
             moveIsValid = false;
         if(!moveIsValid) continue;
 
@@ -86,8 +86,8 @@ void OnePlayerGame::startGameLoop(){
         }
 
         //updating game state
-        stalemateDetected = isStalmate(g,b, 1);
-        checkMateDetected = isCheckMate(g,b, 1);
+        stalemateDetected = isStalmate(playingSide);
+        checkMateDetected = isCheckMate(playingSide);
 
         b.refreshPieceCoordinates();
         //no stalmate or check mate -> pc can make a move

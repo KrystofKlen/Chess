@@ -43,5 +43,18 @@ protected:
     virtual void handleKickout(const std::pair< Coordinates,Coordinates > & movementFromTo) = 0;
 
     void handlePawnPromotion(const std::pair< Coordinates,Coordinates > & movementFromTo);
+
+    bool kingWillNotLandIntoCheck(Game & g , Coordinates & anticipatedPosition, std::shared_ptr<Piece> king);
+
+    bool isCheckMate( int sidePlaying);
+
+    bool isStalmate( int sidePlaying);
+
+    bool kingIsInCheck( int sidePlaying);
+
+    bool kingWillNotLandIntoCheck( Coordinates & anticipatedPosition, std::shared_ptr<Piece> king );
+
+    bool kingWillNotLandIntoCheck(Coordinates & anticipatedPosition, int sidePlaying );
+
 };
 

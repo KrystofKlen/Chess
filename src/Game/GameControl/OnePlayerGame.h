@@ -1,6 +1,5 @@
 #pragma once
 #include "GameControl.h"
-#include "GameStateController.h"
 
 #include "../Engine/AI/ComputerPlayer.h"
 #include "../Engine/AI/EasyLevel.h"

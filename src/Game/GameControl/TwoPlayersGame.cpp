@@ -15,12 +15,12 @@ void TwoPlayersGame::startGameLoop(){
         apiBase -> update(g);
         
         //check game state
-        checkDetected = kingIsInCheck(g,b,playingSide);
+        checkDetected = kingIsInCheck(playingSide);
         if(checkDetected){
-            checkMateDetected = isCheckMate(g,b,playingSide);
+            checkMateDetected = isCheckMate(playingSide);
         }
         if(!checkDetected){
-            stalemateDetected = isStalmate(g,b,playingSide);
+            stalemateDetected = isStalmate(playingSide);
         }
 
         //update UI if game state changed, (+ end if stalmate or check mate)
@@ -42,7 +42,7 @@ void TwoPlayersGame::startGameLoop(){
         bool moveIsValid = g.moveIsValid(movementFromTo.first,movementFromTo.second);
         if( !moveIsValid) continue;
         if( Board::playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece->mLetter == KING
-        && !kingWillNotLandIntoCheck(g,b, movementFromTo.second, playingSide)){
+        && !kingWillNotLandIntoCheck(movementFromTo.second, playingSide)){
             moveIsValid = false;
         }
         if(!moveIsValid) continue;
@@ -76,7 +76,8 @@ void TwoPlayersGame::startGameLoop(){
         }
 
         //updating game state
-        checkMateDetected = isCheckMate(g,b, playingSide);
+        stalemateDetected = isStalmate(playingSide);
+        checkMateDetected = isCheckMate(playingSide);
 
         //end game if check mate 
         if(checkMateDetected){
