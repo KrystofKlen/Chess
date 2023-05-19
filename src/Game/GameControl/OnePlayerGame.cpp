@@ -52,7 +52,7 @@ void OnePlayerGame::startGameLoop(){
             if(!gameRunning) return;    
         }
         if(!castleDetected){
-            b.movePiece(movementFromTo.first, movementFromTo.second, false);
+            b.movePiece(movementFromTo.first, movementFromTo.second, true);
         }
             
         //promote pawn if it is at the end
