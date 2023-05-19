@@ -1,6 +1,6 @@
 #include "OnePlayerGame.h"
 
-OnePlayerGame::OnePlayerGame(int difficulty){
+OnePlayerGame::OnePlayerGame(int difficulty, std::shared_ptr<ApiBase> apiBase):GameControl(apiBase){
     mDifficulty = difficulty;
     if(difficulty == EASY_LEVEL){
         ptrComputer = std::make_unique<EasyLevel>();
@@ -22,9 +22,7 @@ void OnePlayerGame::startGameLoop(){
         b.refreshPieceCoordinates();
 
         //refresh UI
-        api.showBoard();
-        api.showMovesHistory(g.getMovesHistory());
-        api.updatePieces(g);
+        apiBase->update(g);
 
         //check game state
         checkDetected = kingIsInCheck(g,b,1);
@@ -39,17 +37,18 @@ void OnePlayerGame::startGameLoop(){
 
         //update UI if game state changed, (+ end if stalmate or check mate)
         if(checkMateDetected){
-            api.showAlert("CHECK MATE,  PRESS ANY KEY TO END");
+            apiBase->handleGameEvent("CHECK MATE,  PRESS ANY KEY TO END");
             return;
         }else if(checkDetected){
-            api.showAlert("CHECK");
+            apiBase->handleGameEvent("CHECK");
         }else if(stalemateDetected){
-            api.showAlert("STALMATE");
+            apiBase->handleGameEvent("STALMATE");
             return;
         }
+
         //pick piece and position to move to
-        std::pair< Coordinates,Coordinates > movementFromTo =  api.pickPosition(playingSide, gameRunning);
-        if(!gameRunning) break;
+        std::pair< Coordinates,Coordinates > movementFromTo =  apiBase->pickPosition(playingSide, gameRunning);
+        if(!gameRunning) break;        
         
         //check whether move is OK, if not -> new iteration
         bool moveIsValid = g.moveIsValid(movementFromTo.first,movementFromTo.second);
@@ -85,7 +84,6 @@ void OnePlayerGame::startGameLoop(){
             handlePawnPromotion(movementFromTo);
             if(gameIsOver) return;   
         }
-        
 
         //updating game state
         stalemateDetected = isStalmate(g,b, 1);
@@ -99,7 +97,7 @@ void OnePlayerGame::startGameLoop(){
         } 
     } 
     
-    api.saveGame2(
+    apiBase->saveGame(
         b,
         g,
         ONE_PLAYER_GAME,
@@ -120,10 +118,8 @@ void OnePlayerGame::handleKickout(const std::pair< Coordinates,Coordinates > & m
     //end game if king was the target
     if(letter == KING){
         b.movePiece(movementFromTo.first, movementFromTo.second, true);
-        api.showBoard();
-        api.showMovesHistory(g.getMovesHistory());
-        api.updatePieces(g);
-        api.showAlert("GAME OVER , RED WINS, PRESS ANY KEY TO END");
+        apiBase->update(g);
+        apiBase->handleGameEvent("GAME OVER , RED WINS, PRESS ANY KEY TO END");
         gameIsOver = true;
     }      
 }
@@ -133,10 +129,8 @@ void OnePlayerGame::makeMoveForPC(){
     ptrComputer->makeNextMove(g, b, pcWin);
 
     if(pcWin){
-        api.showBoard();
-        api.showMovesHistory(g.getMovesHistory());
-        api.updatePieces(g);
-        api.showAlert("GAME OVER , BLUE WINS, PRESS ANY KEY TO END");
+        apiBase->update(g);
+        apiBase->handleGameEvent("GAME OVER , RED WINS, PRESS ANY KEY TO END");
         gameIsOver = true;
     }
 }

@@ -1,5 +1,9 @@
 #include "TwoPlayersGame.h"
 
+TwoPlayersGame::TwoPlayersGame(std::shared_ptr<ApiBase> apiBase):GameControl(apiBase){
+}
+
+
 void TwoPlayersGame::startGameLoop(){
 
     Board::setPiecesOnBoard(g.piecesINplayer1, g.piecesINplayer2);
@@ -8,9 +12,7 @@ void TwoPlayersGame::startGameLoop(){
 
     while(gameRunning){
         //refresh UI
-        api.showBoard();
-        api.showMovesHistory(g.getMovesHistory());
-        api.updatePieces(g);
+        apiBase -> update(g);
         
         //check game state
         checkDetected = kingIsInCheck(g,b,playingSide);
@@ -23,17 +25,17 @@ void TwoPlayersGame::startGameLoop(){
 
         //update UI if game state changed, (+ end if stalmate or check mate)
         if(checkMateDetected){
-            api.showAlert("CHECK MATE, PRESS ANY KEY TO END");
+            apiBase -> handleGameEvent("CHECK MATE, PRESS ANY KEY TO END");
             return;
         }else if(checkDetected){
-            api.showAlert("CHECK");
+            apiBase -> handleGameEvent("CHECK");
         }else if(stalemateDetected){
-            api.showAlert("STALMATE");
+            apiBase -> handleGameEvent("STALMATE");
             return;
         }
         
         //pick piece and position to move to
-        std::pair< Coordinates,Coordinates > movementFromTo =  api.pickPosition(playingSide, gameRunning);
+        std::pair< Coordinates,Coordinates > movementFromTo =  apiBase->pickPosition(playingSide, gameRunning);
         if(!gameRunning) break;
         
         //check whether move is OK, if not -> new iteration
@@ -78,16 +80,14 @@ void TwoPlayersGame::startGameLoop(){
 
         //end game if check mate 
         if(checkMateDetected){
-            api.showBoard();
-            api.showMovesHistory(g.getMovesHistory());
-            api.updatePieces(g);
-            api.showAlert("CHECK MATE, PRESS ANY KEY TO END");
+            apiBase->update(g);
+            apiBase->handleGameEvent("CHECK MATE, PRESS ANY KEY TO END");
             return;
         }
         swapSides();
     } 
     
-    api.saveGame2(
+    apiBase->saveGame(
             b,
             g,
             TWO_PLAYERS_GAME,
@@ -100,6 +100,7 @@ void TwoPlayersGame::startGameLoop(){
 }
 
 
+
 void TwoPlayersGame::handleKickout(const std::pair< Coordinates,Coordinates > & movementFromTo){
     char letter = Board::playField[movementFromTo.second.mRowIndex][movementFromTo.second.mColumnIndex].mPiece
             ->mLetter;
@@ -110,13 +111,11 @@ void TwoPlayersGame::handleKickout(const std::pair< Coordinates,Coordinates > & 
     //end game if king was the target
     if(letter == KING){
         b.movePiece(movementFromTo.first, movementFromTo.second, true);
-        api.showBoard();
-        api.showMovesHistory(g.getMovesHistory());
-        api.updatePieces(g);
+        apiBase->update(g);
         if(playingSide == 1){
-            api.showAlert("GAME OVER , RED WINS, PRESS ANY KEY TO END");
+            apiBase->handleGameEvent("GAME OVER , RED WINS, PRESS ANY KEY TO END");
         }else{
-            api.showAlert("GAME OVER , BLUE WINS, PRESS ANY KEY TO END");
+            apiBase->handleGameEvent("GAME OVER , BLUE WINS, PRESS ANY KEY TO END");
         }
         gameIsOver = true;
     }  

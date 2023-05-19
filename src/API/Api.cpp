@@ -2,35 +2,18 @@
 
 API::API(){}
 
-void API::closeScreen(){
-    getch();
-    ui.endScreen();
+void API::update(Game& g){
+    showBoard();
+    showMovesHistory(g.getMovesHistory());
+    updatePieces(g);
 }
 
-void API::endForLoadingError(){
-    ui.endScreen();
-    std::cout<<"ERROR : Game could not be loaded. Possible reasons:\n";
-    std::cout<<" 1. File \"load.game\" doesn't exist.\n";
-    std::cout<<" 2. Unknown content of the file.\n";
-    std::cout<<" 3. file was modified and the data about game is not valid.\n";
+void API::handleGameEvent(const std::string &message){
+    uiNcurses.setAlert(ui.ALERT_COLOR_CODE, message);
 }
 
-std::pair<Coordinates,Coordinates> API::pickPosition( int sidePlaying, bool & gameIsRunning){
-    std::pair< std::pair<int,int>, std::pair<int,int> > fromTo = ui.pickPosition(sidePlaying);
-
-    if(fromTo.first.first == -1){
-        gameIsRunning = false;
-    }
-    return 
-    {
-        {fromTo.first.first ,fromTo.first.second},
-        {fromTo.second.first, fromTo.second.second}
-    };
-}
-
-
-void API::promotePawn(Coordinates coordinatesOfPawn,  Game & g, Board & b){
-
+void API::promotePawn(Coordinates coordinatesOfPawn, Game &g, Board &b)
+{
     std::shared_ptr<Piece> & ref =  Board::playField[coordinatesOfPawn.mRowIndex][coordinatesOfPawn.mColumnIndex].mPiece;
     int playingSide = ref->mSide;
 
@@ -42,7 +25,7 @@ void API::promotePawn(Coordinates coordinatesOfPawn,  Game & g, Board & b){
 
     std::shared_ptr<Piece> promotedPiece;
 
-    char letter = ui.selectPieceToMoveBack(kicked,playingSide);
+    char letter = uiNcurses.selectPieceToMoveBack(kicked,playingSide);
     switch (letter)
     {
     case QUEEN:
@@ -84,13 +67,39 @@ void API::promotePawn(Coordinates coordinatesOfPawn,  Game & g, Board & b){
     ref = promotedPiece;
 }
 
+void API::closeScreen(){
+    getch();
+    ui.endScreen();
+}
+
+void API::endForLoadingError(){
+    ui.endScreen();
+    std::cout<<"ERROR : Game could not be loaded. Possible reasons:\n";
+    std::cout<<" 1. File \"load.game\" doesn't exist.\n";
+    std::cout<<" 2. Unknown content of the file.\n";
+    std::cout<<" 3. file was modified and the data about game is not valid.\n";
+}
+
+std::pair<Coordinates,Coordinates> API::pickPosition( int sidePlaying, bool & gameIsRunning){
+    std::pair< std::pair<int,int>, std::pair<int,int> > fromTo = uiNcurses.pickPosition(sidePlaying);
+
+    if(fromTo.first.first == -1){
+        gameIsRunning = false;
+    }
+    return 
+    {
+        {fromTo.first.first ,fromTo.first.second},
+        {fromTo.second.first, fromTo.second.second}
+    };
+}
 
 void API::updatePieces( Game & g){
     
     getInfoAboutPlayingPieces(UI::infoAboutPieces);
     getInfoAboutKickedPieces(g);
-    ui.setPlayingPiecesOnScreen();
-    ui.setKickedPiecesOnScreen(infoAboutKickedPieces);
+    uiNcurses.setPlayingPiecesOnScreen();
+    uiNcurses.setKickedPiecesOnScreen(infoAboutKickedPieces);
+
 }
 
 void API::showMovesHistory(const std::list<Game::MoveHistory> & historyMoves){
@@ -119,12 +128,12 @@ void API::showMovesHistory(const std::list<Game::MoveHistory> & historyMoves){
         }
         
     }
-    ui.showMovesHistory(uiMoves);
+    uiNcurses.showMovesHistory(uiMoves);
 }
 
 void API::showBoard(){
     //ui.printAscii();
-    ui.showChessBoard();
+    uiNcurses.showChessBoard();
 }
 
 void API::showAlert( const std::string & message){
@@ -211,7 +220,7 @@ void API::getInfoAboutGameToSave( const Board & b, const Game & g, std::string &
     info.append(strStream.str());
 }
 
-void API::saveGame2(
+void API::saveGame(
     const Board & b,
     const Game & g,
     int gameType,

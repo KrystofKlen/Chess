@@ -5,11 +5,16 @@
 #include "../UI/UI.h"
 #include "../FileOperations/FileOperations.h"
 #include "Converter.h"
+#include "ApiBase.h"
 
-class API{
+class API : public ApiBase{
 public:
     
     API();
+
+    void update(Game & g);
+
+    void handleGameEvent(const std::string & message);
 
     /**
      * Closes screen at the end of application.
@@ -51,14 +56,7 @@ public:
     void getInfoAboutGameToSave( const Board & b, const Game & g, std::string & info);
     void promotePawn(Coordinates coordinatesOfPawn, Game & g, Board & b);
 
-    /**
-     * gameType 1 = one player against PC, 2 = 2palyersGame
-     */
-    void saveGame( const Board & b, const Game & g, const std::string & gameType,
-        const std::string & difficulty,
-        const  std::string & isCheck,const std::string & isCheckMate, const std::string & isStalmate, const std::string & playingSide );
-
-    void saveGame2(
+    void saveGame(
     const Board & b,
     const Game & g,
     int gameType,

@@ -3,14 +3,15 @@
 #include "../Engine/Core/Game.h"
 #include "../Engine/Core/Board.h"
 #include <memory>
+#include "../../API/ApiBase.h"
 
 
 class GameControl{
 public:
     Game g;
     Board b;
-    API api;
-    GameControl();
+    std::shared_ptr<ApiBase> apiBase;
+    GameControl(std::shared_ptr<ApiBase> apiBase);
     virtual ~GameControl(){};
 
     /**

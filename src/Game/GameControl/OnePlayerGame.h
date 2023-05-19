@@ -13,7 +13,7 @@ public:
     /**
      * @param int difficulty
      */
-    OnePlayerGame(int difficulty);
+    OnePlayerGame(int difficulty,std::shared_ptr<ApiBase> apiBase);
     void startGameLoop();
 private:
     std::unique_ptr<ComputerPlayer> ptrComputer;

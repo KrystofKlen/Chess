@@ -12,6 +12,10 @@ public:
      */
     void launch();
 
+    Application(){
+        api = std::make_shared<API>();
+    }
+
 private:
     /**
      * Displays the menu and prompts the user to select an option.
@@ -42,7 +46,7 @@ private:
     void startNewGame(int choiceFromMenu, std::unique_ptr<GameControl> & chessGame);
 
 
-    API api;
+    std::shared_ptr<API> api;
     static const int minTerminalRows = 43;
     static const int minTerminalColumns = 50;
     const std::string PATH_TO_LOAD="load.game";

@@ -10,7 +10,7 @@ void Application::launch(){
 
     std::unique_ptr<GameControl> chessGame;
 
-    int choiceFromMenu = api.selectNewGameOrLoadFromFile();
+    int choiceFromMenu = api->selectNewGameOrLoadFromFile();
     if(choiceFromMenu == END_FLAG){
         return;
     }
@@ -23,7 +23,7 @@ void Application::launch(){
     }
     chessGame->g.findKingsIndex();
     chessGame->startGameLoop();
-    api.closeScreen();
+    api->closeScreen();
 }
 
 bool Application::checkTerminalRequirements(){
@@ -44,7 +44,7 @@ bool Application::loadFromFile(std::unique_ptr<GameControl> &chessGame){
     std::vector<HistoryFileData> vctHistoryFileData;
     int board[8][8];
     
-    bool succesfullyLoaded = api.loadGameInfoFromFile(
+    bool succesfullyLoaded = api->loadGameInfoFromFile(
         PATH_TO_LOAD,
         gameType,
         difficulty,
@@ -58,13 +58,13 @@ bool Application::loadFromFile(std::unique_ptr<GameControl> &chessGame){
         vctHistoryFileData);
         
     if(!succesfullyLoaded){
-        api.endForLoadingError();    
+        api->endForLoadingError();    
         return false;
     }
     if(gameType == ONE_PLAYER_GAME){
-        chessGame = std::make_unique<OnePlayerGame>(difficulty);
+        chessGame = std::make_unique<OnePlayerGame>(difficulty,api);
     }else if (gameType == TWO_PLAYERS_GAME){
-        chessGame = std::make_unique<TwoPlayersGame>();
+        chessGame = std::make_unique<TwoPlayersGame>(api);
     }else {
         std::cout<<"GAME DIFFICULTY HAS WRONG NUMBER, 0 = ONE PLAYER GAME, 2 = TWO PLAYERS GAME\n"<<std::endl;
         return false;
@@ -72,26 +72,26 @@ bool Application::loadFromFile(std::unique_ptr<GameControl> &chessGame){
 
     chessGame->g.clearDefault();
     
-    api.createPiecesFromFileData(chessGame->g, piecesIn, piecesOut);
+    api->createPiecesFromFileData(chessGame->g, piecesIn, piecesOut);
     //api.convertData(chessGame->g, isCheck, isCheckMate, isStalmate, playingSide);
 
     chessGame->setGameState(isCheck, isStalmate, isCheckMate, playingSide);
-    api.addHistoryMoves(vctHistoryFileData,chessGame->g);
+    api->addHistoryMoves(vctHistoryFileData,chessGame->g);
     return true;
 }
 
 void Application::startNewGame(int choiceFromMenu, std::unique_ptr<GameControl> &chessGame){
     //starting a new game
-    choiceFromMenu = api.selectOnePlayerOrTwoPlayers();
+    choiceFromMenu = api->selectOnePlayerOrTwoPlayers();
     if(choiceFromMenu == END_FLAG){
         return;
     }
     if(choiceFromMenu == ONE_PLAYER_GAME){
         //game against computer
-        int difficulty = api.askForDifficulty();
-        chessGame = std::make_unique<OnePlayerGame>(difficulty);
+        int difficulty = api->askForDifficulty();
+        chessGame = std::make_unique<OnePlayerGame>(difficulty,api);
     }else{
         //2 players on one computer
-        chessGame = std::make_unique<TwoPlayersGame>();
+        chessGame = std::make_unique<TwoPlayersGame>(api);
     }
 }
