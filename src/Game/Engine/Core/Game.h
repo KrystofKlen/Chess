@@ -17,7 +17,7 @@ public:
 
     void kickout(Coordinates coordinatesOfPieceToKickOut, std::list<std::shared_ptr<Piece>> & dstToMoveKickedPiece);
 
-    void checkEnPassant(Coordinates selectedPosition, Coordinates pieceCoordinates);
+    bool checkEnPassant(Coordinates selectedPosition, Coordinates pieceCoordinates);
 
     bool detectCastlingAttempt( Coordinates selectedPosition , Coordinates piecePosition);
 

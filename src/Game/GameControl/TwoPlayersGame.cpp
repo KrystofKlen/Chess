@@ -13,39 +13,18 @@ void TwoPlayersGame::startGameLoop(){
     while(gameRunning){
         //refresh UI
         apiBase -> update(g);
-        
         //check game state
-        checkDetected = kingIsInCheck(playingSide);
-        if(checkDetected){
-            checkMateDetected = isCheckMate(playingSide);
-        }
-        if(!checkDetected){
-            stalemateDetected = isStalmate(playingSide);
-        }
-
-        //update UI if game state changed, (+ end if stalmate or check mate)
-        if(checkMateDetected){
-            apiBase -> handleGameEvent("CHECK MATE, PRESS ANY KEY TO END");
-            return;
-        }else if(checkDetected){
-            apiBase -> handleGameEvent("CHECK");
-        }else if(stalemateDetected){
-            apiBase -> handleGameEvent("STALMATE");
-            return;
-        }
+        checkGameState();
+        handleChangedState();
+        if(!gameRunning) return;
         
         //pick piece and position to move to
         std::pair< Coordinates,Coordinates > movementFromTo =  apiBase->pickPosition(playingSide, gameRunning);
         if(!gameRunning) break;
         
         //check whether move is OK, if not -> new iteration
-        bool moveIsValid = g.moveIsValid(movementFromTo.first,movementFromTo.second);
-        if( !moveIsValid) continue;
-        if( Board::playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece->mLetter == KING
-        && !kingWillNotLandIntoCheck(movementFromTo.second, playingSide)){
-            moveIsValid = false;
-        }
-        if(!moveIsValid) continue;
+        bool moveIsValid = validateMove(movementFromTo);
+        if(!moveIsValid) continue; // let user to choose again
 
         //move is OK ... checking for en passant and castling
         g.addMoveToHistory(movementFromTo,b.playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece);
@@ -56,19 +35,16 @@ void TwoPlayersGame::startGameLoop(){
             bool succesfullyCasteled = g.castle(b, movementFromTo.second, movementFromTo.first);
             if(succesfullyCasteled){
                 swapSides();
-                continue;
-            }else{
-                continue;
             }
+            continue;
         }
 
         //checking if we are kicking out opponents piece
         if(g.checkIfPieceWasKickedOut(movementFromTo.second)){
             handleKickout(movementFromTo);
-            if(gameIsOver) return;   
+            if(!gameRunning) return;   
         }
         b.movePiece(movementFromTo.first, movementFromTo.second, true);
-        //g.movesHistory.push_front(movementFromTo);
 
         //promote pawn if it is at the end
         if(!castleDetected){
@@ -118,7 +94,7 @@ void TwoPlayersGame::handleKickout(const std::pair< Coordinates,Coordinates > & 
         }else{
             apiBase->handleGameEvent("GAME OVER , BLUE WINS, PRESS ANY KEY TO END");
         }
-        gameIsOver = true;
+        gameRunning = false;
     }  
 }
 

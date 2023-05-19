@@ -24,19 +24,19 @@ void Game::kickout(Coordinates coordinatesOfPieceToKickOut, std::list<std::share
     posRef.mPiece = nullptr;
  }
 
-void Game::checkEnPassant(Coordinates selectedPosition, Coordinates pieceCoordinates){
+bool Game::checkEnPassant(Coordinates selectedPosition, Coordinates pieceCoordinates){
     Position& positionWithPiece = Board::playField[pieceCoordinates.mRowIndex][pieceCoordinates.mColumnIndex];
     Position& selectedPosRef = Board::playField[selectedPosition.mRowIndex][selectedPosition.mColumnIndex];
     
-    if(positionWithPiece.mPiece->mLetter != PAWN) return;
-    if(!selectedPosRef.mIsFree) return;
+    if(positionWithPiece.mPiece->mLetter != PAWN) return false;
+    if(!selectedPosRef.mIsFree) return false;
 
     const Position* potentialTarget;
     if(positionWithPiece.mPiece->mSide == 2){
-        if(selectedPosition.mRowIndex != 2) return;
+        if(selectedPosition.mRowIndex != 2) return false;
         potentialTarget = &Board::playField[selectedPosition.mRowIndex + 1][selectedPosition.mColumnIndex];
     }else{
-        if(selectedPosition.mRowIndex != 5) return;
+        if(selectedPosition.mRowIndex != 5) return false;
         potentialTarget = &Board::playField[selectedPosition.mRowIndex - 1][selectedPosition.mColumnIndex];
     }
 
@@ -45,10 +45,10 @@ void Game::checkEnPassant(Coordinates selectedPosition, Coordinates pieceCoordin
         potentialTarget->mPiece->mLetter != PAWN ||
         potentialTarget->mPiece->mSide == positionWithPiece.mPiece->mSide ||
         potentialTarget->mPiece->mNumOfStepsDone != 1
-        ) return;
+        ) return false;
     
     kickout(potentialTarget->mPiece->mCoordinates, positionWithPiece.mPiece->mSide == 2 ? piecesOUTplayer1 : piecesOUTplayer2);
-    
+    return true;
 }
 
 bool Game::detectCastlingAttempt( Coordinates selectedPosition , Coordinates piecePosition){

@@ -37,14 +37,12 @@ protected:
     int playingSide;
     bool checkDetected;
     bool checkMateDetected;
-    bool stalemateDetected;   
-    bool gameIsOver = false; 
+    bool stalemateDetected;    
+    bool gameRunning = true;
 
     virtual void handleKickout(const std::pair< Coordinates,Coordinates > & movementFromTo) = 0;
 
     void handlePawnPromotion(const std::pair< Coordinates,Coordinates > & movementFromTo);
-
-    bool kingWillNotLandIntoCheck(Game & g , Coordinates & anticipatedPosition, std::shared_ptr<Piece> king);
 
     bool isCheckMate( int sidePlaying);
 
@@ -55,6 +53,12 @@ protected:
     bool kingWillNotLandIntoCheck( Coordinates & anticipatedPosition, std::shared_ptr<Piece> king );
 
     bool kingWillNotLandIntoCheck(Coordinates & anticipatedPosition, int sidePlaying );
+
+    void checkGameState();
+
+    void handleChangedState();
+
+    bool validateMove(std::pair< Coordinates,Coordinates > movementFromTo);
 
 };
 

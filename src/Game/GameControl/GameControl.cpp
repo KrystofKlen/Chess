@@ -253,4 +253,41 @@ bool GameControl::kingWillNotLandIntoCheck( Coordinates & anticipatedPosition, i
     return kingWillNotLandIntoCheck(anticipatedPosition, king);
 }
 
+void GameControl::checkGameState(){
+    //check game state
+    checkDetected = kingIsInCheck(playingSide);
+    if(checkDetected){
+        checkMateDetected = isCheckMate(playingSide);
+    }
+    if(!checkDetected){
+        stalemateDetected = isStalmate(playingSide);
+    }
+}
 
+void GameControl::handleChangedState(){
+    //update UI if game state changed, (+ end if stalmate or check mate)
+    if(checkMateDetected){
+        apiBase -> handleGameEvent("CHECK MATE, PRESS ANY KEY TO END");
+        gameRunning = false;
+        return;
+    }else if(checkDetected){
+        apiBase -> handleGameEvent("CHECK");
+        return;
+    }else if(stalemateDetected){
+        apiBase -> handleGameEvent("STALMATE");
+        gameRunning = false;
+        return;
+    }
+}
+
+bool GameControl::validateMove(std::pair<Coordinates, Coordinates> movementFromTo){
+    //check whether move is OK, if not -> new iteration
+    bool moveIsValid = g.moveIsValid(movementFromTo.first,movementFromTo.second);
+    if(!moveIsValid) return false;
+    if( Board::playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece->mLetter == KING
+    && !kingWillNotLandIntoCheck(movementFromTo.second, playingSide))
+        moveIsValid = false;
+    if(!moveIsValid) return false;
+
+    return true;
+}
