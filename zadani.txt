@@ -1,0 +1,128 @@
+Tato semestrální práce patří do kategorie her. Vaším cílem je vytvořit konkrétní hru, která bude modifikovatelná prostřednictvím konfiguračních souborů. Nesnažte se všechny hodnoty definovat přímo v kódu (a to ani pomocí konstant). Umístěte je do konfiguračních souborů (jednoho nebo více), které váš program bude načítat.
+
+Vaším cílem má být implementovat klasickou hru Šachy. Není nutné implementovat jen ty známé šachy, ale případně se inspirovat nějakou jejich variantou jakou jsou asijské šachy. V tom případě je potřeba pravidla dostatečně dobře popsat v zadání. A zároveň je nutné za každé z pravidel mít vhodnou alternativu, aby nedošlo k přehnanému zjednodušení zadání.
+
+Implementujte následující varianty:
+
+    tutoriál, který naučí hráče jednotlivé prvky a pravidla hry,
+
+    pro 2 hráče na jednom počítači,
+
+    pro hru proti počítači.
+
+Hra musí splňovat následující funkcionality:
+
+    Dodržování všech pravidel vč. rošády, braní mimochodem, proměna pěsce
+
+        Pokud implementujete alternativní variantu, ujistěte se, že za tyto 3 speciální pohyby máte dostatečnou náhradu.
+
+    Hra musí řádně oznamovat stav hry a případně její konec (šach, mat, pat) a výsledek (kdo vyhrál).
+
+    Implementujte alespoň 3 druhy umělé inteligence (náhodné tahy nestačí).
+
+        Jeden druh musí být škálovatelná umělá inteligence pomocí algoritmu minimax. Škálování pak probíhá na úrovni hloubky prohledávacího stromu.
+
+    Hra je konfigurovatelná ze souboru:
+
+        umístění uložených her na disku,
+
+        zahájení šachových partií pro umělou inteligenci,
+
+        texty, rozestavění (příp. očekávané tahy) k tutoriálu.
+
+    Rozehranou hru lze uložit do souboru a následně ze souboru načíst.
+
+=============================================================================================================================================================
+PA2 Semestrální práce, Kryštof Klen
+Téma - Šachy
+
+----------------------------------------------------------------------------------
+Architektura hry:
+Ve hře používám NCURSES, díky čemuž vytvořím v terminálu GUI, terminál musí mít povolené barvy,
+jinak od sebe nepudou některé věci rozlišit.
+
+Až na drobnosti je semestrální práce skoro hotová.
+
+Úvod:
+    Klasická hra šachy.
+    Hra je rozdělena do adresárů, ve kterých se nacházejí třídy vykonávající kód
+    odpovídající názvu adresáře. (např. v adresáři FileOperations jsou třídz a funkce související
+    s čtením, zpracováním a ukládáním dat hry do souboru).
+    K dispozici je i soubor file.conf, kde si uživatel může nadefinovat proměnné, které budou
+    při startu programu ze souboru načteny, uživatel tak může např. ovlivnit chování AI.
+
+Nejdůležitejší adresáře:
+
+UI:
+	Obsahuje vše, co nějakým způsobem používá NCURSES.
+	Účelem kódu v tomto adresáři je jen čistě zobrazení
+	a UI. Když např. hráč chce provést nepatný tah, tak 
+	kód v UI mu v tom nezabrání. O to se starají třídy
+	v jiných příslušných adresářích.
+	Jediné, co se v UI kontroluje, jsou věci, které jsou 
+	s UI přímo spjaté (např. aby člověk když vybírá pozici 
+	nevyjel z obrazovky atd..)
+
+FileOperations: Obsahuje kód sloužící k zapisování, čtení ze souboru a parsování dat.
+
+Game: Obsahuje další podadresáře, vše co souvisí čistě s logikou šachů (pohyby, minmax, pravidla ...) je zde.
+
+API: Propojuje FileOperations, Game a UI.
+
+Application: Taková "obalovací/zastiňovací trída", abz mohla hra být přehledně spustitelná z main.ComputerPlayer
+
+config: Souvisí s prací s konfiguračním souborem file.conf, a nastavením proměnných pro program.
+
+-----------------------------------------------------------------------
+Polymorfismus 1:
+	Základem všeho je Piece.h, to reprezentuje libovolnou figurku na šachovnici.
+	Když si hráč vybere na šachovnici figurku, se kterou chce hrát, tak se
+	musí ověřit, že tah je v souladu s pravidly.
+	To se dělá jednoduše, Piece.h má virtuální metodu 
+	void getPossibleMovePositions(std::list<std::pair<int,int>> & possiblePositions),
+	tato metoda, jak název napovídá vygeneruje tahové možnosti figurky.
+    Ty má ale každá figurka jiné, právě tady uplatním polymorfismus.
+	Z Piece dědí pak konkrétní figurky (King,Queen,Pawn...), každá z těchto 
+	tříd má implementaci getPossibleMovePositions jinou.
+	Třída Board má v sobě static Position playField [8][8], což je 2-rozměrné pole, které obsahuje
+	Position obsahuje různé indikátory (např jestli je pozice volná atd.), které usnadňují 
+	implementaci pravidel, každá position má Piece* mPiece -- pointer na dynamicky alokovaný
+	Piece, která může být jakákoliv (King,Queen, Pawn ...)
+
+	Při kontrole, zda hráč udělal tah v souladu s pravidly:
+	1) z UI se vezmou souřadnice
+	2) v playField se najde podle souřadnic Position
+	3) Position má pointer na Piece.
+	4) Zavolá se piece.getPossiblePositions
+	5) Díky dynamické vazbě a polymorfnímu chování se odkáže na Třídu, která 
+	z Figure dědí, a která má tuto metodu implementovanou tak, jak ji daný typ figurky vyžaduje
+	6) Zkontroluje se, že uživatelem vybraná pozice na kterou chce táhnout je 
+	v std::list<std::pair<int,int>>  possiblePositions, který je parametrem
+	void getPossibleMovePositions(std::list<std::pair<int,int>> & possiblePositions)
+	
+	Polymorfismus zde výrazně ulehčuje implementaci pravidel.
+	
+Polymorfismus 2:
+	Také v UI, princip podobný jako u getPossibleMovePositions(std::list<std::pair<int,int>> & possiblePositions),
+     akorát když potřebuju zobrazit figurky (každá figurka reprezentována písmenem..
+	King = K, Queen = Q, Pawn = P...), tak akorát zavolám figure.mLetter, kde z piece dědí King,
+	Queen.. a písmeno reprezentující figurku se díky dynamické vazbě doplní.
+
+Polymorfismus 3: 
+    Analogicky jako u předchozího případu, tentokrát v algorytmu min max použiju piece.getRank, což mi 
+    vrátí rank (díky polymorfismu) konkrétní figurky.
+
+Polymorfismus 4:
+    Při startu hry se volá funkce startGameLoop(), tato funkce je deklarovaná v GameControl, ze které dědí 
+    OnePlayerGame a TwoPlayersGame.
+    Díky polymorfismu se zavolá správná implementace (podle toho zda si hráč vybere hru proti PC, nebo hru ě hráčů).
+
+Polymorfismus 5:
+    funkce makeNextMove() v ComputerPlayer, má různé implementace podle toho, jakou hráč zvolil obtížnost hry.
+-----------------------------------------------------------------------------------------------
+úrovně AI:
+	1) easy - naprosto náhodné tahy
+	2) mid - náhodné tahy, ale pokud půjde někoho vyhodit, tak se vyhodí 
+    (vyhodí se hodnotnější figurka, hodnoty  definovatelné v file.conf).
+	3) diffuct - použití MINMAX (hloubka modifikovatelná v file.conf)	
+

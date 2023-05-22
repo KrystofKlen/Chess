@@ -52,6 +52,8 @@ protected:
 
     bool kingWillNotLandIntoCheck( Coordinates & anticipatedPosition, std::shared_ptr<Piece> king );
 
+    bool checkIfKingStillInCheck(Coordinates &anticipatedPosition, std::shared_ptr<Piece> pieceMoving,std::shared_ptr<Piece> king);
+
     bool kingWillNotLandIntoCheck(Coordinates & anticipatedPosition, int sidePlaying );
 
     void checkGameState();

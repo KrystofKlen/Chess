@@ -233,6 +233,64 @@ bool GameControl::kingWillNotLandIntoCheck( Coordinates & anticipatedPosition, s
     return true;
 }
 
+bool GameControl::checkIfKingStillInCheck(Coordinates &anticipatedPosition, std::shared_ptr<Piece> pieceMoving,std::shared_ptr<Piece> king){
+
+    Coordinates currentPosition = pieceMoving->mCoordinates;
+    int kingSide = king->mSide;
+
+    Position & anticPosRef = Board::playField[anticipatedPosition.mRowIndex][anticipatedPosition.mColumnIndex];
+
+    std::shared_ptr<Piece> tmpBackup = nullptr;
+
+    //clear position if a opponents piece present, save info to tmp
+    if(
+       !anticPosRef.mIsFree &&
+       anticPosRef.mPiece->mSide != kingSide
+        ){
+            tmpBackup = anticPosRef.mPiece;
+        }
+
+    b.movePiece(currentPosition, anticipatedPosition, false);
+
+    std::list<Coordinates> opponentsMoves;
+  
+    //fill opponentsPossibleMoves
+    for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
+        for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
+            
+            const Position & curPosRef = Board::playField[rowIndex][columnIndex];
+            if( !curPosRef.mIsFree && kingSide != curPosRef.mPiece->mSide ){
+
+                if(curPosRef.mPiece->mLetter == PAWN){
+                    curPosRef.mPiece->mSide == 1 ? 
+                    addPawnPossibleKickoutsSide1(opponentsMoves, *curPosRef.mPiece) 
+                    : addPawnPossibleKickoutsSide2(opponentsMoves, *curPosRef.mPiece);
+                }else{
+                    curPosRef.mPiece->getPossibleMovePositions(opponentsMoves);
+                }
+
+            }
+        }    
+    }
+
+    //move king back
+    b.movePiece(anticipatedPosition, currentPosition, false);
+
+    //reset position the king was at
+    anticPosRef.mPiece = tmpBackup;
+    if(tmpBackup != nullptr)
+        anticPosRef.mIsFree = false;
+
+    //find at discovered position if opponent can target king
+    for(Coordinates opponentsMove : opponentsMoves){
+        if(opponentsMove == king->mCoordinates){  
+            return true;
+        }
+    }
+    
+    return false;
+}
+
 bool GameControl::kingWillNotLandIntoCheck( Coordinates & anticipatedPosition, int sidePlaying ){
 
     std::shared_ptr<Piece> king;
@@ -289,5 +347,20 @@ bool GameControl::validateMove(std::pair<Coordinates, Coordinates> movementFromT
         moveIsValid = false;
     if(!moveIsValid) return false;
 
+    
+    if(checkDetected){
+        std::shared_ptr<Piece> pKing = nullptr;
+        for(auto & piece : playingSide == 1 ? g.piecesINplayer1 : g.piecesINplayer2){
+            if(piece->mLetter == KING && piece && piece->mSide == playingSide){
+                pKing = piece;
+                break;
+            }
+        }
+         if(
+        Board::playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece->mLetter != KING &&
+        checkIfKingStillInCheck(movementFromTo.second,Board::playField[movementFromTo.first.mRowIndex][movementFromTo.first.mColumnIndex].mPiece,pKing ) ){
+            return false;
+        } 
+    }
     return true;
 }

@@ -7,8 +7,6 @@ TwoPlayersGame::TwoPlayersGame(std::shared_ptr<ApiBase> apiBase):GameControl(api
 void TwoPlayersGame::startGameLoop(){
 
     Board::setPiecesOnBoard(g.piecesINplayer1, g.piecesINplayer2);
-    
-    bool gameRunning = true;
 
     while(gameRunning){
         //refresh UI
