@@ -22,7 +22,7 @@ enum CastlingSide {SHORTER_SIDE, LONGER_SIDE};
  * this function can detect whether position is blocked
  * @return true = loop adding positions to go should be left, because position is blocked, false = OK, position can be added
  */
-bool breakBecausePositionBlocked(int x, int y, int side, std::list<Coordinates> & possiblePositions);
+bool breakBecausePositionBlocked(Coordinates coordinates, int side, std::list<Coordinates> & possiblePositions);
 
 //Various function to generate moves
 void addMovesVerticalAndHorizontal(std::list<Coordinates> & possiblePositions, const Piece & piece, int rowChange, int colChange);
