@@ -35,7 +35,7 @@ void UI::showChessBoard(){
 
     initWindows();
 
-    //printAscii();
+    printAscii();
     printManualGame();
     printChessBoardDiscription();
 
@@ -131,6 +131,14 @@ std::pair< std::pair<int,int>, std::pair<int,int> > UI::pickPosition(int sidePla
             setSelected( sidePlaying,selectedField.charRepresentingPiece);
             selectedCoordinatesWithPieceToMove = {rowSelected,colSelected};
             break;
+        case 'h':
+            if(board[selectedCoordinatesWithPieceToMove.first][selectedCoordinatesWithPieceToMove.second].mSide != sidePlaying){   
+                //field with no piece, or piece of other player selected  
+                printPieceManual(' ');
+                break;
+            }
+            printPieceManual(selectedField.charRepresentingPiece);
+
         case 'm':
             if(board[selectedCoordinatesWithPieceToMove.first][selectedCoordinatesWithPieceToMove.second].mSide != sidePlaying){   
                 //field with no piece, or piece of other player selected  
@@ -425,8 +433,9 @@ char UI::selectPieceToMoveBack(const std::vector<std::pair<char,int>> & playersK
 }
 
 void UI::printAscii(){
+     int rowFrom = 3 + 8*winSize + 6 + 3;
     mvwprintw
-    (stdscr,2,0,"  ####  #    # ######  ####   ####  \n #    # #    # #      #      #      \n #      ###### #####   ####   #### \n #      #    # #           #      # \n #    # #    # #      #    # #    # \n  ####  #    # ######  ####   ####  \n");
+    (stdscr,rowFrom,0,"  ####  #    # ######  ####   ####  \n #    # #    # #      #      #      \n #      ###### #####   ####   #### \n #      #    # #           #      # \n #    # #    # #      #    # #    # \n  ####  #    # ######  ####   ####  \n");
     refresh();   
 }
 
@@ -441,11 +450,12 @@ void UI::printManualMenu(){
 
 void UI::printManualGame(){
     int rowFrom = 3 + 8*winSize + 6 + 3; 
-    mvprintw( rowFrom++, 0, "- MOVE WITH ARROWS");
-    mvprintw( rowFrom++, 0, "- q / RESIZE TERMINAL = QUIT AND SAVE");
-    mvprintw( rowFrom++, 0, "- m = MOVE");
-    mvprintw( rowFrom++, 0, "- space = SELECT");
-    mvprintw( rowFrom++, 0, "- CTRL+C = QUIT WITHOUT SAVING");
+    mvprintw( rowFrom++, 50, "- MOVE WITH ARROWS");
+    mvprintw( rowFrom++, 50, "- q / RESIZE TERMINAL = QUIT AND SAVE");
+    mvprintw( rowFrom++, 50, "- m = MOVE");
+    mvprintw( rowFrom++, 50, "- h = PIECE MANUEL (PIECE MUST BE SELECTED)");
+    mvprintw( rowFrom++, 50, "- space = SELECT");
+    mvprintw( rowFrom++, 50, "- CTRL+C = QUIT WITHOUT SAVING");
     refresh();
 }
 
@@ -460,6 +470,44 @@ void UI::freeWindows(){
     delwin(pWinDown);
     delwin(pWinChessDiscription);
     delwin(winMovesHistory);
+}
+
+void UI::printPieceManual(char selected){
+    switch (selected)
+    {
+    case KING:
+        printPieceInfo("King: The King is the most important piece in chess. Its primary objective is to avoid being captured by the opponent.\n The King can move one square in any direction—horizontally, vertically, or diagonally.\n\n\n                                                                       "); 
+        break;
+    
+    case QUEEN:
+        printPieceInfo("Queen: The Queen is the most powerful piece in chess.\n It combines the movements of a Rook and a Bishop.\n The Queen can move in any direction—horizontally, vertically, or diagonally—across any number of squares.\n\n                                                                 ");
+        break;
+
+    case ROCK:
+        printPieceInfo("Rook: The Rook is a powerful piece that moves horizontally or vertically across the board.\n It can move any number of squares in a straight line, as long as there are no pieces blocking its path. \n\n                                                                                  ");
+        break;
+    
+    case BISHOP:
+        printPieceInfo("Bishop: The Bishop is a piece that moves diagonally across the board.\n It can move any number of squares in a diagonal line, as long as there are no pieces blocking its path.\n Each player has two Bishops, one on a light square and one on a dark square.   \n\n                      ");
+        break;
+    case KNIGHT:
+        printPieceInfo("Knight: The Knight is a unique piece that moves in an L shape.\n It can move two squares in one direction (horizontally or vertically) and then one square perpendicular to that direction.\n The Knight is the only piece that can jump over other pieces. \n\n                           ");
+        break;
+
+    case PAWN:
+    printPieceInfo("Pawn: Pawns are the smallest and most numerous pieces on the board.\n They are positioned in a row in front of the other pieces.\n Pawns move forward one square at a time, but they capture diagonally.\n On their first move, Pawns have the option to move forward two squares.           ");
+        break;
+    
+    default:
+        printPieceInfo("\n\n\n\n\n\n");
+        break;
+    }
+}
+
+void UI::printPieceInfo(const char* msg){
+    mvwprintw
+        (stdscr,30,0,msg);
+        refresh(); 
 }
 
 void UI::initWindows(){

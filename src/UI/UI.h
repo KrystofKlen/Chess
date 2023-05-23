@@ -5,6 +5,7 @@
 #include<list>
 #include <vector>
 #include<iterator>
+#include "../config/ConstantsEngine.h"
 
 class UI{
 
@@ -40,6 +41,8 @@ public:
     void printManualGame();
     void initWindows();
     void freeWindows();
+    void printPieceManual(char selected);
+    void printPieceInfo(const char*);
 
     static const int BACKGROUND_PAIR_CODE = 1;
     static const int YELLOW_PAIR_CODE = 2;

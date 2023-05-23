@@ -48,7 +48,7 @@ private:
 
 
     std::shared_ptr<API> api;
-    static const int minTerminalRows = 43;
-    static const int minTerminalColumns = 50;
+    static const int minTerminalRows = 45;
+    static const int minTerminalColumns = 110;
     const std::string PATH_TO_LOAD="load.game";
 };

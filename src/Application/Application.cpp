@@ -4,7 +4,7 @@ void Application::launch(){
 
     //check condition for game
     if(!checkTerminalRequirements()){
-        std::cout<<"YOUR TERMINAL DOES NOT FULFIL THE MINIMUM SIZE (50 ROWS, 43 COLUMNS)"<<std::endl;
+        std::cout<<"YOUR TERMINAL DOES NOT FULFIL THE MINIMUM SIZE (45 ROWS, 110 COLUMNS)"<<std::endl;
         return;
     }
 
