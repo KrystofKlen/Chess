@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include "../Game/GameControl/OnePlayerGame.h"
 #include "../Game/GameControl/TwoPlayersGame.h"
+#include "../Game/GameControl/Tutorial.h"
 #include "../API/Api.h"
 
 class Application{

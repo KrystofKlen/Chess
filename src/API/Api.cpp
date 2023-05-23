@@ -353,7 +353,7 @@ bool API::loadGameInfoFromFile(
 
 int API::selectNewGameOrLoadFromFile(){
     
-    std::string choice = ui.showMenu({"NEW GAME", "LOAD GAME", "LOAD UNVERIFIED GAME"});
+    std::string choice = ui.showMenu({"NEW GAME", "LOAD GAME"});
     if(choice.compare("END") == 0){
         return END_FLAG;
     }
@@ -363,12 +363,13 @@ int API::selectNewGameOrLoadFromFile(){
 
 int API::selectOnePlayerOrTwoPlayers(){
 
-    std::string choice = ui.showMenu({"ONE PLAYER", "TWO PLAYERS"});
+    std::string choice = ui.showMenu({"ONE PLAYER", "TWO PLAYERS","TUTORIAL"});
     if(choice.compare("END") == 0){
         return END_FLAG;
     }
     if(choice.compare("ONE PLAYER") == 0) return ONE_PLAYER_GAME;
-    else return TWO_PLAYERS_GAME;
+    else if (choice.compare("TWO PLAYERS") == 0) return TWO_PLAYERS_GAME;
+    else return TUTORIAL;
 }
 
 int API::askForDifficulty(){

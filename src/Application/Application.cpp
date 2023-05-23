@@ -90,8 +90,10 @@ void Application::startNewGame(int choiceFromMenu, std::unique_ptr<GameControl> 
         //game against computer
         int difficulty = api->askForDifficulty();
         chessGame = std::make_unique<OnePlayerGame>(difficulty,api);
-    }else{
+    }else if (choiceFromMenu == TWO_PLAYERS_GAME){
         //2 players on one computer
         chessGame = std::make_unique<TwoPlayersGame>(api);
+    }else{
+        chessGame = std::make_unique<Tutorial>(api);
     }
 }

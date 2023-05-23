@@ -4,6 +4,7 @@ static const int MID_LEVEL = 2;
 static const int DIFFICULT_LEVEL = 3;
 static const int ONE_PLAYER_GAME = 4;
 static const int TWO_PLAYERS_GAME = 5;
+static const int TUTORIAL = 6;
 static const char KING = 'K';
 static const char QUEEN = 'Q';
 static const char BISHOP = 'B';
