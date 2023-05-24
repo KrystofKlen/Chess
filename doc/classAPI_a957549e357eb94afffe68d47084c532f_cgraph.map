@@ -1,8 +1,0 @@
-<map id="API::update" name="API::update">
-<area shape="rect" id="node1" title=" " alt="" coords="5,56,96,83"/>
-<area shape="rect" id="node2" href="$classAPI.html#a3e644d12d2ebacbad06fcd30e0dd5e96" title=" " alt="" coords="167,5,285,32"/>
-<area shape="rect" id="node3" href="$classAPI.html#a615fe3847d7a2ba60f5658a111f3b0f8" title=" " alt="" coords="144,56,308,83"/>
-<area shape="rect" id="node4" href="$classAPI.html#ae2b3be0c9d2b51d6a02f958c1dd3e3f2" title=" " alt="" coords="161,107,291,133"/>
-<area shape="rect" id="node5" href="$classAPI.html#a797fc90eb7ee468cdc3854b974ecc505" title="Get information about playing pieces on the board." alt="" coords="356,77,563,104"/>
-<area shape="rect" id="node6" href="$classAPI.html#acefa4afb6cda741fe5d5e6f300370ce4" title="Get information about the pieces that have been kicked out of the board during the game." alt="" coords="375,129,544,170"/>
-</map>

@@ -1,9 +1,0 @@
-digraph "UI"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{UI\n|+ infoAboutPieces\l+ BACKGROUND_PAIR_CODE\l+ YELLOW_PAIR_CODE\l+ WHITE_PAIR_CODE\l+ SELECTED_FIELD_CODE\l+ PLAYER_1_COLOR_CODE\l+ PLAYER_2_COLOR_CODE\l+ ALERT_COLOR_CODE\l- winSize\l- CHESS_BOARD_STATS_OFFSET\l- CHESS_BOARD_START_X\l- CHESS_BOARD_START_Y\l- STATS_WIN_X\l- STATS_Y\l- HISTORY_X\l- HISTORY_Y\l- KICKED_FIGURES_LINES\l- KICKED_FIGURES_COLLS\land 10 more...\l|+ endScreen()\l+ printChessBoardDiscription()\l+ showMovesHistory()\l+ setSelected()\l+ drawDownWindow()\l+ showChessBoard()\l+ pickPosition()\l+ setPlayingPiecesOnScreen()\l+ setKickedPiecesOnScreen()\l+ setAlert()\land 10 more...\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
-  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" -board" ,arrowhead="odiamond",fontname="Helvetica"];
-  Node2 [label="{UI::Field\n|+ mPtrWindow\l+ mColorPairCode\l+ charRepresentingPiece\l+ mSide\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structUI_1_1Field.html",tooltip=" "];
-}

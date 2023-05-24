@@ -1,5 +1,0 @@
-<map id="GameControl" name="GameControl">
-<area shape="rect" id="node1" title=" " alt="" coords="51,5,265,479"/>
-<area shape="rect" id="node2" href="$classOnePlayerGame.html" title=" " alt="" coords="5,527,145,663"/>
-<area shape="rect" id="node3" href="$classTwoPlayersGame.html" title=" " alt="" coords="169,541,315,648"/>
-</map>
