@@ -1,0 +1,22 @@
+digraph "src/Game/GameControl/GameControl.h"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="src/Game/GameControl\l/GameControl.h",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="src/Game/GameControl\l/GameControl.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$GameControl_8cpp.html",tooltip=" "];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="src/Game/GameControl\l/OnePlayerGame.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$OnePlayerGame_8h.html",tooltip=" "];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="src/Game/GameControl\l/OnePlayerGame.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$OnePlayerGame_8cpp.html",tooltip=" "];
+  Node3 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="src/Application/Application.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$Application_8h.html",tooltip=" "];
+  Node5 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="src/Application/Application.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$Application_8cpp.html",tooltip=" "];
+  Node1 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="src/Game/GameControl\l/TwoPlayersGame.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$TwoPlayersGame_8h.html",tooltip=" "];
+  Node7 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="src/Game/GameControl\l/TwoPlayersGame.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$TwoPlayersGame_8cpp.html",tooltip=" "];
+  Node7 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

@@ -37,7 +37,8 @@ protected:
     int playingSide;
     bool checkDetected;
     bool checkMateDetected;
-    bool stalemateDetected;    
+    bool stalemateDetected;   
+    bool drawDetected = false; 
     bool gameRunning = true;
 
     virtual void handleKickout(const std::pair< Coordinates,Coordinates > & movementFromTo) = 0;
@@ -65,6 +66,9 @@ protected:
     void findKing(std::shared_ptr<Piece> & king,int sidePlaying);
 
     void findOpponentsPossibleMoves(std::list<Coordinates> & opponentsMoves, int kingSide);
+
+    // if data loaded from external source, this function is expecting this data to make sence!! -> there must be 2 kings.
+    bool isDraw();
 
 };
 

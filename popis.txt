@@ -90,4 +90,6 @@ Polymorfismus 5:
 	2) mid - náhodné tahy, ale pokud půjde někoho vyhodit, tak se vyhodí 
     (vyhodí se hodnotnější figurka, hodnoty  definovatelné v file.conf).
 	3) diffuct - použití MINMAX (hloubka modifikovatelná v file.conf)	
+-----------------------------------------------------------------------------------------------
+Hra nabízí také tutoriál, kde je hráč upozorněn na figurkz, které může vyhodit a které může vyhodit.
 

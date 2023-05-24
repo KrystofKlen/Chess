@@ -1,0 +1,11 @@
+digraph "src/Game/GameControl" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_b43036362fece0f978c3c8156df55d19 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="Game" fontname="Helvetica", fontsize="10", URL="dir_b43036362fece0f978c3c8156df55d19.html"]
+  dir_5df036ac0ebcc8de0fcebad1ec89f8dc [shape=box, label="GameControl", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_5df036ac0ebcc8de0fcebad1ec89f8dc.html"];
+  }
+  dir_32137984f496da46263d816e0d6dc804 [shape=box label="API" URL="dir_32137984f496da46263d816e0d6dc804.html"];
+  dir_5df036ac0ebcc8de0fcebad1ec89f8dc->dir_32137984f496da46263d816e0d6dc804 [headlabel="1", labeldistance=1.5 headhref="dir_000005_000001.html"];
+}

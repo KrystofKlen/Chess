@@ -1,0 +1,14 @@
+digraph "Converter::createPieceFromFileData"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="RL";
+  Node1 [label="Converter::createPieceFrom\lFileData",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Creates a new piece from the given file data."];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="Converter::convertHistory\lMoveFileData",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classConverter.html#a005b4516b7f41ddc80fd22d2f0670176",tooltip="Converts a HistoryFileData struct to a MoveHistory object."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="API::addHistoryMoves",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classAPI.html#a3b2b35f5c42788aeb36a67e89fc5a520",tooltip=" "];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="API::createPiecesFromFileData",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classAPI.html#a8c250f00fa9be75467d50b1c6084b25a",tooltip=" "];
+}

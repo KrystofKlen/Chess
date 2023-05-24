@@ -65,7 +65,10 @@ bool Application::loadFromFile(std::unique_ptr<GameControl> &chessGame){
         chessGame = std::make_unique<OnePlayerGame>(difficulty,api);
     }else if (gameType == TWO_PLAYERS_GAME){
         chessGame = std::make_unique<TwoPlayersGame>(api);
-    }else {
+    }else if(gameType == TUTORIAL){
+        chessGame = std::make_unique<Tutorial>(api);
+    }
+    else {
         std::cout<<"GAME DIFFICULTY HAS WRONG NUMBER, 0 = ONE PLAYER GAME, 2 = TWO PLAYERS GAME\n"<<std::endl;
         return false;
     }

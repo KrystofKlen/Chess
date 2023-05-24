@@ -242,17 +242,6 @@ bool GameControl::kingWillNotLandIntoCheck( Coordinates & anticipatedPosition, i
 
     std::shared_ptr<Piece> king;
 
-    //find king
-    // for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
-    //     for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
-    //         const Position & posRef = Board::playField[rowIndex][columnIndex];
-    //         if( !posRef.mIsFree && posRef.mPiece->mLetter == KING && posRef.mPiece->mSide == sidePlaying){
-    //             king = posRef.mPiece;
-    //             rowIndex = Board::BOARD_SIZE;
-    //             break;
-    //         }
-    //     }     
-    // }
     findKing(king,sidePlaying);
 
     return kingWillNotLandIntoCheck(anticipatedPosition, king);
@@ -260,6 +249,9 @@ bool GameControl::kingWillNotLandIntoCheck( Coordinates & anticipatedPosition, i
 
 void GameControl::checkGameState(){
     //check game state
+    drawDetected = isDraw();
+    if(drawDetected) return;
+
     checkDetected = kingIsInCheck(playingSide);
     if(checkDetected){
         checkMateDetected = isCheckMate(playingSide);
@@ -271,7 +263,11 @@ void GameControl::checkGameState(){
 
 void GameControl::handleChangedState(){
     //update UI if game state changed, (+ end if stalmate or check mate)
-    if(checkMateDetected){
+    if(drawDetected){
+        apiBase -> handleGameEvent("DRAW, PRESS ANY KEY TO END");
+        gameRunning = false;
+    }
+    else if(checkMateDetected){
         apiBase -> handleGameEvent("CHECK MATE, PRESS ANY KEY TO END");
         gameRunning = false;
         return;
@@ -342,4 +338,8 @@ void GameControl::findOpponentsPossibleMoves(std::list<Coordinates> &opponentsMo
             }
         }    
     }
+}
+
+bool GameControl::isDraw(){
+    return (g.piecesINplayer1.size() == 1 && g.piecesINplayer2.size() == 1);
 }

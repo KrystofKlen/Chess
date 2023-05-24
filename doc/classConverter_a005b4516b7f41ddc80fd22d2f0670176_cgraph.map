@@ -1,0 +1,4 @@
+<map id="Converter::convertHistoryMoveFileData" name="Converter::convertHistoryMoveFileData">
+<area shape="rect" id="node1" title="Converts a HistoryFileData struct to a MoveHistory object." alt="" coords="5,5,177,47"/>
+<area shape="rect" id="node2" href="$classConverter.html#acba4ac4e7e6fdd6583b36bd973bb8124" title="Creates a new piece from the given file data." alt="" coords="225,5,412,47"/>
+</map>
