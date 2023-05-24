@@ -107,7 +107,7 @@ void Tutorial::makeMoveForPC(){
 }
 
 void Tutorial::sendHelpMessage(){
-    std::list<char> possibleKickoutsPlayer1,  possibleKickoutsPlayer2;
+    std::set<char> possibleKickoutsPlayer1,  possibleKickoutsPlayer2;
     std::list<Coordinates> possibleMovesPlayer1,possibleMovesPlayer2;
 
     for(auto & piece : g.piecesINplayer1){
@@ -118,20 +118,24 @@ void Tutorial::sendHelpMessage(){
         piece->getPossibleMovePositions(possibleMovesPlayer2);
     }
 
-    for(auto targettable : possibleMovesPlayer1){
-        const Position & posRef = Board::playField[targettable.mRowIndex][targettable.mColumnIndex];
-        if(!posRef.mIsFree && posRef.mPiece->mSide == 2){
-            possibleKickoutsPlayer1.push_back(posRef.mPiece->mLetter);
-        }
-    }
+    findPossibleKickouts(possibleMovesPlayer1,possibleKickoutsPlayer1,1);
+    findPossibleKickouts(possibleMovesPlayer2,possibleKickoutsPlayer2,2);
 
-    for(auto targettable : possibleMovesPlayer2){
+    std::stringstream ss;
+    createMessage(ss,possibleKickoutsPlayer1,possibleKickoutsPlayer2);
+    apiBase->handleGameEvent(ss.str());
+}
+
+void Tutorial::findPossibleKickouts(const std::list<Coordinates> & possibleMovesPlayer, std::set<char> &possibleKickoutsPlayer, int side){
+    for(auto targettable : possibleMovesPlayer){
         const Position & posRef = Board::playField[targettable.mRowIndex][targettable.mColumnIndex];
-        if(!posRef.mIsFree && posRef.mPiece->mSide == 1){
-            possibleKickoutsPlayer2.push_back(posRef.mPiece->mLetter);
+        if(!posRef.mIsFree && posRef.mPiece->mSide != side){
+            possibleKickoutsPlayer.insert(posRef.mPiece->mLetter);
         }
     }
-    std::stringstream ss;
+}
+
+void Tutorial::createMessage(std::stringstream &ss, const std::set<char> &possibleKickoutsPlayer1, const std::set<char> &possibleKickoutsPlayer2){
     ss << "Kick: ";
 
     for (auto it = possibleKickoutsPlayer1.begin(); it != possibleKickoutsPlayer1.end(); ++it) {
@@ -149,7 +153,4 @@ void Tutorial::sendHelpMessage(){
             ss << ",";
         }
     }
-
-
-    apiBase->handleGameEvent(ss.str());
 }

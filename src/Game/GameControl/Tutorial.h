@@ -1,4 +1,5 @@
 #pragma once
+#include <set>
 #include "GameControl.h"
 
 #include "../Engine/AI/ComputerPlayer.h"
@@ -22,5 +23,9 @@ private:
     void makeMoveForPC();
 
     void sendHelpMessage();
+
+    void findPossibleKickouts(const std::list<Coordinates> & possibleMovesPlayer, std::set<char> & possibleKickoutsPlayer, int side);
+
+    void createMessage(std::stringstream & ss, const std::set<char> & possibleKickoutsPlayer1, const std::set<char> & possibleKickoutsPlayer2);
 
 };
