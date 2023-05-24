@@ -34,18 +34,7 @@ bool GameControl::isCheckMate(int sidePlaying){
     const std::list<std::shared_ptr<Piece>>* pOpponentPiecesIn;
     sidePlaying == 1 ? pOpponentPiecesIn =  &g.piecesINplayer2 : pOpponentPiecesIn = &g.piecesINplayer1;
 
-    //find king
-    for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
-        for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
-            const Position & posRef = Board::playField[rowIndex][columnIndex];
-            if( !posRef.mIsFree && posRef.mPiece->mLetter == KING && posRef.mPiece->mSide == sidePlaying){
-                king = posRef.mPiece;
-                rowIndex = Board::BOARD_SIZE;
-                break;
-            }
-        }     
-    }
-    //findKing(king,sidePlaying);
+    findKing(king,sidePlaying);
 
     //check if king at his current position is in check
     if( !kingIsInCheck(sidePlaying)) return false;
@@ -144,17 +133,7 @@ bool GameControl::kingIsInCheck(int sidePlaying){
     const std::list<std::shared_ptr<Piece>>* pOpponentPiecesIn;
     sidePlaying == 1 ? pOpponentPiecesIn =  &g.piecesINplayer2 : pOpponentPiecesIn = &g.piecesINplayer1;
 
-    //find king
-    for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
-        for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
-            const Position & posRef = Board::playField[rowIndex][columnIndex];
-            if( !posRef.mIsFree && posRef.mPiece->mLetter == KING && posRef.mPiece->mSide == sidePlaying){
-                king = posRef.mPiece;
-                rowIndex = Board::BOARD_SIZE;
-                break;
-            }
-        }     
-    }
+    findKing(king,sidePlaying);
 
     //generate opponents moves
     std::list<Coordinates> opponentsMoves;
@@ -197,23 +176,7 @@ bool GameControl::kingWillNotLandIntoCheck( Coordinates & anticipatedPosition, s
     std::list<Coordinates> opponentsMoves;
   
     //fill opponentsPossibleMoves
-    for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
-        for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
-            
-            const Position & curPosRef = Board::playField[rowIndex][columnIndex];
-            if( !curPosRef.mIsFree && kingSide != curPosRef.mPiece->mSide ){
-
-                if(curPosRef.mPiece->mLetter == PAWN){
-                    curPosRef.mPiece->mSide == 1 ? 
-                    addPawnPossibleKickoutsSide1(opponentsMoves, *curPosRef.mPiece) 
-                    : addPawnPossibleKickoutsSide2(opponentsMoves, *curPosRef.mPiece);
-                }else{
-                    curPosRef.mPiece->getPossibleMovePositions(opponentsMoves);
-                }
-
-            }
-        }    
-    }
+    findOpponentsPossibleMoves(opponentsMoves,kingSide);
 
     //move king back
     b.movePiece(anticipatedPosition, currentPosition, false);
@@ -255,23 +218,7 @@ bool GameControl::checkIfKingStillInCheck(Coordinates &anticipatedPosition, std:
     std::list<Coordinates> opponentsMoves;
   
     //fill opponentsPossibleMoves
-    for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
-        for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
-            
-            const Position & curPosRef = Board::playField[rowIndex][columnIndex];
-            if( !curPosRef.mIsFree && kingSide != curPosRef.mPiece->mSide ){
-
-                if(curPosRef.mPiece->mLetter == PAWN){
-                    curPosRef.mPiece->mSide == 1 ? 
-                    addPawnPossibleKickoutsSide1(opponentsMoves, *curPosRef.mPiece) 
-                    : addPawnPossibleKickoutsSide2(opponentsMoves, *curPosRef.mPiece);
-                }else{
-                    curPosRef.mPiece->getPossibleMovePositions(opponentsMoves);
-                }
-
-            }
-        }    
-    }
+    findOpponentsPossibleMoves(opponentsMoves,kingSide);
 
     //move king back
     b.movePiece(anticipatedPosition, currentPosition, false);
@@ -296,17 +243,17 @@ bool GameControl::kingWillNotLandIntoCheck( Coordinates & anticipatedPosition, i
     std::shared_ptr<Piece> king;
 
     //find king
-    for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
-        for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
-            const Position & posRef = Board::playField[rowIndex][columnIndex];
-            if( !posRef.mIsFree && posRef.mPiece->mLetter == KING && posRef.mPiece->mSide == sidePlaying){
-                king = posRef.mPiece;
-                rowIndex = Board::BOARD_SIZE;
-                break;
-            }
-        }     
-    }
-   // findKing(king,sidePlaying);
+    // for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
+    //     for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
+    //         const Position & posRef = Board::playField[rowIndex][columnIndex];
+    //         if( !posRef.mIsFree && posRef.mPiece->mLetter == KING && posRef.mPiece->mSide == sidePlaying){
+    //             king = posRef.mPiece;
+    //             rowIndex = Board::BOARD_SIZE;
+    //             break;
+    //         }
+    //     }     
+    // }
+    findKing(king,sidePlaying);
 
     return kingWillNotLandIntoCheck(anticipatedPosition, king);
 }
@@ -363,4 +310,36 @@ bool GameControl::validateMove(std::pair<Coordinates, Coordinates> movementFromT
         } 
     }
     return true;
+}
+
+void GameControl::findKing(std::shared_ptr<Piece> & king,int sidePlaying){
+    for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
+        for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
+            const Position & posRef = Board::playField[rowIndex][columnIndex];
+            if( !posRef.mIsFree && posRef.mPiece->mLetter == KING && posRef.mPiece->mSide == sidePlaying){
+                king = posRef.mPiece;
+                return;
+            }
+        }     
+    }
+}
+
+void GameControl::findOpponentsPossibleMoves(std::list<Coordinates> &opponentsMoves, int kingSide){
+    for (int rowIndex = 0; rowIndex < Board::BOARD_SIZE; rowIndex++){
+        for (int columnIndex = 0; columnIndex < Board::BOARD_SIZE; columnIndex++){
+            
+            const Position & curPosRef = Board::playField[rowIndex][columnIndex];
+            if( !curPosRef.mIsFree && kingSide != curPosRef.mPiece->mSide ){
+
+                if(curPosRef.mPiece->mLetter == PAWN){
+                    curPosRef.mPiece->mSide == 1 ? 
+                    addPawnPossibleKickoutsSide1(opponentsMoves, *curPosRef.mPiece) 
+                    : addPawnPossibleKickoutsSide2(opponentsMoves, *curPosRef.mPiece);
+                }else{
+                    curPosRef.mPiece->getPossibleMovePositions(opponentsMoves);
+                }
+
+            }
+        }    
+    }
 }

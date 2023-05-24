@@ -62,5 +62,9 @@ protected:
 
     bool validateMove(std::pair< Coordinates,Coordinates > movementFromTo);
 
+    void findKing(std::shared_ptr<Piece> & king,int sidePlaying);
+
+    void findOpponentsPossibleMoves(std::list<Coordinates> & opponentsMoves, int kingSide);
+
 };
 
