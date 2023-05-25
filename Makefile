@@ -32,19 +32,19 @@ doc:
 	doxygen Doxyfile
 
 
-compile: klenkrys
+compile: game
 
-klenkrys: src/main.o  $(CORE) $(PIECES) $(GAME_CONTROL) $(AI) $(API) $(UI) $(FILE_OPERATIONS)  $(APPLICATION) 
+game: src/main.o  $(CORE) $(PIECES) $(GAME_CONTROL) $(AI) $(API) $(UI) $(FILE_OPERATIONS)  $(APPLICATION) 
 	$(LD) $(CXXFLAGS) -o $@ $^ -lncurses 
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ 
 
 clean:
-	rm -f *.o klenkrys src/main.o $(UI_PATH)*.o $(APPLICATION_PATH)*.o $(API_PATH)*.o $(GAME_CONTROL_PATH)*.o $(GAME_CONTROL)*.o $(CORE_PATH)*.o $(PIECES_PATH)*.o $(FILE_OPERATIONS_PATH)*.o  $(AI_PATH)*.o
+	rm -f *.o src/main.o $(UI_PATH)*.o $(APPLICATION_PATH)*.o $(API_PATH)*.o $(GAME_CONTROL_PATH)*.o $(GAME_CONTROL)*.o $(CORE_PATH)*.o $(PIECES_PATH)*.o $(FILE_OPERATIONS_PATH)*.o  $(AI_PATH)*.o
 
 run:
-	./klenkrys
+	./game
 
 deps:
 	$(CXX) -MM *cpp > Makefile.d
